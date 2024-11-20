@@ -55,17 +55,3 @@ class BlockLoader:
             if current_block:
                 self.blocks.append(current_block)
                 self.labels.append(current_label)
-
-
-def main():
-    notebook_paths = ['02.02-The-Basics-Of-NumPy-Arrays.ipynb']
-    block_loader = BlockLoader(notebook_paths)
-    print('!!! BLOCKS EXTRACTED !!!')
-    for i, label in enumerate(block_loader.labels):
-        print(label)
-        print(block_loader.blocks[i])
-        print('-' * 40)
-
-
-if __name__ == '__main__':
-    main()
