@@ -14,6 +14,23 @@ class EmbeddingModel:
         """
         self.embeddings = self.model.encode(labels)
 
+    def plot_sim(self):
+        # Plot the similarity matrix
+        plt.figure(figsize=(12, 12))
+        plt.imshow(self.similarity_matrix, cmap='coolwarm', interpolation='nearest')
+        plt.colorbar(label='Similarity')
+
+        # Annotate matrix
+        plt.title("Similarity Matrix")
+        for i in range(self.similarity_matrix.shape[0]):
+            for j in range(self.similarity_matrix.shape[1]):
+                plt.text(j, i, f"{self.similarity_matrix[i, j]:.2f}",
+                         ha="center", va="center", color="black")
+
+        # Show the plot
+        plt.tight_layout()
+        plt.savefig('../../plots/similarity_matrix.png')
+        
     def similarity(self, plot=True):
         """
         Computes a similarity matrix for all pairs of embeddings.
@@ -22,21 +39,4 @@ class EmbeddingModel:
             raise ValueError("Embeddings are not initialized. Call 'encode' first.")
         self.similarity_matrix = util.pytorch_cos_sim(self.embeddings, self.embeddings)
 
-        if plot:
-            # Plot the similarity matrix
-            plt.figure(figsize=(12, 12))
-            plt.imshow(self.similarity_matrix, cmap='coolwarm', interpolation='nearest')
-            plt.colorbar(label='Similarity')
-
-            # Add labels (optional)
-            plt.title("Similarity Matrix")
-
-            # Annotate matrix (optional)
-            for i in range(self.similarity_matrix.shape[0]):
-                for j in range(self.similarity_matrix.shape[1]):
-                    plt.text(j, i, f"{self.similarity_matrix[i, j]:.2f}",
-                             ha="center", va="center", color="black")
-
-            # Show the plot
-            plt.tight_layout()
-            plt.savefig('./plots/similarity_matrix.png')
+        if plot: self.plot_sim()
