@@ -7,9 +7,11 @@ class BlockLoader:
         self.code_lines = []
         self.blocks = []
         self.labels = []
+        self.acc_md = []
 
         self.load_notebooks()
         self.preprocess_blocks()
+
 
     def load_notebooks(self):
         for path in self.notebook_paths:
@@ -19,15 +21,28 @@ class BlockLoader:
             self.notebook_data.append(notebook_data)
 
             # keep code cells
+            cell_md = ''
             for cell in notebook_data['cells']:
-                if cell['cell_type'] == 'code':
+                if cell['cell_type'] == 'markdown':
+                    if isinstance(cell['source'], str):
+                        cell_md += cell['source']
+                    else:
+                        for line in cell['source']:
+                            cell_md += line
+                elif cell['cell_type'] == 'code':
                     self.code_lines.append(cell['source'])
+                    if cell_md == '':
+                        self.acc_md.append(self.acc_md[-1]) # append last markdown for continuous code cells
+                    else:
+                        self.acc_md.append(cell_md)
+                    cell_md = ''
 
     def preprocess_blocks(self):
         """
         Extract blocks with their respective label (comment), discard uncommented blocks
         """
-        for code in self.code_lines:
+        for i, code in enumerate(self.code_lines):
+            md = self.acc_md[i]
             found_comment = False
             current_block = []
             current_label = ''
@@ -36,11 +51,11 @@ class BlockLoader:
                 if '#' in line and not line.startswith('#'): # case of comment next to line
                     before_hash, after_hash = line.split('#', 1)
                     self.blocks.append(before_hash)
-                    self.labels.append(after_hash)
+                    self.labels.append('MARKDOWN: ' + md + '\nCOMMENT: ' + after_hash)
                 elif line.startswith('#'): # case of large block (multiple lines)
                     if found_comment: # when there is a block already in progress
                         self.blocks.append(current_block)
-                        self.labels.append(current_label)
+                        self.labels.append('MARKDOWN: ' + md + '\nCOMMENT: ' + current_label)
                     else: # when it is the first large block found
                         found_comment = True
 
@@ -54,4 +69,4 @@ class BlockLoader:
             # when block is over check if there are elements in the current block
             if current_block:
                 self.blocks.append(current_block)
-                self.labels.append(current_label)
+                self.labels.append('MARKDOWN: ' + md + '\nCOMMENT: ' + current_label)

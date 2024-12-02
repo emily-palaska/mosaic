@@ -29,8 +29,8 @@ class EmbeddingModel:
 
         # Show the plot
         plt.tight_layout()
-        plt.savefig('../../plots/similarity_matrix.png')
-        
+        plt.savefig('../plots/similarity_matrix.png')
+
     def similarity(self, plot=True):
         """
         Computes a similarity matrix for all pairs of embeddings.

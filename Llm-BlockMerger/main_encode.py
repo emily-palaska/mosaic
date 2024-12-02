@@ -7,12 +7,12 @@ def main():
     print('BLOCKS')
     print(len(block_loader.blocks))
 
-    """
+
     for i, label in enumerate(block_loader.labels):
         print(label)
-        print(block_loader.blocks[i])
+        #print(block_loader.blocks[i])
         print('-' * 40)
-    """
+
 
     embedding_model = EmbeddingModel()
     embedding_model.encode(block_loader.labels)
