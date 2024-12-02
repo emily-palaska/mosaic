@@ -10,8 +10,8 @@ class BlockLoader:
         self.acc_md = []
 
         self.load_notebooks()
+        self.separate_blocks()
         self.preprocess_blocks()
-
 
     def load_notebooks(self):
         for path in self.notebook_paths:
@@ -20,9 +20,13 @@ class BlockLoader:
                 notebook_data = json.load(file)
             self.notebook_data.append(notebook_data)
 
-            # keep code cells
+    def separate_blocks(self):
+        """
+        Keep code and accumulated markdown cells from the notebook(s) data
+        """
+        for notebook in self.notebook_data:
             cell_md = ''
-            for cell in notebook_data['cells']:
+            for cell in notebook['cells']:
                 if cell['cell_type'] == 'markdown':
                     if isinstance(cell['source'], str):
                         cell_md += cell['source']
