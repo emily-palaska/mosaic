@@ -1,5 +1,5 @@
-from loading.BlockLoader import BlockLoader
-from encoding.EmbeddingModel import EmbeddingModel
+from loading.blockloader import BlockLoader
+from encoding.embeddingmodel import EmbeddingModel
 
 def main():
     notebook_paths = ['notebooks/02.02-The-Basics-Of-NumPy-Arrays.ipynb']
@@ -7,12 +7,12 @@ def main():
     print('BLOCKS')
     print(len(block_loader.blocks))
 
-
+    """
     for i, label in enumerate(block_loader.labels):
         print(label)
         #print(block_loader.blocks[i])
         print('-' * 40)
-
+    """
 
     embedding_model = EmbeddingModel()
     embedding_model.encode(block_loader.labels)
