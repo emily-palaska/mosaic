@@ -1,9 +1,9 @@
 from loading.blockloading import *
-from encoding.embeddingdb import BlockMergerEmbeddingDB
+from encoding.embeddingmodel import *
 
 
 def main():
-    # Initialize block loader which will keep the code with the respective labels
+    # Load a notebook
     notebook_paths = ['notebooks/02.02-The-Basics-Of-NumPy-Arrays.ipynb']
     blocks, labels = preprocess_blocks(*separate_blocks(load_notebooks(notebook_paths)))
 
@@ -18,20 +18,13 @@ def main():
     print('BLOCKS: ', len(blocks))
     print('LABELS: ', len(labels))
 
-    """
-    for i, label in enumerate(block_loader.labels):
-        print(label)
-        #print(block_loader.blocks[i])
-        print('-' * 40)
-        
-    # Initialize the embedding model
-    embedding_model = EmbeddingModel()
-    embedding_model.encode(block_loader.labels)
-    embedding_model.similarity()
-    print('EMBEDDINGS: ', embedding_model.embeddings.shape)
-    """
-    exit(0)
+    # Embed and visualize labels
+    embeddings, embedding_dim = encode_labels(initialize_model(), labels)
+    plot_similarity_matrix(compute_similarity(embeddings), '../plots/similarity_matrix.png')
+    print('EMBEDDINGS:', len(embeddings))
 
+    exit(0)
+"""
     # Initialize embedding db
     embedding_db = BlockMergerEmbeddingDB(workspace='./encoding')
     embedding_db.create(block_loader.labels)
@@ -44,6 +37,6 @@ def main():
     for m in matches:
         print('-' * 40)
         print(m.text)
-
+"""
 if __name__ == '__main__':
     main()

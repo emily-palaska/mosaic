@@ -1,47 +1,69 @@
 from sentence_transformers import SentenceTransformer, util
 import matplotlib.pyplot as plt
+import numpy as np
 
-class EmbeddingModel:
-    def __init__(self, model='sentence-transformers/all-MiniLM-L6-v2'):
-        self.model = SentenceTransformer(model)
-        self.labels = None
-        self.embeddings = None
-        self.similarity_matrix = None
-        self.embedding_dim = None
+def initialize_model(model_name='sentence-transformers/all-MiniLM-L6-v2'):
+    """
+    Initialize the SentenceTransformer model.
+    :param model_name: Name of the pre-trained model.
+    :return: Initialized model.
+    """
+    return SentenceTransformer(model_name)
 
-    def encode(self, labels):
-        """
-        Encodes a list of sentences and stores the embeddings.
-        :param labels: numpy array of labels to be encoded
-        """
-        self.labels = labels
-        self.embeddings = self.model.encode(labels)
-        self.embedding_dim = self.embeddings.shape[1] if self.embeddings.ndim == 2 else self.embeddings.shape[1:]
-        return self.embeddings
+def encode_labels(model, labels):
+    """
+    Encode a list of sentences into embeddings.
+    :param model: Initialized SentenceTransformer model.
+    :param labels: List or numpy array of labels to encode.
+    :return: Tuple of embeddings and embedding dimensions.
+    """
+    embeddings = model.encode(labels)
+    embedding_dim = embeddings.shape[1] if embeddings.ndim == 2 else embeddings.shape[1:]
+    return embeddings, embedding_dim
 
-    def plot_sim(self):
-        # Plot the similarity matrix
-        plt.figure(figsize=(12, 12))
-        plt.imshow(self.similarity_matrix, cmap='coolwarm', interpolation='nearest')
-        plt.colorbar(label='Similarity')
+def compute_similarity(embeddings):
+    """
+    Compute the similarity matrix for embeddings.
+    :param embeddings: Encoded sentence embeddings.
+    :return: Similarity matrix.
+    """
+    return util.pytorch_cos_sim(embeddings, embeddings)
 
-        # Annotate matrix
-        plt.title("Similarity Matrix")
-        for i in range(self.similarity_matrix.shape[0]):
-            for j in range(self.similarity_matrix.shape[1]):
-                plt.text(j, i, f"{self.similarity_matrix[i, j]:.2f}",
+def plot_similarity_matrix(similarity_matrix, save_path='../plots/similarity_matrix.png'):
+    """
+    Plot and save the similarity matrix as an image.
+    :param similarity_matrix: The similarity matrix to plot.
+    :param save_path: Path to save the plot.
+    """
+    plt.figure(figsize=(12, 12))
+    plt.imshow(similarity_matrix, cmap='coolwarm', interpolation='nearest')
+    plt.colorbar(label='Similarity')
+
+    # Annotate the matrix with similarity values - ONLY for small dimensions due to visibility
+    if similarity_matrix.shape[0] <= 20:
+        for i in range(similarity_matrix.shape[0]):
+            for j in range(similarity_matrix.shape[1]):
+                plt.text(j, i, f"{similarity_matrix[i, j]:.2f}",
                          ha="center", va="center", color="black")
 
-        # Show the plot
-        plt.tight_layout()
-        plt.savefig('../plots/similarity_matrix.png')
+    plt.title("Similarity Matrix")
+    plt.tight_layout()
+    plt.savefig(save_path)
+    plt.close()
 
-    def similarity(self, plot=True):
-        """
-        Computes a similarity matrix for all pairs of embeddings.
-        """
-        if self.embeddings is None:
-            raise ValueError("Embeddings are not initialized. Call 'encode' first.")
-        self.similarity_matrix = util.pytorch_cos_sim(self.embeddings, self.embeddings)
+def process_similarity(model, labels, plot=True, save_path='../plots/similarity_matrix.png'):
+    """
+    Encode labels, compute similarity matrix, and optionally plot.
+    :param model: Initialized SentenceTransformer model.
+    :param labels: List of labels to encode.
+    :param plot: Whether to plot the similarity matrix.
+    :param save_path: Path to save the plot.
+    :return: Tuple of embeddings, similarity matrix, and embedding dimensions.
+    """
+    embeddings, embedding_dim = encode_labels(model, labels)
+    similarity_matrix = compute_similarity(embeddings)
 
-        if plot: self.plot_sim()
+    if plot:
+        plot_similarity_matrix(similarity_matrix, save_path)
+
+    return embeddings, similarity_matrix, embedding_dim
