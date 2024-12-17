@@ -1,13 +1,22 @@
-from loading.blockloader import BlockLoader
+from loading.blockloading import *
 from encoding.embeddingdb import BlockMergerEmbeddingDB
 
 
 def main():
     # Initialize block loader which will keep the code with the respective labels
     notebook_paths = ['notebooks/02.02-The-Basics-Of-NumPy-Arrays.ipynb']
-    block_loader = BlockLoader(notebook_paths)
+    blocks, labels = preprocess_blocks(*separate_blocks(load_notebooks(notebook_paths)))
 
-    print('BLOCKS: ', len(block_loader.blocks))
+    """    
+    for block, label in zip(blocks, labels):
+        print(label)
+        print('CODE:')
+        print(block)
+        print('-'*40)
+    """
+
+    print('BLOCKS: ', len(blocks))
+    print('LABELS: ', len(labels))
 
     """
     for i, label in enumerate(block_loader.labels):
@@ -21,6 +30,7 @@ def main():
     embedding_model.similarity()
     print('EMBEDDINGS: ', embedding_model.embeddings.shape)
     """
+    exit(0)
 
     # Initialize embedding db
     embedding_db = BlockMergerEmbeddingDB(workspace='./encoding')
