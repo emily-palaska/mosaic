@@ -14,7 +14,7 @@ def extract_cell_content(notebook):
     Extract the code and markdown content from a notebook's cells.
 
     :param notebook: Raw notebook JSON data.
-    :return: Tuple of code lines and accumulated markdown text.
+    :return: Tuple of code lines and accumulated Markdown text.
     """
     code_lines, accumulated_markdown = [], []
     cell_markdown = ''
