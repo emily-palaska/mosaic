@@ -17,9 +17,7 @@ def encode_labels(model, labels):
     :param labels: List or numpy array of labels to encode.
     :return: Tuple of embeddings and embedding dimensions.
     """
-    embeddings = model.encode(labels)
-    embedding_dim = embeddings.shape[1] if embeddings.ndim == 2 else embeddings.shape[1:]
-    return embeddings, embedding_dim
+    return model.encode(labels)
 
 def compute_similarity(embeddings):
     """
