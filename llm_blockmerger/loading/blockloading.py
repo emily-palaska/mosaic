@@ -1,7 +1,4 @@
 import json
-import numpy as np
-from PIL.SpiderImagePlugin import isInt
-
 
 def load_notebooks(nb_paths):
     """
