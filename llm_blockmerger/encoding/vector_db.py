@@ -10,8 +10,9 @@ class BlockMergerDoc(BaseDoc):
     - `text`: A string field for storing textual data (e.g., labels or descriptions).
     - `embedding`: An NdArray field for storing the corresponding vector embedding.
     """
-    text: str = ''
+    label: str = ''
     embedding: NdArray
+    block: list
 
 def initialize_vectordb(workspace='./'):
     """
@@ -22,16 +23,17 @@ def initialize_vectordb(workspace='./'):
     """
     return InMemoryExactNNVectorDB[BlockMergerDoc](workspace=workspace)
 
-def vectordb_create(db, labels, embeddings):
+def vectordb_create(db, labels, embeddings, blocks):
     """
     Index a list of documents in the vector database.
 
     :param db: The initialized vector database instance.
     :param labels: A list of text labels for the documents.
     :param embeddings: A list of embeddings (vectors) corresponding to the labels.
+    :param blocks: A list of blocks containing code corresponding to the labels.
     """
     num_values = len(labels)
-    doc_list = [BlockMergerDoc(text=labels[i], embedding=embeddings[i]) for i in range(num_values)]
+    doc_list = [BlockMergerDoc(label=labels[i], embedding=embeddings[i], block=blocks[i]) for i in range(num_values)]
     db.index(inputs=DocList[BlockMergerDoc](doc_list))
 
 def vectordb_read(db, embedding, limit=10):
@@ -48,6 +50,6 @@ def vectordb_read(db, embedding, limit=10):
         embedding = embedding.flatten()
 
     # Perform the search and return the results
-    query = BlockMergerDoc(text='query', embedding=embedding)
+    query = BlockMergerDoc(label='', embedding=embedding, block=[])
     results = db.search(inputs=DocList[BlockMergerDoc]([query]), limit=limit)
     return results[0].matches

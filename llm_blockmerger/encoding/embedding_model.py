@@ -1,6 +1,5 @@
 from sentence_transformers import SentenceTransformer, util
 import matplotlib.pyplot as plt
-import numpy as np
 
 def initialize_model(model_name='sentence-transformers/all-MiniLM-L6-v2'):
     """

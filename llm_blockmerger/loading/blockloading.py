@@ -1,4 +1,6 @@
 import json
+import numpy as np
+from PIL.SpiderImagePlugin import isInt
 
 
 def load_notebooks(nb_paths):
@@ -9,7 +11,6 @@ def load_notebooks(nb_paths):
     :return: List of raw notebook JSON data.
     """
     return [json.load(open(path, 'r')) for path in nb_paths]
-
 
 def extract_cell_content(notebook):
     """
@@ -65,11 +66,11 @@ def parse_code_blocks(code_lines, accumulated_markdown):
             if '#' in line:  # Comment detected
                 if not line.startswith('#'): # Side-comment
                     before_hash, after_hash = line.split('#', 1)
-                    blocks.append(before_hash.strip())
+                    blocks.append([before_hash.strip()])
                     labels.append(f"MARKDOWN: {md}\nCOMMENT: {after_hash.strip()}")
                 else: # Full-line
                     if current_block:
-                        blocks.append(current_block)
+                        blocks.append(current_block if isinstance(current_block, list) else [current_block])
                         labels.append(f"MARKDOWN: {md}\nCOMMENT: {current_label}")
                     _, current_label = line.split('#', 1)
                     current_block = []
