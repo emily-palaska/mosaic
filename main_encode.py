@@ -1,7 +1,7 @@
-from loading.blockloading import *
-from encoding.embedding_model import *
-from encoding.vector_db import *
-from linear_merging import *
+from llm_blockmerger.loading.blockloading import *
+from llm_blockmerger.encoding.vector_db import *
+from llm_blockmerger.encoding.embedding_model import *
+from llm_blockmerger.linear_merging import *
 
 def main():
     # Load a notebook
@@ -22,7 +22,7 @@ def main():
     # Embed and visualize labels
     embedding_model = initialize_model()
     embeddings = encode_labels(embedding_model, labels)
-    plot_similarity_matrix(compute_similarity(embeddings), '../plots/similarity_matrix.png')
+    plot_similarity_matrix(compute_similarity(embeddings), './plots/similarity_matrix.png')
     print('EMBEDDINGS:', embeddings.shape)
 
     # Create a vector database, and try it with an add/read example
@@ -42,16 +42,19 @@ def main():
     """
 
     # Code generation pipeline through a linear search
-
-    result = linear_merge(embedding_model, vector_db, 'make a simple numpy program')
+    example = 'simple numpy program'
+    # Choice of merging method: string or embedding comparison
+    #labels, blocks = linear_string_merge(embedding_model, vector_db, example)
+    labels, blocks = linear_embedding_merge(embedding_model, vector_db, example)
     print('MERGE RESULT:')
 
     # Print the labels and code blocks of the result
-    for label, block in result:
+    for label, block in zip(labels, blocks):
+        print('-' * 40)
         print(label)
         print('CODE:')
         print(block)
-        print('-'*40)
+
 
 if __name__ == '__main__':
     main()
