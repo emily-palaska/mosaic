@@ -38,12 +38,12 @@ def linear_string_merge(embedding_model, vector_db, specification, max_iteration
     return labels, blocks
 
 def embedding_projection(current_embedding, neighbor_embedding):
-    if np.all(neighbor_embedding == 0):
+    if np.all(current_embedding == 0):
         return None
-    inner_product = np.dot(current_embedding, neighbor_embedding) / np.dot(neighbor_embedding, neighbor_embedding)
-    return inner_product * neighbor_embedding
+    inner_product = np.dot(neighbor_embedding, current_embedding) / np.dot(current_embedding, current_embedding)
+    return inner_product * current_embedding
 
-def linear_embedding_merge(embedding_model, vector_db, specification, max_iterations=10, norm_threshold=1e-3):
+def linear_embedding_merge(embedding_model, vector_db, specification, max_iterations=10, norm_threshold=0.1):
     labels, blocks = [], []
     current_embedding = encode_labels(embedding_model, [specification])[0]
 
