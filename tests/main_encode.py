@@ -1,3 +1,6 @@
+import os
+os.chdir("../")
+
 from llm_blockmerger.loading.blockloading import *
 from llm_blockmerger.encoding.vector_db import *
 from llm_blockmerger.encoding.embedding_model import *
