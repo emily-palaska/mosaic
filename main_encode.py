@@ -7,8 +7,7 @@ def main():
     # Load a notebook
     notebook_paths = ['notebooks/02.02-The-Basics-Of-NumPy-Arrays.ipynb']
     blocks, labels = preprocess_blocks(*separate_blocks(load_notebooks(notebook_paths)))
-    print('BLOCKS: ', len(blocks))
-    print('LABELS: ', len(labels))
+    assert len(blocks) == len(labels), "Blocks and labels should have the same length"
 
     """
     # Prints the extracted blocks
@@ -22,15 +21,15 @@ def main():
     # Embed and visualize labels
     embedding_model = initialize_model()
     embeddings = encode_labels(embedding_model, labels)
-    plot_similarity_matrix(compute_similarity(embeddings), './plots/similarity_matrix.png')
+    #plot_similarity_matrix(compute_similarity(embeddings), './plots/similarity_matrix.png')
     print('EMBEDDINGS:', embeddings.shape)
 
     # Create a vector database, and try it with an add/read example
-    vector_db = initialize_vectordb()
-    vectordb_create(vector_db, labels, embeddings, blocks)
-    print(encode_labels(embedding_model, ['numpy']).shape)
-    matches = vectordb_read(vector_db, encode_labels(embedding_model, ['numpy']))
-    print('MATCHES: ', len(matches))
+    # TODO test assertation of shape with add/read example
+    example = 'numpy'
+    vector_db = (VectorDB(dbtype=HNSWVectorDB))
+    vector_db.create(labels, embeddings, blocks)
+    print('MATCHES: ', len(vector_db.read(encode_labels(embedding_model, [example]))))
 
     """
     # Prints the labels and code blocks of the matches

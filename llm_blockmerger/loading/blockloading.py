@@ -1,21 +1,9 @@
 import json
 
 def load_notebooks(nb_paths):
-    """
-    Load Jupyter notebooks from the specified paths.
-
-    :param nb_paths: List of file paths to the notebooks.
-    :return: List of raw notebook JSON data.
-    """
     return [json.load(open(path, 'r')) for path in nb_paths]
 
 def extract_cell_content(notebook):
-    """
-    Extract the code and markdown content from a notebook's cells.
-
-    :param notebook: Raw notebook JSON data.
-    :return: Tuple of code lines and accumulated Markdown text.
-    """
     code_lines, accumulated_markdown = [], []
     cell_markdown = ''
 
@@ -30,12 +18,6 @@ def extract_cell_content(notebook):
 
 
 def separate_blocks(notebook_data):
-    """
-    Separate code and corresponding markdown from multiple notebooks.
-
-    :param notebook_data: List of raw notebook JSON data.
-    :return: Tuple of all code lines and corresponding accumulated markdown.
-    """
     all_code_lines, all_accumulated_markdown = [], []
     for notebook in notebook_data:
         code_lines, accumulated_markdown = extract_cell_content(notebook)
@@ -45,13 +27,6 @@ def separate_blocks(notebook_data):
 
 
 def parse_code_blocks(code_lines, accumulated_markdown):
-    """
-    Parse code blocks with labels derived from comments and markdown.
-
-    :param code_lines: List of code cells, each containing a list of lines.
-    :param accumulated_markdown: List of markdown strings corresponding to each code cell.
-    :return: Tuple of parsed code blocks and labels.
-    """
     # TODO deal with 3 "s type of comments
     blocks, labels = [], []
 
@@ -81,11 +56,4 @@ def parse_code_blocks(code_lines, accumulated_markdown):
     return blocks, labels
 
 def preprocess_blocks(code_lines, accumulated_markdown):
-    """
-    Wrapper to preprocess code and markdown into labeled blocks.
-
-    :param code_lines: List of code cells.
-    :param accumulated_markdown: List of markdown strings corresponding to each code cell.
-    :return: Tuple of blocks and their labels.
-    """
     return parse_code_blocks(code_lines, accumulated_markdown)
