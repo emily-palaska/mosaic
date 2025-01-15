@@ -1,10 +1,9 @@
-import pytest, sys
-sys.path.append("..")
+import pytest
 from llm_blockmerger.loading.blockloading import *
 
 @pytest.fixture
 def notebook_data():
-    path = '../notebooks/test_notebook.ipynb'
+    path = './notebooks/test_notebook.ipynb'
     blocks = [
         ['def add(a, b):', 'return a + b'],
         ['print(result)'],
