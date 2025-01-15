@@ -12,7 +12,7 @@ def extract_cell_content(notebook):
             cell_markdown += ''.join(cell['source'])
         elif cell['cell_type'] == 'code':
             code_lines.append(cell['source'])
-            accumulated_markdown.append(cell_markdown or accumulated_markdown[-1] if accumulated_markdown else '')
+            accumulated_markdown.append(cell_markdown  if cell_markdown else accumulated_markdown[-1])
             cell_markdown = ''
     return code_lines, accumulated_markdown
 
@@ -26,8 +26,7 @@ def separate_blocks(notebook_data):
     return all_code_lines, all_accumulated_markdown
 
 
-def parse_code_blocks(code_lines, accumulated_markdown):
-    # TODO deal with 3 "s type of comments
+def preprocess_blocks(code_lines, accumulated_markdown):
     blocks, labels = [], []
 
     for i, code in enumerate(code_lines):
@@ -54,6 +53,3 @@ def parse_code_blocks(code_lines, accumulated_markdown):
             labels.append(f"MARKDOWN: {md}\nCOMMENT: {current_label.strip()}")
 
     return blocks, labels
-
-def preprocess_blocks(code_lines, accumulated_markdown):
-    return parse_code_blocks(code_lines, accumulated_markdown)
