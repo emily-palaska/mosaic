@@ -1,5 +1,18 @@
 import json
 
+class CodeBlocksManager:
+    def __init__(self, blocks=None, labels=None, variables=None, var_descriptions=None):
+        self.labels = labels
+        self.blocks = blocks
+        self.variables = variables
+        self.var_descriptions = var_descriptions
+
+    def set_values(self, labels=None, blocks=None, variables=None, var_descriptions=None):
+        if labels: self.labels = labels
+        if blocks: self.blocks = blocks
+        if variables: self.variables = variables
+        if var_descriptions: self.var_descriptions = var_descriptions
+
 def load_notebooks(nb_paths):
     return [json.load(open(path, 'r')) for path in nb_paths]
 
@@ -16,17 +29,7 @@ def extract_cell_content(notebook):
             cell_markdown = ''
     return code_lines, accumulated_markdown
 
-
-def separate_blocks(notebook_data):
-    all_code_lines, all_accumulated_markdown = [], []
-    for notebook in notebook_data:
-        code_lines, accumulated_markdown = extract_cell_content(notebook)
-        all_code_lines.extend(code_lines)
-        all_accumulated_markdown.extend(accumulated_markdown)
-    return all_code_lines, all_accumulated_markdown
-
-
-def preprocess_blocks(code_lines, accumulated_markdown):
+def preprocess_code_lines(code_lines, accumulated_markdown):
     blocks, labels = [], []
 
     for i, code in enumerate(code_lines):
@@ -35,11 +38,11 @@ def preprocess_blocks(code_lines, accumulated_markdown):
 
         for line in code:
             if '#' in line:  # Comment detected
-                if not line.startswith('#'): # Side-comment
+                if not line.startswith('#'):  # Side-comment
                     before_hash, after_hash = line.split('#', 1)
                     blocks.append([before_hash.strip()])
                     labels.append(f"MARKDOWN: {md}\nCOMMENT: {after_hash.strip()}")
-                else: # Full-line
+                else:  # Full-line
                     if current_block:
                         blocks.append(current_block if isinstance(current_block, list) else [current_block])
                         labels.append(f"MARKDOWN: {md}\nCOMMENT: {current_label}")
@@ -51,5 +54,18 @@ def preprocess_blocks(code_lines, accumulated_markdown):
         if current_block:  # Handle remaining lines in the current block
             blocks.append(current_block)
             labels.append(f"MARKDOWN: {md}\nCOMMENT: {current_label.strip()}")
+    return blocks, labels
 
+def preprocess_blocks(notebook_data):
+    block_managers = []
+    for notebook in notebook_data:
+        code_lines, accumulated_markdown = extract_cell_content(notebook)
+        block_managers.append(CodeBlocksManager(*preprocess_code_lines(code_lines, accumulated_markdown)))
+    return block_managers
+
+def concatenate_managers(block_managers):
+    labels, blocks = [], []
+    for block_manager in block_managers:
+        labels.extend(block_manager.labels)
+        blocks.extend(block_manager.blocks)
     return blocks, labels

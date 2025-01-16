@@ -9,7 +9,7 @@ from llm_blockmerger.linear_merging import *
 def main():
     # Load a notebook
     notebook_paths = ['notebooks/02.02-The-Basics-Of-NumPy-Arrays.ipynb']
-    blocks, labels = preprocess_blocks(*separate_blocks(load_notebooks(notebook_paths)))
+    blocks, labels = concatenate_managers(preprocess_blocks(load_notebooks(notebook_paths)))
     assert len(blocks) == len(labels), "Blocks and labels should have the same length"
 
     """
