@@ -1,8 +1,6 @@
 from docarray import DocList
 from vectordb import InMemoryExactNNVectorDB, HNSWVectorDB
 from .blockmergerdoc import BlockMergerDoc
-from .config import FEATURE_SIZE
-import numpy as np
 import os
 
 class VectorDB:
@@ -23,7 +21,6 @@ class VectorDB:
 
         results = self.db.search(inputs=DocList[BlockMergerDoc]([query]), limit=limit)
         return results[0].matches
-
 
     def get_size(self):
         return self.db.num_docs()['num_docs']
