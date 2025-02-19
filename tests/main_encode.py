@@ -23,6 +23,7 @@ def main():
     vector_db = (VectorDB(dbtype=HNSWVectorDB))
     vector_db.create(labels, embeddings, blocks)
     print('MATCHES: ', len(vector_db.read(encode_labels(embedding_model, [example]))))
+    print(vector_db.get_size())
 
     # Code generation pipeline through a linear search
     example = 'simple numpy program'
