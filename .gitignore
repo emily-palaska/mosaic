@@ -3,3 +3,4 @@
 llm_blockmerger/encoding/InMemoryExactNNIndexer[BlockMergerDoc][BlockMergerDocWithMatchesAndScores]
 /databases/*
 *.db
+/models/**
