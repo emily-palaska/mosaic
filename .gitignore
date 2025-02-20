@@ -2,3 +2,4 @@
 **/__pycache__/
 llm_blockmerger/encoding/InMemoryExactNNIndexer[BlockMergerDoc][BlockMergerDocWithMatchesAndScores]
 /databases/*
+*.db
