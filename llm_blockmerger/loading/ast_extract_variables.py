@@ -1,36 +1,42 @@
 import ast
 
-def ast_extract_variables(script):
+def ast_extraction(script):
     tree = ast.parse(script)
     variables = set()
 
-    def visit_node(curr_node):
-        if isinstance(curr_node, ast.Name) and isinstance(curr_node.ctx, ast.Store):
-            variables.add(curr_node.id)
-        elif isinstance(curr_node, ast.FunctionDef):
-            # Capture function arguments
-            for arg in curr_node.args.args:
-                variables.add(arg.arg)
-        elif isinstance(curr_node, ast.For):
-            # Capture loop variables
-            if isinstance(curr_node.target, ast.Name):
-                variables.add(curr_node.target.id)
-            elif isinstance(curr_node.target, ast.Tuple):
-                for elt in curr_node.target.elts:
+    def handle_function(curr_node):
+        for arg in curr_node.args.args:
+            variables.add(arg.arg)
+
+    def handle_loop(curr_node):
+        if isinstance(curr_node.target, ast.Name):
+            variables.add(curr_node.target.id)
+        elif isinstance(curr_node.target, ast.Tuple):
+            handle_tuple(curr_node)
+
+    def handle_tuple(curr_node):
+        for target in curr_node.targets:
+            if isinstance(target, ast.Tuple):
+                for elt in target.elts:
                     if isinstance(elt, ast.Name):
                         variables.add(elt.id)
-        elif isinstance(curr_node, ast.Assign):
-            # Handle tuple unpacking
-            for target in curr_node.targets:
-                if isinstance(target, ast.Tuple):
-                    for elt in target.elts:
-                        if isinstance(elt, ast.Name):
-                            variables.add(elt.id)
+
+    def visit_node(curr_node):
+        match curr_node:
+            case ast.Name(ctx=ast.Store()):
+                variables.add(curr_node.id)
+            case ast.FunctionDef():
+                handle_function(curr_node)
+            case ast.For():
+                handle_loop(curr_node)
+            case ast.Assign():
+                handle_tuple(curr_node)
 
     for node in ast.walk(tree):
         visit_node(node)
 
     return sorted(list(variables))
+
 
 # Example usage
 demo_script = """
@@ -45,5 +51,4 @@ def foo(c):
     return d
 """
 
-demo_variables = ast_extract_variables(demo_script)
-print(demo_variables)  # Output: ['a', 'b', 'c', 'd', 'i', 'x', 'y', 'z']
+print(ast_extraction(demo_script))  # Output: ['a', 'b', 'c', 'd', 'i', 'x', 'y', 'z']
