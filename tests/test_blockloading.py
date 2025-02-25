@@ -24,7 +24,7 @@ def notebook_data():
 
 def test_preprocess_pipeline(notebook_data):
     path, expected_blocks, expected_labels = notebook_data
-    blocks, labels = preprocess_blocks(*separate_blocks(load_notebooks(path)))
+    blocks, labels = concatenate_managers(preprocess_blocks(load_notebooks(path)))
     assert len(blocks) == len(labels)
     assert blocks == expected_blocks
     assert labels == expected_labels

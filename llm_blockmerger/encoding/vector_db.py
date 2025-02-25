@@ -42,7 +42,7 @@ class VectorDB:
 def empty_docs(workspace='./databases/'):
     import sqlite3
 
-    db_files = find_db_files(workspace)
+    db_files = _find_db_files(workspace)
 
     for db_file in db_files:
         conn = sqlite3.connect(db_file)
@@ -51,7 +51,7 @@ def empty_docs(workspace='./databases/'):
         conn.commit()
         conn.close()
 
-def find_db_files(folder_path):
+def _find_db_files(folder_path):
     # List to store all .db file paths
     db_files = []
 
