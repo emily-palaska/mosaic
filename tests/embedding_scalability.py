@@ -1,6 +1,7 @@
 import os
+import numpy as np
+from llm_blockmerger.encoding.vector_db import VectorDB, HNSWVectorDB
 os.chdir("../")
-from llm_blockmerger.linear_merging import *
 
 def noise_db_input(feature_size=200, instances=10):
     embeddings = np.random.rand(instances, feature_size)
@@ -12,13 +13,8 @@ def main():
     feature_size, instances = 150, 10
     labels, blocks, embeddings = noise_db_input(feature_size=feature_size, instances=instances)
 
-    # Dynamically change the size of the BaseDoc before creating the VectorDB
-    import llm_blockmerger.encoding.config
-    llm_blockmerger.encoding.config.FEATURE_SIZE = feature_size
-
     # Create a VectorDB, should initialize empty
-    from llm_blockmerger.encoding.vector_db import VectorDB, HNSWVectorDB
-    vector_db = (VectorDB(dbtype=HNSWVectorDB))
+    vector_db = VectorDB(dbtype=HNSWVectorDB, feature_size=feature_size, empty=True)
     assert vector_db.get_size() == 0, 'Initialized VectorDB size is not 0'
 
     # Try an example and verify the dimensions

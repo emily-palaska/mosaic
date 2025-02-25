@@ -1,25 +1,39 @@
 from docarray import DocList
 from vectordb import InMemoryExactNNVectorDB, HNSWVectorDB
-from .blockmergerdoc import BlockMergerDoc
 import os
+from docarray import BaseDoc
+from docarray.typing import NdArray
+
+def make_doc(feature_size=384):
+    class BlockMergerDoc(BaseDoc):
+        label: str = ''
+        block: list = []
+        embedding: NdArray[feature_size]
+
+    return BlockMergerDoc
 
 class VectorDB:
-    def __init__(self, dbtype=HNSWVectorDB, workspace='./databases/'):
-        self.db = dbtype[BlockMergerDoc](workspace=workspace)
-        empty_docs(workspace=workspace)
+    def __init__(self,
+                 dbtype=HNSWVectorDB,
+                 workspace='./databases/',
+                 feature_size=384,
+                 empty=False):
+        self.BlockMergerDoc = make_doc(feature_size)
+        self.db = dbtype[self.BlockMergerDoc](workspace=workspace)
+        if empty: empty_docs(workspace=workspace)
 
     def create(self, labels, embeddings, blocks):
         num_values = len(labels)
-        doc_list = [BlockMergerDoc(label=labels[i], block=blocks[i], embedding=embeddings[i]) for i in range(num_values)]
-        self.db.index(inputs=DocList[BlockMergerDoc](doc_list))
+        doc_list = [self.BlockMergerDoc(label=labels[i], block=blocks[i], embedding=embeddings[i]) for i in range(num_values)]
+        self.db.index(inputs=DocList[self.BlockMergerDoc](doc_list))
 
     def read(self, embedding, limit=10):
         if not embedding.ndim == 1:
             embedding = embedding.flatten()
 
-        query = BlockMergerDoc(label='query', block=[], embedding=embedding)
+        query = self.BlockMergerDoc(label='query', block=[], embedding=embedding)
 
-        results = self.db.search(inputs=DocList[BlockMergerDoc]([query]), limit=limit)
+        results = self.db.search(inputs=DocList[self.BlockMergerDoc]([query]), limit=limit)
         return results[0].matches
 
     def get_size(self):
