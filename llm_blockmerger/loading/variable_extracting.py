@@ -107,3 +107,8 @@ def _separate_output(output_text):
     return sorted(variables)
 
 
+def main():
+    model_name = 'huggyllama/llama-7b'
+    llama = Llama(model_name=model_name)
+    script = "x = 1\ny = 2\nz = x + y"
+    print(extract_variables(script, llama))
