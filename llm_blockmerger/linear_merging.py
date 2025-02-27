@@ -1,5 +1,7 @@
 import numpy as np
 from llm_blockmerger.encoding.embedding_model import encode_labels
+from llm_blockmerger.loading.blockloading import _concatenate_block
+import textwrap
 
 def remove_common_words(original: str, to_remove: str, replacement='UNKNOWN') -> str:
     original = original.replace('\n', ' ')
@@ -44,7 +46,7 @@ def embedding_projection(current_embedding, neighbor_embedding):
     return inner_product * current_embedding
 
 def linear_embedding_merge(embedding_model, vector_db, specification, max_iterations=10, norm_threshold=0.1):
-    labels, blocks = [], []
+    labels, blocks, sources = [], [], []
     current_embedding = encode_labels(embedding_model, [specification])[0]
 
     for _ in range(max_iterations):
@@ -60,6 +62,7 @@ def linear_embedding_merge(embedding_model, vector_db, specification, max_iterat
         nearest_doc = nearest_neighbors[0]
         labels.append(nearest_doc.label)
         blocks.append(nearest_doc.block)
+        sources.append(nearest_doc.source)
         neighbor_embedding = encode_labels(embedding_model, [nearest_doc.label])[0]
         projection = embedding_projection(current_embedding, neighbor_embedding)
 
@@ -67,4 +70,22 @@ def linear_embedding_merge(embedding_model, vector_db, specification, max_iterat
         if np.linalg.norm(projection) < norm_threshold:
             break
         current_embedding = current_embedding - projection
-    return labels, blocks
+    return labels, blocks, sources
+
+def print_merge_result(specification, labels, blocks, sources):
+    print("\n" + "=" * 60)
+    print(' ' * 23 + "MERGE RESULT")
+    print("=" * 60)
+
+    print("\nSpecification (Input to Merging Mechanism):")
+    print(textwrap.indent(specification, "    "))
+    print("=" * 60)
+
+    for i, (label, block, source) in enumerate(zip(labels, blocks, sources), 1):
+        print("\n" + "-" * 60)
+        print(f"SOURCE: {source}")
+        print(textwrap.fill(label,100))
+        print("CODE:")
+        print(_concatenate_block(block))
+
+    print("\n" + "=" * 60)
