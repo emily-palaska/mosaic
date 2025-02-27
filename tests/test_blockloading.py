@@ -22,7 +22,7 @@ def notebook_data():
         'MARKDOWN: Testing it with two examples\nCOMMENT: '
     ]
 
-    variables = [{'a', 'b', 'result'}]
+    variables = [['a', 'b'], ['a', 'b'], ['result'], ['a', 'result'], ['result'], ['a', 'result']]
     return [path], blocks, labels, variables
 
 def test_preprocess_pipeline(notebook_data):
