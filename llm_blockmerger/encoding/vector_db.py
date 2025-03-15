@@ -10,6 +10,7 @@ def make_doc(feature_size=384):
         block: list = []
         source: str = ''
         variables: list = []
+        var_descriptions: list = []
         embedding: NdArray[feature_size]
 
     return BlockMergerDoc
@@ -24,12 +25,13 @@ class VectorDB:
         self.db = dbtype[self.BlockMergerDoc](workspace=workspace)
         if empty: empty_docs(workspace=workspace)
 
-    def create(self, labels, blocks, variables, sources, embeddings):
+    def create(self, labels, blocks, variables, var_descriptions, sources, embeddings):
         num_values = len(labels)
         doc_list = [self.BlockMergerDoc(label=labels[i],
                                         block=blocks[i],
                                         source=sources[i],
                                         variables=variables[i],
+                                        var_descriptions = var_descriptions[i],
                                         embedding=embeddings[i]) for i in range(num_values)]
         self.db.index(inputs=DocList[self.BlockMergerDoc](doc_list))
 
