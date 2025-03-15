@@ -9,7 +9,18 @@ class CodeBlocksManager:
         self.blocks = blocks if blocks else []
         self.variables = variables if variables else []
         self.var_descriptions = var_descriptions if var_descriptions else []
-        self.source = source
+        self.sources = source if source else []
+
+    def append_doc(self, doc):
+        self.blocks.append(doc.block)
+        self.labels.append(doc.label)
+        self.variables.append(doc.variables)
+        self.var_descriptions.append(doc.var_descriptions)
+        self.sources.append(doc.source)
+
+    def unzip(self):
+        return self.blocks, self.labels, self.variables, self.var_descriptions, self.sources
+
 
 def load_notebooks(nb_paths):
     return [(os.path.basename(path), json.load(open(path, 'r'))) for path in nb_paths]
@@ -94,7 +105,7 @@ def main():
     path = ['../../notebooks/test_notebook.ipynb']
     block_managers = preprocess_blocks(load_notebooks(path))
     for block_manager in block_managers:
-        print(block_manager.source)
+        print(block_manager.sources)
         for block, variables in zip(block_manager.blocks, block_manager.variables):
             print(variables)
             for line in block:

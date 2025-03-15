@@ -1,6 +1,6 @@
 import numpy as np
 from llm_blockmerger.encoding.embedding_model import encode_labels
-from llm_blockmerger.loading.blockloading import _concatenate_block
+from llm_blockmerger.loading.blockloading import _concatenate_block, CodeBlocksManager
 import textwrap
 
 def remove_common_words(original: str, to_remove: str, replacement='UNKNOWN') -> str:
@@ -15,11 +15,11 @@ def remove_common_words(original: str, to_remove: str, replacement='UNKNOWN') ->
     return ' '.join(replaced_words)
 
 def linear_string_merge(embedding_model, vector_db, specification, max_iterations=10, replacement='UNKNOWN'):
-    labels, blocks = [], []
+    merge_block_manager = CodeBlocksManager()
     for _ in range(max_iterations):
         # Break condition: Exit if the empty string is empty
         if specification in ['', ' ']:
-            return labels, blocks
+            return merge_block_manager
 
         spec_embedding = encode_labels(embedding_model, [specification])
         nearest_neighbors = vector_db.read(spec_embedding, limit=1)
@@ -29,15 +29,14 @@ def linear_string_merge(embedding_model, vector_db, specification, max_iteration
             break
 
         nearest_doc = nearest_neighbors[0]
-        labels.append(nearest_doc.label)
-        blocks.append(nearest_doc.block)
-        new_specification = remove_common_words(specification, ''.join(labels), replacement=replacement)
+        merge_block_manager.append_doc(nearest_doc)
+        new_specification = remove_common_words(specification, ''.join(nearest_doc.label), replacement=replacement)
 
         # Break condition: Exit if specification remains the same
         if new_specification == specification:
             break
         specification = new_specification
-    return labels, blocks
+    return merge_block_manager
 
 def embedding_projection(current_embedding, neighbor_embedding):
     if np.all(current_embedding == 0):
@@ -46,7 +45,7 @@ def embedding_projection(current_embedding, neighbor_embedding):
     return inner_product * current_embedding
 
 def linear_embedding_merge(embedding_model, vector_db, specification, max_iterations=10, norm_threshold=0.1):
-    labels, blocks, sources = [], [], []
+    merge_block_manager = CodeBlocksManager()
     current_embedding = encode_labels(embedding_model, [specification])[0]
 
     for _ in range(max_iterations):
@@ -60,9 +59,7 @@ def linear_embedding_merge(embedding_model, vector_db, specification, max_iterat
             break
 
         nearest_doc = nearest_neighbors[0]
-        labels.append(nearest_doc.label)
-        blocks.append(nearest_doc.block)
-        sources.append(nearest_doc.source)
+        merge_block_manager.append_doc(nearest_doc)
         neighbor_embedding = encode_labels(embedding_model, [nearest_doc.label])[0]
         projection = embedding_projection(current_embedding, neighbor_embedding)
 
@@ -70,9 +67,9 @@ def linear_embedding_merge(embedding_model, vector_db, specification, max_iterat
         if np.linalg.norm(projection) < norm_threshold:
             break
         current_embedding = current_embedding - projection
-    return labels, blocks, sources
+    return merge_block_manager
 
-def print_merge_result(specification, labels, blocks, sources):
+def print_merge_result(specification, block_manager):
     print("\n" + "=" * 60)
     print(' ' * 23 + "MERGE RESULT")
     print("=" * 60)
@@ -81,6 +78,7 @@ def print_merge_result(specification, labels, blocks, sources):
     print(textwrap.indent(specification, "    "))
     print("=" * 60)
 
+    blocks, labels, variables, var_descriptions, sources = block_manager.unzip()
     for i, (label, block, source) in enumerate(zip(labels, blocks, sources), 1):
         print("\n" + "-" * 60)
         print(f"SOURCE: {source}")

@@ -4,7 +4,7 @@ os.chdir("../")
 from llm_blockmerger.loading.blockloading import concatenate_managers, preprocess_blocks, load_notebooks
 from llm_blockmerger.encoding.vector_db import VectorDB, HNSWVectorDB
 from llm_blockmerger.encoding.embedding_model import initialize_model, encode_labels
-from llm_blockmerger.linear_merging import linear_embedding_merge, linear_string_merge, print_merge_result
+from llm_blockmerger.block_merging import linear_embedding_merge, linear_string_merge, print_merge_result
 
 def main():
     # Load a notebook
@@ -33,7 +33,7 @@ def main():
     # Code generation pipeline through a linear string or embedding search
     specification = 'simple numpy program'
     #labels, blocks = linear_string_merge(embedding_model, vector_db, example)
-    print_merge_result(specification, *linear_embedding_merge(embedding_model, vector_db, specification))
+    print_merge_result(specification, linear_embedding_merge(embedding_model, vector_db, specification))
 
 
 if __name__ == '__main__':

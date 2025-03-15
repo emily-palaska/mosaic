@@ -5,21 +5,28 @@ def extract_variables(script, model=None):
     if model is None:
         return _ast_extraction(script)
     else:
-        prompt = _create_prompt(script)
+        prompt = _create_variable_extraction_prompt(script)
         output_text = model.answer(prompt)
         return _separate_output(output_text)
 
+def extract_variable_descriptions(variables, script, model):
+    prompt = _create_variable_description_prompt(variables,script)
+    output_text = model.answer(prompt)
+    return output_text
+
 class Llama:
     def __init__(self, model_name="meta-llama/Llama-3.2-3B", verbose=False):
+
         self.verbose = verbose
         self._set_verbosity()
-
         self.device = torch.device("cuda" if torch.cuda.is_available() else "cpu")
         self.tokenizer = AutoTokenizer.from_pretrained(model_name)
         if self.tokenizer.pad_token is None:
             self.tokenizer.pad_token = self.tokenizer.eos_token
-        self.model = AutoModelForCausalLM.from_pretrained(model_name)
-        self.model.to(self.device)
+        self.model = AutoModelForCausalLM.from_pretrained(
+            model_name,
+            torch_dtype=torch.float16
+        ).to(self.device)
 
     def _set_verbosity(self):
         # Suppress warnings, logs and progress bars (UserWarning: 1Torch was not compiled with flash attention.)
@@ -81,11 +88,25 @@ def _ast_extraction(script=''):
 
     return sorted(list(variables))
 
-def _create_prompt(script=''):
+def _create_variable_extraction_prompt(script=''):
     return f"""
 Analyze the following Python script and create a list of all the variables you can find. 
 Return only the list of variable names.
 Note that they should be separated by commas (,).
+
+Script:
+{textwrap.indent(script, '\t')}
+
+Output:
+"""
+
+def _create_variable_description_prompt(variables, script=''):
+    return f"""
+Given the following Python script and the list of variables, provide a brief description of each variable.
+Explain its role and significance within the script.
+
+Variables list:
+{textwrap.indent(str(variables), '\t')}
 
 Script:
 {textwrap.indent(script, '\t')}
@@ -108,7 +129,13 @@ def _separate_output(output_text):
 
 
 def main():
-    model_name = 'huggyllama/llama-7b'
-    llama = Llama(model_name=model_name)
+    #model_name = 'huggyllama/llama-7b'
+    model_name = "meta-llama/Llama-3.2-3B"
+    llama = Llama(model_name=model_name, verbose=True)
+
     script = "x = 1\ny = 2\nz = x + y"
-    print(extract_variables(script, llama))
+    variables = extract_variables(script)
+    print(extract_variable_descriptions(variables, script, llama))
+
+if __name__ == '__main__':
+    main()
