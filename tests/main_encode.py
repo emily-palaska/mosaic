@@ -9,7 +9,7 @@ from llm_blockmerger.block_merging import linear_embedding_merge, linear_string_
 def main():
     # Load a notebook
     notebook_paths = ['notebooks/02.02-The-Basics-Of-NumPy-Arrays.ipynb']
-    blocks, labels, variables, sources = concatenate_managers(preprocess_blocks(load_notebooks(notebook_paths)))
+    blocks, labels, variables, var_descriptions, sources = concatenate_managers(preprocess_blocks(load_notebooks(notebook_paths)))
     assert len(blocks) == len(labels), "Blocks and labels should have the same length"
     assert len(variables) == len(blocks), "Variables and blocks should have the same length"
     assert len(sources) == len(blocks), "Paths and blocks should have the same length"
@@ -23,7 +23,7 @@ def main():
     # Create a vector database
     vector_db = VectorDB(dbtype=HNSWVectorDB, empty=True)
     assert vector_db.get_size() == 0, 'VectorDB should initialize empty'
-    vector_db.create(labels, blocks, variables, sources, embeddings)
+    vector_db.create(labels, blocks, variables, var_descriptions, sources, embeddings)
     assert vector_db.get_size() == len(blocks), 'VectorDB should have created every block as a vector'
 
     # Read from the database
