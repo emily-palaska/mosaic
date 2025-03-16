@@ -60,14 +60,10 @@ def empty_docs(workspace='./databases/'):
         conn.close()
 
 def _find_db_files(folder_path):
-    # List to store all .db file paths
     db_files = []
-
-    # Walk through the folder and its subfolders
     for root, dirs, files in os.walk(folder_path):
         for file in files:
             if file.endswith('.db'):
-                # Append the full path of the .db file
                 db_files.append(os.path.join(root, file))
 
     return db_files
