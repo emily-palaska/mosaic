@@ -85,5 +85,8 @@ def print_merge_result(specification, block_manager):
         print(textwrap.fill(label,100))
         print("CODE:")
         print(_concatenate_block(block))
+        print("VARIABLES:")
+        for var, desc in zip(variables, var_descriptions):
+            print(f'{var}:{textwrap.fill(desc,100)}')
 
     print("\n" + "=" * 60)
