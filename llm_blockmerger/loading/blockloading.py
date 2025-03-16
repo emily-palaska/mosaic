@@ -89,6 +89,7 @@ def _find_notebook_variables(block_manager):
         except Exception: raise
     return notebook_variables
 
+# todo implement this with reg ex maybe
 def _separate_notebook_variables(block_manager, notebook_variables):
     for block in block_manager.blocks:
         block_variables = []
@@ -100,13 +101,14 @@ def _concatenate_block(block):
     return '\n'.join(block) + '\n'
 
 def concatenate_managers(block_managers):
-    labels, blocks, sources, variables = [], [], [], []
+    labels, blocks, sources, variables, var_descriptions = [], [], [], [], []
     for block_manager in block_managers:
         labels.extend(block_manager.labels)
         blocks.extend(block_manager.blocks)
         variables.extend(block_manager.variables)
-        sources.extend(block_manager.source for _ in range(len(block_manager.blocks)))
-    return blocks, labels, variables, sources
+        sources.extend(block_manager.sources for _ in range(len(block_manager.blocks)))
+        var_descriptions.extend(block_manager.var_descriptions)
+    return blocks, labels, variables, var_descriptions, sources
 
 def main():
     path = ['../../notebooks/test_notebook.ipynb']
