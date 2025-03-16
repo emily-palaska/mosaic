@@ -11,6 +11,13 @@ class CodeBlocksManager:
         self.var_descriptions = var_descriptions if var_descriptions else []
         self.sources = source if source else []
 
+    def set(self, blocks=None, labels=None, source=None, variables=None, var_descriptions=None):
+        if blocks is not None: self.blocks = blocks
+        if labels is not None: self.labels = labels
+        if source is not None: self.sources = source
+        if variables is not None: self.variables = variables
+        if var_descriptions is not None: self.var_descriptions = var_descriptions
+
     def append_doc(self, doc):
         self.blocks.append(doc.block)
         self.labels.append(doc.label)
