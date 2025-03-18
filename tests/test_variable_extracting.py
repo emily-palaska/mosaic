@@ -1,5 +1,5 @@
 import pytest
-from llm_blockmerger.loading.variable_extracting import extract_variables, Llama
+from llm_blockmerger.load.variable_extraction import extract_variables, Llama
 
 
 @pytest.fixture

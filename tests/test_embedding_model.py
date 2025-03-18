@@ -1,6 +1,6 @@
 import pytest, sys
 sys.path.append("..")
-from llm_blockmerger.encoding.embedding_model import *
+from llm_blockmerger.store.embedding_similarity import *
 
 @pytest.fixture
 def labels():
