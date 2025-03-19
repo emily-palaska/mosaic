@@ -2,7 +2,12 @@ import textwrap
 from llm_blockmerger.core.utils import ast_extraction
 from llm_blockmerger.core.utils import concatenate_block
 
-def extract_notebook_variables(block_manager, model):
+def extract_notebook_variables(block_manager, model, empty=False):
+    if empty:
+        block_manager.set(variables=[[] for _ in range(len(block_manager))],
+                          var_descriptions=[[] for _ in range(len(block_manager))])
+        return
+
     # todo update d if v is already in the set
     notebook_variables = set()
     for block in block_manager.blocks:

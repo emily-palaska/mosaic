@@ -1,9 +1,14 @@
-from llm_blockmerger.store.embedding_similarity import initialize_model, encode_labels, compute_similarity
+from llm_blockmerger.core.utils import compute_embedding_similarity
 from llm_blockmerger.load.block_loading import CodeBlocksManager
 
-def merge_variables(block_manager, threshold=0.9):
+def merge_variables(embedding_model, block_manager, threshold=0.9):
     blocks, labels, variables, var_descriptions, sources = block_manager.unzip()
-    variables_to_merge, variables_to_remove, descriptions_to_remove = _find_variables_to_remove(*_find_variables_to_merge(variables, var_descriptions, threshold))
+    variables_to_merge, variables_to_remove, descriptions_to_remove = _find_variables_to_remove(
+        *_find_variables_to_merge(embedding_model,
+                                  variables,
+                                  var_descriptions,
+                                  threshold)
+    )
 
     for var, desc in zip(variables, var_descriptions):
         var[:] = [v for v in var if v not in variables_to_remove]
@@ -16,12 +21,11 @@ def merge_variables(block_manager, threshold=0.9):
     block_manager.set(blocks=blocks, variables=variables, var_descriptions=var_descriptions)
     return block_manager
 
-
-def _find_variables_to_merge(variables, var_descriptions, threshold=0.9):
+def _find_variables_to_merge(embedding_model, variables, var_descriptions, threshold=0.9):
     flat_variables = [item for sublist in variables for item in sublist]
     flat_descriptions = [item for sublist in var_descriptions for item in sublist]
 
-    similarity_matrix = compute_similarity(encode_labels(initialize_model(), flat_descriptions))
+    similarity_matrix = compute_embedding_similarity(embedding_model.encode_strings(flat_descriptions),)
     variables_to_merge = [(flat_variables[i], flat_variables[j])
                 for i in range(len(flat_variables))
                 for j in range(i + 1, len(flat_variables))

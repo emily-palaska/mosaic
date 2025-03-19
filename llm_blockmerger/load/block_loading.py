@@ -6,11 +6,14 @@ class CodeBlocksManager:
         self.var_descriptions = var_descriptions if var_descriptions else []
         self.sources = source if source else []
 
+    def __len__(self):
+        return len(self.blocks)
+
     def preprocess_notebook(self, path, notebook):
         blocks, labels = _preprocess_code_lines(*_extract_cell_content(notebook))
         self.blocks = blocks
         self.labels = labels
-        self.sources = [path for _ in range(len(blocks))]
+        self.sources = path
 
     def set(self, blocks=None, labels=None, source=None, variables=None, var_descriptions=None):
         if blocks is not None: self.blocks = blocks
@@ -24,6 +27,7 @@ class CodeBlocksManager:
         self.labels.append(doc.label)
         self.variables.append(doc.variables)
         self.var_descriptions.append(doc.var_descriptions)
+        if not isinstance(self.sources, list): self.sources = [self.sources]
         self.sources.append(doc.source)
 
     def unzip(self):

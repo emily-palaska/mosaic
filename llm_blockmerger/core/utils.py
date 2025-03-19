@@ -54,7 +54,7 @@ def concatenate_managers(block_managers):
         labels.extend(block_manager.labels)
         blocks.extend(block_manager.blocks)
         variables.extend(block_manager.variables)
-        sources.extend(block_manager.sources for _ in range(len(block_manager.blocks)))
+        sources.extend(block_manager.sources for _ in range(len(block_manager)))
         var_descriptions.extend(block_manager.var_descriptions)
     return blocks, labels, variables, var_descriptions, sources
 
@@ -107,19 +107,35 @@ def print_merge_result(specification, block_manager):
     print(' ' * 23 + "MERGE RESULT")
     print("=" * 60)
 
-    print("\nSpecification (Input to Merging Mechanism):")
+    print("\nSPECIFICATION:")
     print(textwrap.indent(specification, "    "))
-    print("=" * 60)
 
-    blocks, labels, variables, var_descriptions, sources = block_manager.unzip()
-    for i, (label, block, source) in enumerate(zip(labels, blocks, sources), 1):
-        print("\n" + "-" * 60)
-        print(f"SOURCE: {source}")
-        print(textwrap.fill(label,100))
+    blocks, labels, variables, descriptions, sources = block_manager.unzip()
+    print("VARIABLES:")
+    for i in range(len(block_manager)):
+        for v, d in zip(variables[i], descriptions[i]):
+            print(f'\t{v}: {textwrap.fill(d,100)}')
+    for i in range(len(block_manager)):
+        print("-" * 60)
+        print(f"SOURCE: {sources[i]}")
+        print("LABEL:")
+        print(textwrap.indent(textwrap.fill(labels[i],100), '\t'))
         print("CODE:")
-        print(concatenate_block(block))
-        print("VARIABLES:")
-        for var, desc in zip(variables, var_descriptions):
-            print(f'{var}:{textwrap.fill(desc,100)}')
+        print(textwrap.indent(concatenate_block(blocks[i]), '\t'))
 
     print("\n" + "=" * 60)
+
+def main():
+    from llm_blockmerger.load.block_loading import CodeBlocksManager
+    manager = CodeBlocksManager(
+        blocks=[['x', 'y', 'z']],
+        labels=['program'],
+        variables=[['x', 'y', 'z']],
+        var_descriptions=[['x', 'y', 'z']],
+        source=['path']
+    )
+    print_merge_result('specification', manager)
+
+
+if __name__ == '__main__':
+    main()
