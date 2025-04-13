@@ -21,11 +21,10 @@ def main():
     for manager in managers: extract_notebook_variables(manager, llama)
     print('Extracted notebook variables...')
 
-    blocks, labels, variables, var_descriptions, sources = concatenate_managers(managers)
+    blocks, labels, variable_dictionaries, sources = concatenate_managers(managers)
     assert len(labels) == len(blocks), "Blocks and labels should have the same length"
     assert len(sources) == len(blocks), "Paths and blocks should have the same length"
-    assert len(variables) == len(blocks), "Variables and blocks should have the same length"
-    assert len(var_descriptions) == len(blocks), "Descriptions and blocks should have the same length"
+    assert len(variable_dictionaries) == len(blocks), "Variable dictionaries and blocks should have the same length"
     print('Passed dimension assertations...')
 
     embedding_model = LLM(task='embedding')
@@ -38,7 +37,7 @@ def main():
     vector_db = VectorDB(dbtype=HNSWVectorDB, empty=True)
     print('Initialized vector database...')
     assert vector_db.get_size() == 0, 'VectorDB should initialize empty'
-    vector_db.create(labels, blocks, variables, var_descriptions, sources, embeddings)
+    vector_db.create(labels, blocks, variable_dictionaries, sources, embeddings)
     assert vector_db.get_size() == len(blocks), 'VectorDB should have created every block as a vector'
     print('Loaded data to vector database...')
 

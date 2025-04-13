@@ -1,11 +1,10 @@
 import textwrap
 from llm_blockmerger.core.utils import ast_extraction
-from load.managers import concatenate_block
+from llm_blockmerger.core.utils import concatenate_block
 
 def extract_notebook_variables(block_manager, model, empty=False):
     if empty:
-        block_manager.set(variables=[[] for _ in range(len(block_manager))],
-                          var_descriptions=[[] for _ in range(len(block_manager))])
+        block_manager.set(variables_dict=[{} for _ in range(len(block_manager))])
         return
 
     # todo update d if v is already in the set
@@ -17,22 +16,19 @@ def extract_notebook_variables(block_manager, model, empty=False):
             notebook_variables.update((v, d) for v, d in zip(block_variables, block_descriptions))
         except IndentationError: continue
         except Exception: raise
-    separated_variables, separated_descriptions = _separate_variables_per_block(block_manager.blocks, notebook_variables)
-    block_manager.set(variables=separated_variables, var_descriptions=separated_descriptions)
+    variable_dictionaries = _separate_variables_per_block(block_manager.blocks, notebook_variables)
+    block_manager.set(variable_dictionaries=variable_dictionaries)
 
 def _separate_variables_per_block(blocks, notebook_variables):
     # todo try reg ex
-    separated_variables = []
-    separated_descriptions = []
+    variable_dictionaries = []
     for block in blocks:
-        block_variables, block_descriptions = [], []
+        block_dictionary = {}
         for variable, description in notebook_variables:
             if variable in concatenate_block(block):
-                block_variables.append(variable)
-                block_descriptions.append(description)
-        separated_variables.append(block_variables)
-        separated_descriptions.append(block_descriptions)
-    return separated_variables, separated_descriptions
+                block_dictionary[variable] = description
+        variable_dictionaries.append(block_dictionary)
+    return variable_dictionaries
 
 def _extract_block_variables(script, model=None):
     if model is None:
@@ -102,12 +98,12 @@ def main():
     blocks = [['x = 1', 'y = 2'], ['z = x + y']]
     labels = ['Simple addition code']
 
-    from llm_blockmerger.load.code_loading import CodeBlocksManager
+    from llm_blockmerger.load.managers import CodeBlocksManager
     demo_manager = CodeBlocksManager(blocks=blocks, labels=labels)
     extract_notebook_variables(demo_manager, llama)
 
-    for block_variables, block_descriptions in zip(demo_manager.variables, demo_manager.var_descriptions):
-        for v, d in zip(block_variables, block_descriptions):
+    for block_dictionary in demo_manager.variable_dictionaries:
+        for v, d in block_dictionary.items():
             print(f'{v}: {d}')
         print('-'*40)
 

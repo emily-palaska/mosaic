@@ -72,10 +72,10 @@ def print_merge_result(specification, block_manager):
     print("\nSPECIFICATION:")
     print(textwrap.indent(specification, "    "))
 
-    blocks, labels, variables, descriptions, sources = block_manager.unzip()
+    blocks, labels, variable_dictionaries, sources = block_manager.unzip()
     print("VARIABLES:")
-    for i in range(len(block_manager)):
-        for v, d in zip(variables[i], descriptions[i]):
+    for block_dictionary in variable_dictionaries:
+        for v, d in block_dictionary.items():
             print(f'\t{v}: {textwrap.fill(d,100)}')
     for i in range(len(block_manager)):
         print("-" * 60)
