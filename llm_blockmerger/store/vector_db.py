@@ -1,6 +1,6 @@
 from docarray import DocList
 from vectordb import InMemoryExactNNVectorDB, HNSWVectorDB
-import os
+from llm_blockmerger.core.utils import find_db_files
 from docarray import BaseDoc
 from docarray.typing import NdArray
 
@@ -21,6 +21,7 @@ class VectorDB:
                  workspace='./databases/',
                  feature_size=384,
                  empty=False):
+        assert dbtype in [HNSWVectorDB, InMemoryExactNNVectorDB], "Invalid dbtype"
         self.BlockMergerDoc = make_doc(feature_size)
         self.db = dbtype[self.BlockMergerDoc](workspace=workspace)
         if empty: empty_docs(workspace=workspace)
@@ -50,7 +51,7 @@ class VectorDB:
 def empty_docs(workspace='./databases/'):
     import sqlite3
 
-    db_files = _find_db_files(workspace)
+    db_files = find_db_files(workspace)
 
     for db_file in db_files:
         conn = sqlite3.connect(db_file)
@@ -59,11 +60,3 @@ def empty_docs(workspace='./databases/'):
         conn.commit()
         conn.close()
 
-def _find_db_files(folder_path):
-    db_files = []
-    for root, dirs, files in os.walk(folder_path):
-        for file in files:
-            if file.endswith('.db'):
-                db_files.append(os.path.join(root, file))
-
-    return db_files

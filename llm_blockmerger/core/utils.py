@@ -1,7 +1,13 @@
-import ast, os, json, textwrap
-from sentence_transformers import util
-import matplotlib.pyplot as plt
-import numpy as np
+import ast, textwrap, os
+
+def find_db_files(folder_path):
+    db_files = []
+    for root, dirs, files in os.walk(folder_path):
+        for file in files:
+            if file.endswith('.db'):
+                db_files.append(os.path.join(root, file))
+
+    return db_files
 
 def remove_common_words(original: str, to_remove: str, replacement='UNKNOWN') -> str:
     original = original.replace('\n', ' ')
@@ -13,57 +19,6 @@ def remove_common_words(original: str, to_remove: str, replacement='UNKNOWN') ->
         for word in original_words
     ]
     return ' '.join(replaced_words)
-
-def embedding_projection(current_embedding, neighbor_embedding):
-    if np.all(current_embedding == 0):
-        return None
-    inner_product = np.dot(neighbor_embedding, current_embedding) / np.dot(current_embedding, current_embedding)
-    return inner_product * current_embedding
-
-def compute_embedding_similarity(embeddings):
-    return util.pytorch_cos_sim(embeddings, embeddings)
-
-def plot_similarity_matrix(similarity_matrix, save_path='../plots/similarity_matrix.png'):
-    plt.figure(figsize=(12, 12))
-    plt.imshow(similarity_matrix, cmap='coolwarm', interpolation='nearest')
-    plt.colorbar(label='Similarity')
-
-    # Annotate the matrix with similarity values - ONLY for small dimensions due to visibility
-    if similarity_matrix.shape[0] <= 20:
-        for i in range(similarity_matrix.shape[0]):
-            for j in range(similarity_matrix.shape[1]):
-                plt.text(j, i, f"{similarity_matrix[i, j]:.2f}",
-                         ha="center", va="center", color="black")
-
-    plt.title("Similarity Matrix")
-    plt.tight_layout()
-    plt.savefig(save_path)
-    plt.close()
-
-def initialize_managers(notebook_paths):
-    from load.block_loading import CodeBlocksManager
-    managers = []
-    for notebook_path in notebook_paths:
-        managers.append(CodeBlocksManager())
-        managers[-1].preprocess_notebook(*load_notebooks(notebook_path))
-    return managers
-
-def concatenate_managers(block_managers):
-    labels, blocks, sources, variables, var_descriptions = [], [], [], [], []
-    for block_manager in block_managers:
-        labels.extend(block_manager.labels)
-        blocks.extend(block_manager.blocks)
-        variables.extend(block_manager.variables)
-        sources.extend(block_manager.sources for _ in range(len(block_manager)))
-        var_descriptions.extend(block_manager.var_descriptions)
-    return blocks, labels, variables, var_descriptions, sources
-
-def concatenate_block(block):
-    return '\n'.join(block) + '\n'
-
-def load_notebooks(nb_paths):
-    if not isinstance(nb_paths, list): return os.path.basename(nb_paths), json.load(open(nb_paths, 'r'))
-    return [(os.path.basename(path), json.load(open(path, 'r'))) for path in nb_paths]
 
 def ast_extraction(script=''):
     tree = ast.parse(script)
@@ -103,6 +58,7 @@ def ast_extraction(script=''):
     return sorted(list(variables))
 
 def print_merge_result(specification, block_manager):
+    from llm_blockmerger.core.managers import concatenate_block
     print("\n" + "=" * 60)
     print(' ' * 23 + "MERGE RESULT")
     print("=" * 60)
@@ -124,18 +80,3 @@ def print_merge_result(specification, block_manager):
         print(textwrap.indent(concatenate_block(blocks[i]), '\t'))
 
     print("\n" + "=" * 60)
-
-def main():
-    from llm_blockmerger.load.block_loading import CodeBlocksManager
-    manager = CodeBlocksManager(
-        blocks=[['x', 'y', 'z']],
-        labels=['program'],
-        variables=[['x', 'y', 'z']],
-        var_descriptions=[['x', 'y', 'z']],
-        source=['path']
-    )
-    print_merge_result('specification', manager)
-
-
-if __name__ == '__main__':
-    main()

@@ -1,4 +1,4 @@
-from llm_blockmerger.core.utils import compute_embedding_similarity
+from llm_blockmerger.core.embeddings import compute_embedding_similarity
 from llm_blockmerger.load.block_loading import CodeBlocksManager
 
 def merge_variables(embedding_model, block_manager, threshold=0.9):
@@ -66,12 +66,15 @@ def main():
         ]
     ]
 
+    from llm_blockmerger.core.models import LLM
+    embedding_model = LLM(task='embedding')
+
     manager = CodeBlocksManager(
         blocks=demo_blocks,
         variables=demo_variables,
         var_descriptions=demo_var_descriptions
     )
-    manager = merge_variables(manager)
+    manager = merge_variables(embedding_model, manager)
     print(manager.blocks)
     print(manager.variables)
     print(manager.var_descriptions)

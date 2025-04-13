@@ -1,6 +1,7 @@
 import numpy as np
 from llm_blockmerger.load.block_loading import CodeBlocksManager
-from llm_blockmerger.core.utils import remove_common_words, embedding_projection
+from llm_blockmerger.core.utils import remove_common_words
+from llm_blockmerger.core.embeddings import embedding_projection
 
 def linear_string_merge(embedding_model, vector_db, specification, max_iterations=10, replacement='UNKNOWN'):
     merge_block_manager = CodeBlocksManager()

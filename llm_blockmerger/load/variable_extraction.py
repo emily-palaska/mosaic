@@ -1,6 +1,6 @@
 import textwrap
 from llm_blockmerger.core.utils import ast_extraction
-from llm_blockmerger.core.utils import concatenate_block
+from llm_blockmerger.core.managers import concatenate_block
 
 def extract_notebook_variables(block_manager, model, empty=False):
     if empty:
