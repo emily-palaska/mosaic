@@ -1,4 +1,11 @@
-import ast, textwrap, os
+import ast, textwrap, os, json
+
+def concatenate_block(block):
+    return '\n'.join(block) + '\n'
+
+def load_notebooks(nb_paths):
+    if not isinstance(nb_paths, list): return os.path.basename(nb_paths), json.load(open(nb_paths, 'r'))
+    return [(os.path.basename(path), json.load(open(path, 'r'))) for path in nb_paths]
 
 def find_db_files(folder_path):
     db_files = []
@@ -58,7 +65,6 @@ def ast_extraction(script=''):
     return sorted(list(variables))
 
 def print_merge_result(specification, block_manager):
-    from llm_blockmerger.core.managers import concatenate_block
     print("\n" + "=" * 60)
     print(' ' * 23 + "MERGE RESULT")
     print("=" * 60)

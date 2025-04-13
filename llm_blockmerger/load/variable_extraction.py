@@ -1,6 +1,6 @@
 import textwrap
 from llm_blockmerger.core.utils import ast_extraction
-from llm_blockmerger.core.managers import concatenate_block
+from load.managers import concatenate_block
 
 def extract_notebook_variables(block_manager, model, empty=False):
     if empty:
@@ -102,7 +102,7 @@ def main():
     blocks = [['x = 1', 'y = 2'], ['z = x + y']]
     labels = ['Simple addition code']
 
-    from llm_blockmerger.load.block_loading import CodeBlocksManager
+    from llm_blockmerger.load.code_loading import CodeBlocksManager
     demo_manager = CodeBlocksManager(blocks=blocks, labels=labels)
     extract_notebook_variables(demo_manager, llama)
 

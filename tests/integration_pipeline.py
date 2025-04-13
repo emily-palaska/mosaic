@@ -3,7 +3,7 @@ os.chdir("../")
 
 from llm_blockmerger.core.utils import print_merge_result
 from llm_blockmerger.core.embeddings import plot_similarity_matrix, compute_embedding_similarity
-from llm_blockmerger.core.managers import initialize_managers, concatenate_managers
+from load.managers import initialize_managers, concatenate_managers
 from llm_blockmerger.core.models import LLM
 from llm_blockmerger.load.variable_extraction import extract_notebook_variables
 from llm_blockmerger.block_merge import linear_embedding_merge, linear_string_merge

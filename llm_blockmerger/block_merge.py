@@ -1,5 +1,5 @@
 import numpy as np
-from llm_blockmerger.load.block_loading import CodeBlocksManager
+from llm_blockmerger.load.managers import CodeBlocksManager
 from llm_blockmerger.core.utils import remove_common_words
 from llm_blockmerger.core.embeddings import embedding_projection
 

@@ -1,5 +1,5 @@
 from llm_blockmerger.core.embeddings import compute_embedding_similarity
-from llm_blockmerger.load.block_loading import CodeBlocksManager
+from llm_blockmerger.load.managers import CodeBlocksManager
 
 def merge_variables(embedding_model, block_manager, threshold=0.9):
     blocks, labels, variables, var_descriptions, sources = block_manager.unzip()
