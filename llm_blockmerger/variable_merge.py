@@ -2,19 +2,6 @@ from llm_blockmerger.core.embeddings import compute_embedding_similarity
 from llm_blockmerger.load.managers import CodeBlocksManager
 from collections import defaultdict
 
-def merge_variables(embedding_model, block_manager, threshold=0.9):
-    blocks, labels, variable_dictionaries, sources = block_manager.unzip()
-    components = _find_variables_to_merge(embedding_model, variable_dictionaries, threshold)
-    _refactor_dictionaries(components, variable_dictionaries)
-
-    for group in components:
-        for idg in range(1, len(group)):
-            for idx, block in enumerate(blocks):
-                blocks[idx] = _replace_variables(block, group[idg], group[0])
-
-    block_manager.set(blocks=blocks, variable_dictionaries=variable_dictionaries)
-    return block_manager
-
 def _build_similarity_graph(variables, similarity_matrix, threshold):
     graph = defaultdict(set)
     n = len(variables)
@@ -44,7 +31,20 @@ def _find_connected_components(graph):
 
     return components
 
-def _find_variables_to_merge(embedding_model, variable_dictionaries, threshold=0.9):
+def _find_pair_merges(embedding_model, variable_dictionaries, threshold=0.9):
+    flat_variables = [v for block_dict in variable_dictionaries for v in block_dict]
+    flat_descriptions = [d for block_dict in variable_dictionaries for d in block_dict.values()]
+
+    similarity_matrix = compute_embedding_similarity(embedding_model.encode_strings(flat_descriptions),)
+    components = [
+        [flat_variables[i], flat_variables[j]]
+                for i in range(len(flat_variables))
+                for j in range(i + 1, len(flat_variables))
+                if similarity_matrix[i][j] > threshold
+    ]
+    return components
+
+def _find_group_merges(embedding_model, variable_dictionaries, threshold=0.9):
     flat_variables = [v for block_dict in variable_dictionaries for v in block_dict]
     flat_descriptions = [d for block_dict in variable_dictionaries for d in block_dict.values()]
 
@@ -71,6 +71,21 @@ def _replace_variables(block, old_var, new_var):
         modified_block.append("".join(modified_line))
     return modified_block
 
+def merge_variables(embedding_model, block_manager, threshold=0.9, find_merges=_find_group_merges):
+    if find_merges not in [_find_group_merges, _find_pair_merges]:
+        raise TypeError("Incorrect type of find_variables_function")
+    blocks, _, variable_dictionaries, _ = block_manager.unzip()
+
+    components = find_merges(embedding_model, variable_dictionaries, threshold)
+    _refactor_dictionaries(components, variable_dictionaries)
+
+    for group in components:
+        for idg in range(1, len(group)):
+            for idx, block in enumerate(blocks):
+                blocks[idx] = _replace_variables(block, group[idg], group[0])
+
+    block_manager.set(blocks=blocks, variable_dictionaries=variable_dictionaries)
+    return block_manager
 
 # todo make tests out of this execution scenario
 def main():
