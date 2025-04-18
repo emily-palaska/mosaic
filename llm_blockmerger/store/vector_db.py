@@ -3,6 +3,8 @@ from vectordb import InMemoryExactNNVectorDB, HNSWVectorDB
 from llm_blockmerger.core.utils import find_db_files
 from docarray import BaseDoc
 from docarray.typing import NdArray
+from torch.utils.data import Dataset
+import torch
 
 def make_doc(feature_size=384):
     class BlockMergerDoc(BaseDoc):
@@ -14,13 +16,14 @@ def make_doc(feature_size=384):
 
     return BlockMergerDoc
 
-class VectorDB:
+class VectorDB(Dataset):
     def __init__(self,
                  dbtype=HNSWVectorDB,
                  workspace='./databases/',
                  feature_size=384,
                  empty=False):
         assert dbtype in [HNSWVectorDB, InMemoryExactNNVectorDB], "Invalid dbtype"
+        self.feature_size = feature_size
         self.BlockMergerDoc = make_doc(feature_size)
         self.db = dbtype[self.BlockMergerDoc](workspace=workspace)
         if empty: empty_docs(workspace=workspace)
@@ -43,8 +46,15 @@ class VectorDB:
         results = self.db.search(inputs=DocList[self.BlockMergerDoc]([query]), limit=limit)
         return results[0].matches
 
-    def get_size(self):
+    def get_feature_size(self):
+        return self.feature_size
+
+    def __len__(self):
         return self.db.num_docs()['num_docs']
+
+    def __getitem__(self, embedding):
+        m = self.read(embedding, limit=3)
+        return torch.tensor(m[0]), torch.tensor(m[1]), torch.tensor(m[2])
 
 def empty_docs(workspace='./databases/'):
     import sqlite3
