@@ -15,14 +15,14 @@ def main():
 
     # Create a VectorDB, should initialize empty
     vector_db = VectorDB(dbtype=HNSWVectorDB, feature_size=feature_size, empty=True)
-    assert vector_db.get_size() == 0, 'Initialized VectorDB size is not 0'
+    assert len(vector_db) == 0, 'Initialized VectorDB size is not 0'
 
     # Try an example and verify the dimensions
     example = np.zeros(feature_size)
     vector_db.create(labels, embeddings, blocks)
     result = vector_db.read(example, limit=1)
     assert result[0].embedding.shape == (feature_size,), "Result should match the embedding's feature shape"
-    assert vector_db.get_size() == instances, 'VectorDB size does not match instances created'
+    assert len(vector_db) == instances, 'VectorDB size does not match instances created'
 
 if __name__ == '__main__':
     main()
