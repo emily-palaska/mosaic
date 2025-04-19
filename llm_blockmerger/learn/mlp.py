@@ -33,11 +33,7 @@ def transitive_contrastive_loss(a, b, c, threshold=0.8, margin=1.0):
     bc = normalized_cosine_similarity(b, c)
     ca = normalized_cosine_similarity(c, a)
 
-    # Strict and loose transitivity labeling
     label = (torch.sqrt(ab * bc) > threshold).float()
-    #label = torch.sqrt(ab * bc)
-
-    # Contrastive loss formula
     loss_similar = (1 - label) * torch.pow(ca, 2)
     loss_dissimilar = label * torch.pow(torch.clamp(margin - ca, min=0.0), 2)
 

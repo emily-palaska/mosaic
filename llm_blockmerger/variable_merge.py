@@ -71,9 +71,11 @@ def _replace_variables(block, old_var, new_var):
         modified_block.append("".join(modified_line))
     return modified_block
 
-def merge_variables(embedding_model, block_manager, threshold=0.9, find_merges=_find_group_merges):
-    if find_merges not in [_find_group_merges, _find_pair_merges]:
-        raise TypeError("Incorrect type of find_variables_function")
+def merge_variables(embedding_model,
+                    block_manager,
+                    threshold=0.9,
+                    find_merges=_find_group_merges):
+    assert find_merges in [_find_group_merges, _find_pair_merges], "Incorrect type of find_variables_function"
     blocks, _, variable_dictionaries, _ = block_manager.unzip()
 
     components = find_merges(embedding_model, variable_dictionaries, threshold)
