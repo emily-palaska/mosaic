@@ -53,6 +53,7 @@ class VectorDB(Dataset):
         return self.db.num_docs()['num_docs']
 
     def __getitem__(self, embedding):
+        # todo make this get all the database with indexing
         m = self.read(embedding, limit=3)
         return torch.tensor(m[0]), torch.tensor(m[1]), torch.tensor(m[2])
 

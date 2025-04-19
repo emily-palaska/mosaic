@@ -1,6 +1,5 @@
 .idea
 **/__pycache__/
-llm_blockmerger/store/InMemoryExactNNIndexer[BlockMergerDoc][BlockMergerDocWithMatchesAndScores]
 /databases/*
 *.db
 /models/**

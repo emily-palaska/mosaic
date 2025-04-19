@@ -23,22 +23,27 @@ class MLP(nn.Module):
     def forward(self, x):
         return self.network(x)
 
-def transitive_contrastive_loss(a, b, c, label_ab, label_bc, margin=0.2, alpha=0.5):
-    # Compute cosine distances
-    cos_dist_ab = 1 - F.cosine_similarity(a, b, dim=1)
-    cos_dist_bc = 1 - F.cosine_similarity(b, c, dim=1)
-    cos_dist_ac = 1 - F.cosine_similarity(a, c, dim=1)
+def normalized_cosine_similarity(embedding1, embedding2):
+    cos_sim = F.cosine_similarity(embedding1, embedding2, dim=1)
+    return (cos_sim + 1) / 2
 
-    # Pairwise losses
-    loss_ab = (label_ab * torch.pow(cos_dist_ab, 2) +
-               (1 - label_ab) * torch.pow(torch.clamp(margin - cos_dist_ab, min=0.0), 2))
-    loss_bc = (label_bc * torch.pow(cos_dist_bc, 2) +
-               (1 - label_bc) * torch.pow(torch.clamp(margin - cos_dist_bc, min=0.0), 2))
+def transitive_contrastive_loss(a, b, c, threshold=0.8, margin=1.0):
+    # Normalized cosine distances
+    ab = normalized_cosine_similarity(a, b)
+    bc = normalized_cosine_similarity(b, c)
+    ca = normalized_cosine_similarity(c, a)
 
-    # Transitivity term
-    trans_loss = (label_ab * label_bc) * torch.pow(cos_dist_ac, 2)
+    # Strict and loose transitivity labeling
+    label = (torch.sqrt(ab * bc) > threshold).float()
+    #label = torch.sqrt(ab * bc)
 
-    return (1 - alpha) * (loss_ab.mean() + loss_bc.mean()) + alpha * trans_loss.mean()
+    # Contrastive loss formula
+    loss_similar = (1 - label) * torch.pow(ca, 2)
+    loss_dissimilar = label * torch.pow(torch.clamp(margin - ca, min=0.0), 2)
+
+    #print(f'\t Label distribution: {torch.sum(label, dim=0) / label.shape[0]}')
+    #print(f'\t Similar: {torch.mean(loss_similar)} Dissimilar: {torch.mean(loss_dissimilar)}')
+    return torch.mean(0.5 * (loss_similar + loss_dissimilar))
 
 def train(model, train_loader, optimizer, epochs=10):
     model.train()
@@ -48,18 +53,12 @@ def train(model, train_loader, optimizer, epochs=10):
         num_batches = 0
 
         for batch in train_loader:
-            a, b, c, label_ab, label_bc = batch
+            a, b, c = batch
             a, b, c = a.to(model.device), b.to(model.device), c.to(model.device)
-            label_ab, label_bc = label_ab.to(model.device), label_bc.to(model.device)
 
             optimizer.zero_grad()
             emb_a, emb_b, emb_c = model(a), model(b), model(c)
-
-            loss = transitive_contrastive_loss(
-                emb_a, emb_b, emb_c,
-                label_ab, label_bc,
-                margin=0.2, alpha=0.5
-            )
+            loss = transitive_contrastive_loss(emb_a, emb_b, emb_c,)
 
             loss.backward()
             optimizer.step()
@@ -71,12 +70,12 @@ def train(model, train_loader, optimizer, epochs=10):
         print(f'Epoch [{epoch + 1}/{epochs}]\t Loss: {avg_loss:.4f}')
 
 def main():
-    model = MLP(input_dim=128, layer_dims=[64, 32])
+    feat_dim = 128
+    model = MLP(input_dim=feat_dim, layer_dims=[64, 32])
     optimizer = optim.Adam(model.parameters(), lr=0.001)
 
-    dataset = DummyTripletDataset(num_samples=1000, feat_dim=128)
+    dataset = DummyTripletDataset(num_samples=32, feat_dim=feat_dim)
     train_loader = DataLoader(dataset, batch_size=32, shuffle=True)
-
     train(model, train_loader, optimizer, epochs=10)
 
 if __name__ == "__main__":

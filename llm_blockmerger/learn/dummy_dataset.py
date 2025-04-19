@@ -2,7 +2,7 @@ import torch
 from torch.utils.data import Dataset
 
 class DummyTripletDataset(Dataset):
-    def __init__(self, num_samples=1000, feat_dim=128, std=5.0):
+    def __init__(self, num_samples=1000, feat_dim=128, std=10):
         self.num_samples = num_samples
         self.feat_dim = feat_dim
         self.data = torch.randn(num_samples * 3, feat_dim) * std
