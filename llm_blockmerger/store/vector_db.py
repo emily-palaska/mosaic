@@ -110,4 +110,4 @@ def main():
     print(vector_db[0])
 
 if __name__ == "__main__":
-    empty_docs(workspace='../../databases/')
+    main()
