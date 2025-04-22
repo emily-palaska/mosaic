@@ -42,7 +42,7 @@ def main():
 
     vector_db = VectorDB(databasetype=HNSWVectorDB, empty=True)
     print('Initialized vector database...')
-    assert len(vector_db) == 0, 'VectorDB should initialize empty'
+    assert len(vector_db) == 0, f'VectorDB should initialize empty, initialized with {len(vector_db)} entries'
     vector_db.create(labels, blocks, variable_dictionaries, sources, embeddings)
     assert len(vector_db) == len(blocks), 'VectorDB should have created every block as a vector'
     print(f'Loaded data to vector database with size {len(vector_db)}...')
@@ -51,6 +51,7 @@ def main():
     optimizer = optim.Adam(model.parameters(), lr=0.001)
     print('Initialized model...')
 
+    vector_db.update_triplets()
     train_loader = DataLoader(vector_db, batch_size=32, shuffle=True)
     print('Created train loader...')
 

@@ -28,9 +28,10 @@ class VectorDB(Dataset):
         self.feature_size = feature_size
         self.dtype = dtype
         self.BlockMergerDoc = make_doc(feature_size)
+
+        if empty: empty_docs(workspace=workspace)
         self.db = databasetype[self.BlockMergerDoc](workspace=workspace)
         self.triplets = generate_triplets(len(self))
-        if empty: empty_docs(workspace=workspace)
 
     def update_triplets(self):
         self.triplets = generate_triplets(len(self))
