@@ -89,4 +89,4 @@ def print_merge_result(specification, block_manager):
 
 def generate_triplets(n):
     from itertools import combinations
-    return list(combinations(range(1, n + 1), 3))
+    return list(combinations(range(0, n), 3))

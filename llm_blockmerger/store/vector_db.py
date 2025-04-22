@@ -31,16 +31,21 @@ class VectorDB(Dataset):
 
         if empty: empty_docs(workspace=workspace)
         self.db = databasetype[self.BlockMergerDoc](workspace=workspace)
+<<<<<<< Updated upstream
         self.triplets = generate_triplets(len(self))
+=======
+        self.triplets = generate_triplets(self.get_num_docs())
+        if empty: empty_docs(workspace=workspace)
+>>>>>>> Stashed changes
 
     def update_triplets(self):
-        self.triplets = generate_triplets(len(self))
+        self.triplets = generate_triplets(self.get_num_docs())
 
     def create(self, labels, blocks, variable_dictionaries, sources, embeddings):
         num_values = len(labels)
         doc_list = [
             self.BlockMergerDoc(
-                id=str(len(self) +i),
+                id=str(self.get_num_docs() +i),
                 label=labels[i],
                 block=blocks[i],
                 source=sources[i],
@@ -68,8 +73,11 @@ class VectorDB(Dataset):
     def get_feature_size(self):
         return self.feature_size
 
-    def __len__(self):
+    def get_num_docs(self):
         return self.db.num_docs()['num_docs']
+
+    def __len__(self):
+        return len(self.triplets)
 
     def __getitem__(self, index):
         if index >= len(self.triplets):
@@ -130,10 +138,16 @@ def main():
                          empty=False)
     print('Initialized vector database...')
     vector_db.create(labels, blocks, variable_dictionaries, sources, embeddings)
-    print(f'Database length is {len(vector_db)}')
-    import numpy as np
-    query = np.array([i for i in range(vector_db.feature_size)])
-    print(vector_db.read(query))
+    vector_db.update_triplets()
+    print(f'Database entries are {vector_db.get_num_docs()}')
+    print(f'Dataset length is {len(vector_db)}')
+
+    from torch.utils.data import DataLoader
+    train_loader = DataLoader(vector_db, batch_size=32, shuffle=True)
+
+    for batch in train_loader:
+        print(batch)
+
 
 if __name__ == "__main__":
     main()
