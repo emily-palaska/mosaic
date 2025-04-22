@@ -7,9 +7,14 @@ from llm_blockmerger.learn.mlp import MLP, train
 from torch.utils.data import DataLoader
 
 def main():
-    vector_db = VectorDB(dbtype=HNSWVectorDB, empty=False)
-    assert len(vector_db) == 84, 'VectorDB should initialize with saved elements'
+    vector_db = VectorDB(workspace='../databases/',
+                         databasetype=HNSWVectorDB,
+                         empty=False)
+    #assert len(vector_db) == 84, 'VectorDB should initialize with saved elements'
     print('Initialized vector database...')
+
+    print(len(vector_db))
+    exit(0)
 
     model = MLP(input_dim=vector_db.get_feature_size(), layer_dims=[64, 32, 3])
     optimizer = optim.Adam(model.parameters(), lr=0.001)

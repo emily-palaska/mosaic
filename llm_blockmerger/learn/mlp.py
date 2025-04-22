@@ -3,7 +3,7 @@ import torch.nn as nn
 import torch.optim as optim
 import torch.nn.functional as F
 from torch.utils.data import DataLoader
-from dummy_dataset import DummyTripletDataset
+from llm_blockmerger.learn.dummy_dataset import DummyTripletDataset
 
 class MLP(nn.Module):
     def __init__(self, input_dim, layer_dims = None):

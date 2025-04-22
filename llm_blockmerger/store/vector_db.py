@@ -19,15 +19,29 @@ def make_doc(feature_size=384):
 
 class VectorDB(Dataset):
     def __init__(self,
-                 dbtype=HNSWVectorDB,
+                 databasetype=HNSWVectorDB,
                  workspace='./databases/',
                  feature_size=384,
+                 dtype=torch.float32,
                  empty=False):
-        assert dbtype in [HNSWVectorDB, InMemoryExactNNVectorDB], "Invalid dbtype"
+        assert databasetype in [HNSWVectorDB, InMemoryExactNNVectorDB], "Invalid dbtype"
         self.feature_size = feature_size
+        self.dtype = dtype
         self.BlockMergerDoc = make_doc(feature_size)
-        self.db = dbtype[self.BlockMergerDoc](workspace=workspace)
+        self.db = databasetype[self.BlockMergerDoc](workspace=workspace)
         if empty: empty_docs(workspace=workspace)
+        self._precompute_triplets()
+
+    def _precompute_triplets(self):
+        self.triplets = []
+        n = len(self)
+
+        for i in range(n):
+            anchor_idx = i
+            positive_idx = (i + 1) % n
+            negative_idx = (i - 1) % n
+
+            self.triplets.append((anchor_idx, positive_idx, negative_idx))
 
     def create(self, labels, blocks, variable_dictionaries, sources, embeddings):
         num_values = len(labels)
@@ -60,9 +74,20 @@ class VectorDB(Dataset):
         return self.db.num_docs()['num_docs']
 
     def __getitem__(self, index):
-        # todo make this triplets
-        if index >= len(self): raise IndexError(f'Index {index} out of range')
-        return self.db.get_by_id(str(index))
+        if index >= len(self):
+            raise IndexError(f'Index {index} out of range')
+
+        anchor_idx, positive_idx, negative_idx = self.triplets[index]
+
+        anchor = self.db.get_by_id(str(anchor_idx))
+        positive = self.db.get_by_id(str(positive_idx))
+        negative = self.db.get_by_id(str(negative_idx))
+
+        anchor_embedding = torch.tensor(anchor.embedding, dtype=self.dtype)
+        positive_embedding = torch.tensor(positive.embedding, dtype=self.dtype)
+        negative_embedding = torch.tensor(negative.embedding, dtype=self.dtype)
+
+        return anchor_embedding, positive_embedding, negative_embedding
 
 def empty_docs(workspace='./databases/'):
     import sqlite3
@@ -100,7 +125,7 @@ def main():
     sources = ['' for _ in range(len(blocks))]
     embeddings = [[i for _ in range(feature_size)] for i in range(len(blocks))]
 
-    vector_db = VectorDB(dbtype=HNSWVectorDB,
+    vector_db = VectorDB(databasetype=HNSWVectorDB,
                          workspace='../../databases/',
                          feature_size=feature_size,
                          empty=True)

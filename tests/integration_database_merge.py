@@ -34,7 +34,7 @@ def main():
     plot_similarity_matrix(compute_embedding_similarity(embeddings), './plots/similarity_matrix.png')
     print('Plotted similarity matrix...')
 
-    vector_db = VectorDB(dbtype=HNSWVectorDB, empty=True)
+    vector_db = VectorDB(databasetype=HNSWVectorDB, empty=True)
     print('Initialized vector database...')
     assert len(vector_db) == 0, 'VectorDB should initialize empty'
     vector_db.create(labels, blocks, variable_dictionaries, sources, embeddings)
