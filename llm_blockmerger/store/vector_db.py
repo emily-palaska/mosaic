@@ -31,12 +31,7 @@ class VectorDB(Dataset):
 
         if empty: empty_docs(workspace=workspace)
         self.db = databasetype[self.BlockMergerDoc](workspace=workspace)
-<<<<<<< Updated upstream
-        self.triplets = generate_triplets(len(self))
-=======
         self.triplets = generate_triplets(self.get_num_docs())
-        if empty: empty_docs(workspace=workspace)
->>>>>>> Stashed changes
 
     def update_triplets(self):
         self.triplets = generate_triplets(self.get_num_docs())
