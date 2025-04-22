@@ -3,16 +3,15 @@ os.chdir("../")
 
 import torch.optim as optim
 from torch.utils.data import DataLoader
-
-from llm_blockmerger.learn.mlp import MLP, train
-from llm_blockmerger.core.utils import print_merge_result
 from llm_blockmerger.core.embeddings import plot_similarity_matrix, compute_embedding_similarity
 from llm_blockmerger.load.managers import initialize_managers, concatenate_managers
 from llm_blockmerger.core.models import LLM
 from llm_blockmerger.load.variable_extraction import extract_notebook_variables
-from llm_blockmerger.block_merge import linear_embedding_merge, linear_string_merge
 from llm_blockmerger.variable_merge import merge_variables
 from llm_blockmerger.store.vector_db import VectorDB, HNSWVectorDB
+from llm_blockmerger.learn.mlp import MLP, train
+from llm_blockmerger.core.utils import print_merge_result
+from llm_blockmerger.block_merge import linear_embedding_merge, linear_string_merge
 
 def main():
     notebook_paths = ['notebooks/02.02-The-Basics-Of-NumPy-Arrays.ipynb']
