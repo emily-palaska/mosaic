@@ -10,10 +10,10 @@ def main():
     vector_db = VectorDB(workspace='../databases/',
                          databasetype=HNSWVectorDB,
                          empty=False)
-    #assert len(vector_db) == 84, 'VectorDB should initialize with saved elements'
-    print('Initialized vector database...')
 
-    print(len(vector_db))
+
+    print(f'Initialized vector database with {len(vector_db)} entries...')
+
     exit(0)
 
     model = MLP(input_dim=vector_db.get_feature_size(), layer_dims=[64, 32, 3])
@@ -24,6 +24,7 @@ def main():
     print('Created train loader...')
 
     train(model, train_loader, optimizer, epochs=10)
+    print('Finished training...')
 
 if __name__ == "__main__":
     main()

@@ -63,7 +63,7 @@ def train(model, train_loader, optimizer, epochs=10):
             num_batches += 1
 
         avg_loss = total_loss / num_batches
-        print(f'Epoch [{epoch + 1}/{epochs}]\t Loss: {avg_loss:.4f}')
+        print(f'\tEpoch [{epoch + 1}/{epochs}]\t Loss: {avg_loss:.4f}')
 
 def main():
     feat_dim = 128

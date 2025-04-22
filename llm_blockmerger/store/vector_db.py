@@ -28,6 +28,7 @@ class VectorDB(Dataset):
         self.feature_size = feature_size
         self.dtype = dtype
         self.BlockMergerDoc = make_doc(feature_size)
+
         self.db = databasetype[self.BlockMergerDoc](workspace=workspace)
         if empty: empty_docs(workspace=workspace)
         self._precompute_triplets()
@@ -128,11 +129,10 @@ def main():
     vector_db = VectorDB(databasetype=HNSWVectorDB,
                          workspace='../../databases/',
                          feature_size=feature_size,
-                         empty=True)
+                         empty=False)
     print('Initialized vector database...')
     vector_db.create(labels, blocks, variable_dictionaries, sources, embeddings)
-    print('Added elements to vector database...')
-    print(vector_db[0])
+    print(f'Database length is {len(vector_db)}')
 
 if __name__ == "__main__":
     main()
