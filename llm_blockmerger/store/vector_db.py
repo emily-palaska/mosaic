@@ -1,6 +1,6 @@
 from docarray import DocList
 from vectordb import InMemoryExactNNVectorDB, HNSWVectorDB
-from llm_blockmerger.core.utils import find_db_files
+from llm_blockmerger.core.utils import find_db_files, generate_triplets
 from docarray import BaseDoc
 from docarray.typing import NdArray
 from torch.utils.data import Dataset
@@ -28,23 +28,12 @@ class VectorDB(Dataset):
         self.feature_size = feature_size
         self.dtype = dtype
         self.BlockMergerDoc = make_doc(feature_size)
-
-
         self.db = databasetype[self.BlockMergerDoc](workspace=workspace)
-
+        self.triplets = generate_triplets(len(self))
         if empty: empty_docs(workspace=workspace)
-        self._precompute_triplets()
 
-    def _precompute_triplets(self):
-        self.triplets = []
-        n = len(self)
-
-        for i in range(n):
-            anchor_idx = i
-            positive_idx = (i + 1) % n
-            negative_idx = (i - 1) % n
-
-            self.triplets.append((anchor_idx, positive_idx, negative_idx))
+    def update_triplets(self):
+        self.triplets = generate_triplets(len(self))
 
     def create(self, labels, blocks, variable_dictionaries, sources, embeddings):
         num_values = len(labels)
@@ -82,7 +71,7 @@ class VectorDB(Dataset):
         return self.db.num_docs()['num_docs']
 
     def __getitem__(self, index):
-        if index >= len(self):
+        if index >= len(self.triplets):
             raise IndexError(f'Index {index} out of range')
 
         anchor_idx, positive_idx, negative_idx = self.triplets[index]

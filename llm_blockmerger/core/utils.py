@@ -86,3 +86,7 @@ def print_merge_result(specification, block_manager):
         print(textwrap.indent(concatenate_block(blocks[i]), '\t'))
 
     print("\n" + "=" * 60)
+
+def generate_triplets(n):
+    from itertools import combinations
+    return list(combinations(range(1, len(n) + 1), 3))
