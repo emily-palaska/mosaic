@@ -29,7 +29,9 @@ class VectorDB(Dataset):
         self.dtype = dtype
         self.BlockMergerDoc = make_doc(feature_size)
 
+
         self.db = databasetype[self.BlockMergerDoc](workspace=workspace)
+
         if empty: empty_docs(workspace=workspace)
         self._precompute_triplets()
 
