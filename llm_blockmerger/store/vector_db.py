@@ -48,7 +48,7 @@ class VectorDB(Dataset):
         num_values = len(labels)
         doc_list = [
             self.BlockMergerDoc(
-                id=str(i),
+                id=str(len(self) +i),
                 label=labels[i],
                 block=blocks[i],
                 source=sources[i],
@@ -58,6 +58,7 @@ class VectorDB(Dataset):
             for i in range(num_values)
         ]
         self.db.index(inputs=DocList[self.BlockMergerDoc](doc_list))
+        self.db.persist()
 
     def read(self, embedding, limit=10):
         if not embedding.ndim == 1:
@@ -124,7 +125,7 @@ def main():
     variable_dictionaries = [{} for _ in range(len(blocks))]
     feature_size = 10
     sources = ['' for _ in range(len(blocks))]
-    embeddings = [[i for _ in range(feature_size)] for i in range(len(blocks))]
+    embeddings = [[10*i for _ in range(feature_size)] for i in range(len(blocks))]
 
     vector_db = VectorDB(databasetype=HNSWVectorDB,
                          workspace='../../databases/',
