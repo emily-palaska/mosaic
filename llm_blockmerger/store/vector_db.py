@@ -63,10 +63,13 @@ class VectorDB(Dataset):
         self.db.persist()
 
     def read(self, embedding, limit=10):
+        if isinstance(embedding, list):
+            import numpy as np
+            embedding = np.array(embedding)
         if not embedding.ndim == 1:
             embedding = embedding.flatten()
 
-        query = self.BlockMergerDoc(label='query', block=[], embedding=embedding)
+        query = self.BlockMergerDoc(id='', label='', block=[], embedding=embedding)
 
         results = self.db.search(inputs=DocList[self.BlockMergerDoc]([query]), limit=limit)
         return results[0].matches
