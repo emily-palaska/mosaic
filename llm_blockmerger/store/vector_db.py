@@ -33,9 +33,6 @@ class VectorDB(Dataset):
         self.db = databasetype[self.BlockMergerDoc](workspace=workspace)
         self.triplets = generate_triplets(self.get_num_docs())
 
-    def update_triplets(self):
-        self.triplets = generate_triplets(self.get_num_docs())
-
     def create(self, labels, blocks, variable_dictionaries, sources, embeddings):
         num_values = len(labels)
         doc_list = [
@@ -50,6 +47,7 @@ class VectorDB(Dataset):
             for i in range(num_values)
         ]
         self.db.index(inputs=DocList[self.BlockMergerDoc](doc_list))
+        self.triplets = generate_triplets(self.get_num_docs())
 
     def read(self, embedding, limit=10):
         if len(self) == 0:
@@ -79,7 +77,7 @@ class VectorDB(Dataset):
             raise IndexError(f'Index {index} out of range')
 
         anchor_idx, positive_idx, negative_idx = self.triplets[index]
-
+        print(anchor_idx, positive_idx, negative_idx)
         anchor = self.db.get_by_id(str(anchor_idx))
         positive = self.db.get_by_id(str(positive_idx))
         negative = self.db.get_by_id(str(negative_idx))
@@ -132,16 +130,10 @@ def main():
                          feature_size=feature_size,
                          empty=False)
     print('Initialized vector database...')
-    vector_db.create(labels, blocks, variable_dictionaries, sources, embeddings)
-    vector_db.update_triplets()
+    #vector_db.create(labels, blocks, variable_dictionaries, sources, embeddings)
     print(f'Database entries are {vector_db.get_num_docs()}')
     print(f'Dataset length is {len(vector_db)}')
 
-    from torch.utils.data import DataLoader
-    train_loader = DataLoader(vector_db, batch_size=32, shuffle=True)
-
-    for batch in train_loader:
-        print(batch)
 
 
 if __name__ == "__main__":

@@ -42,16 +42,15 @@ def main():
 
     vector_db = VectorDB(databasetype=HNSWVectorDB, empty=True)
     print('Initialized vector database...')
-    assert len(vector_db) == 0, f'VectorDB should initialize empty, initialized with {len(vector_db)} entries'
+    assert vector_db.get_num_docs() == 0, f'VectorDB should initialize empty, initialized with {vector_db.get_num_docs()} entries'
     vector_db.create(labels, blocks, variable_dictionaries, sources, embeddings)
-    assert len(vector_db) == len(blocks), 'VectorDB should have created every block as a vector'
-    print(f'Loaded data to vector database with size {len(vector_db)}...')
+    assert vector_db.get_num_docs() == len(blocks), 'VectorDB should have created every block as a vector'
+    print(f'Loaded data to vector database with {vector_db.get_num_docs()} entries and {len(vector_db)} triplets...')
 
     model = MLP(input_dim=vector_db.get_feature_size(), layer_dims=[64, 32, 3])
     optimizer = optim.Adam(model.parameters(), lr=0.001)
-    print('Initialized model...')
+    print('Initialized MLP model...')
 
-    vector_db.update_triplets()
     train_loader = DataLoader(vector_db, batch_size=32, shuffle=True)
     print('Created train loader...')
 
