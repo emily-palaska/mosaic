@@ -60,16 +60,17 @@ class VectorDB(Dataset):
             for i in range(num_values)
         ]
         self.db.index(inputs=DocList[self.BlockMergerDoc](doc_list))
-        self.db.persist()
 
     def read(self, embedding, limit=10):
+        if len(self) == 0:
+            raise IndexError("VectorDB is empty")
         if isinstance(embedding, list):
             import numpy as np
             embedding = np.array(embedding)
         if not embedding.ndim == 1:
             embedding = embedding.flatten()
 
-        query = self.BlockMergerDoc(id='', label='', block=[], embedding=embedding)
+        query = self.BlockMergerDoc(id='', embedding=embedding)
 
         results = self.db.search(inputs=DocList[self.BlockMergerDoc]([query]), limit=limit)
         return results[0].matches
@@ -109,6 +110,7 @@ def empty_docs(workspace='./databases/'):
         conn.close()
 
 def main():
+    # todo load without indexing
     blocks = [
         ['    return a + b '],
         ['def add(a, b):\n', '    return a + b '],
@@ -139,6 +141,9 @@ def main():
     print('Initialized vector database...')
     vector_db.create(labels, blocks, variable_dictionaries, sources, embeddings)
     print(f'Database length is {len(vector_db)}')
+    import numpy as np
+    query = np.array([i for i in range(vector_db.feature_size)])
+    print(vector_db.read(query))
 
 if __name__ == "__main__":
     main()

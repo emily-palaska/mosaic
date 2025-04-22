@@ -1,6 +1,10 @@
 import os
 os.chdir("../")
 
+import torch.optim as optim
+from torch.utils.data import DataLoader
+
+from llm_blockmerger.learn.mlp import MLP, train
 from llm_blockmerger.core.utils import print_merge_result
 from llm_blockmerger.core.embeddings import plot_similarity_matrix, compute_embedding_similarity
 from llm_blockmerger.load.managers import initialize_managers, concatenate_managers
@@ -34,16 +38,30 @@ def main():
     plot_similarity_matrix(compute_embedding_similarity(embeddings), './plots/similarity_matrix.png')
     print('Plotted similarity matrix...')
 
+    for manager in managers: merge_variables(embedding_model, manager)
+    print('Merged variables...')
+
     vector_db = VectorDB(databasetype=HNSWVectorDB, empty=True)
     print('Initialized vector database...')
     assert len(vector_db) == 0, 'VectorDB should initialize empty'
     vector_db.create(labels, blocks, variable_dictionaries, sources, embeddings)
     assert len(vector_db) == len(blocks), 'VectorDB should have created every block as a vector'
-    print('Loaded data to vector database...')
+    print(f'Loaded data to vector database with size {len(vector_db)}...')
 
-    specification = 'simple numpy program'
-    print_merge_result(specification, merge_variables(*linear_string_merge(embedding_model, vector_db, specification)))
-    print_merge_result(specification, merge_variables(*linear_embedding_merge(embedding_model, vector_db, specification)))
+    model = MLP(input_dim=vector_db.get_feature_size(), layer_dims=[64, 32, 3])
+    optimizer = optim.Adam(model.parameters(), lr=0.001)
+    print('Initialized model...')
+
+    train_loader = DataLoader(vector_db, batch_size=32, shuffle=True)
+    print('Created train loader...')
+
+    train(model, train_loader, optimizer, epochs=10)
+    print('Finished training...')
+
+    # Merge example
+    #specification = 'simple numpy program'
+    #print_merge_result(specification, merge_variables(*linear_string_merge(embedding_model, vector_db, specification)))
+    #print_merge_result(specification, merge_variables(*linear_embedding_merge(embedding_model, vector_db, specification)))
 
 
 if __name__ == '__main__':
