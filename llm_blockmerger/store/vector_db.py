@@ -138,7 +138,7 @@ def main():
     vector_db = VectorDB(databasetype=HNSWVectorDB,
                          workspace='../../databases/',
                          feature_size=feature_size,
-                         empty=False)
+                         empty=True)
     print('Initialized vector database...')
     vector_db.create(embeddings, data)
     print(f'Database entries are {vector_db.get_num_docs()}')
