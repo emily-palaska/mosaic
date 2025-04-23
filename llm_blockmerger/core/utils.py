@@ -89,15 +89,17 @@ def print_merge_result(specification, block_manager):
 
 def create_blockdata(labels, blocks, variable_dictionaries, sources):
     import json
-    blockdata = [{
-        'labels': labels[i],
-        'blocks': blocks[i],
-        'variable_dictionary': variable_dictionaries[i],
-        'source': sources[i]
-    }
-        for i in range(len(blocks))
+    blockdata = [
+        json.dumps(
+            {
+                'labels': labels[i],
+                'blocks': blocks[i],
+                'variable_dictionary': variable_dictionaries[i],
+                'source': sources[i]
+            }
+        ) for i in range(len(blocks))
     ]
-    return json.dumps(blockdata)
+    return blockdata
 
 def generate_triplets(n):
     from itertools import combinations
