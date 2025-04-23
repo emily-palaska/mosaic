@@ -30,7 +30,8 @@ class VectorDB(Dataset):
         self.BlockMergerDoc = make_doc(feature_size)
 
         if empty: empty_docs(workspace=workspace)
-        self.db = databasetype[self.BlockMergerDoc](workspace=workspace)
+        print("here")
+        self.db = databasetype[self.BlockMergerDoc](workspace=workspace, index=True)
         self.triplets = generate_triplets(self.get_num_docs())
 
     def create(self, labels, blocks, variable_dictionaries, sources, embeddings):
@@ -46,6 +47,7 @@ class VectorDB(Dataset):
             )
             for i in range(num_values)
         ]
+
         self.db.index(inputs=DocList[self.BlockMergerDoc](doc_list))
         self.triplets = generate_triplets(self.get_num_docs())
 
@@ -101,6 +103,9 @@ def empty_docs(workspace='./databases/'):
         conn.close()
 
 def main():
+    import logging
+    logger = logging.getLogger('docarray')
+    logger.setLevel(logging.INFO)
     # todo load without indexing
     blocks = [
         ['    return a + b '],
@@ -130,7 +135,7 @@ def main():
                          feature_size=feature_size,
                          empty=False)
     print('Initialized vector database...')
-    #vector_db.create(labels, blocks, variable_dictionaries, sources, embeddings)
+    vector_db.create(labels, blocks, variable_dictionaries, sources, embeddings)
     print(f'Database entries are {vector_db.get_num_docs()}')
     print(f'Dataset length is {len(vector_db)}')
 
