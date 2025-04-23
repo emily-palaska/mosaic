@@ -87,6 +87,69 @@ def print_merge_result(specification, block_manager):
 
     print("\n" + "=" * 60)
 
+def create_blockdata(labels, blocks, variable_dictionaries, sources):
+    import json
+    blockdata = [{
+        'labels': labels[i],
+        'blocks': blocks[i],
+        'variable_dictionary': variable_dictionaries[i],
+        'source': sources[i]
+    }
+        for i in range(len(blocks))
+    ]
+    return json.dumps(blockdata)
+
 def generate_triplets(n):
     from itertools import combinations
     return list(combinations(range(0, n), 3))
+
+def print_db_contents(workspace='./databases/'):
+    import sqlite3
+    import os
+
+    # Find all database files in the workspace
+    db_files =  find_db_files(workspace)
+    print(f'Found files: {db_files}')
+    for db_file in db_files:
+        full_path = os.path.join(workspace, db_file)
+        db_size = os.path.getsize(full_path)
+        print(f"\nContents of database {db_file} with size {db_size/1024:.2f} KB")
+
+
+        conn = sqlite3.connect(full_path)
+        cursor = conn.cursor()
+
+        # Get all table names in the database
+        cursor.execute("SELECT name FROM sqlite_master WHERE type='table';")
+        tables = cursor.fetchall()
+
+        for table in tables:
+            table_name = table[0]
+            #cursor.execute(f"INSERT INTO {table_name} (label, data) VALUES ('John Doe', '555-1212');")
+
+            # Get table size (approximate)
+            cursor.execute(f"SELECT COUNT(*) FROM {table_name};")
+            row_count = cursor.fetchone()[0]
+
+            cursor.execute(f"PRAGMA table_info({table_name});")
+            columns = cursor.fetchall()
+            column_count = len(columns)
+
+            print(f"\nTable: {table_name}")
+            print(f"Rows: {row_count}, Columns: {column_count}")
+
+            # Get and print column names
+            column_names = [col[1] for col in columns]
+            print("Columns:", ", ".join(column_names))
+
+            # Print first few rows as sample
+            cursor.execute(f"SELECT * FROM {table_name} LIMIT 3;")
+            rows = cursor.fetchall()
+            print("\nSample rows:")
+            for row in rows:
+                for element in row:
+                    print(element)
+                    print('-'*60)
+                print()
+
+        conn.close()

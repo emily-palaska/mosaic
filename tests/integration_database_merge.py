@@ -10,7 +10,7 @@ from llm_blockmerger.load.variable_extraction import extract_notebook_variables
 from llm_blockmerger.variable_merge import merge_variables
 from llm_blockmerger.store.vector_db import VectorDB, HNSWVectorDB
 from llm_blockmerger.learn.mlp import MLP, train
-from llm_blockmerger.core.utils import print_merge_result
+from llm_blockmerger.core.utils import print_merge_result, create_blockdata
 from llm_blockmerger.block_merge import linear_embedding_merge, linear_string_merge
 
 def main():
@@ -43,11 +43,13 @@ def main():
     vector_db = VectorDB(databasetype=HNSWVectorDB, empty=True)
     print('Initialized vector database...')
     assert vector_db.get_num_docs() == 0, f'VectorDB should initialize empty, initialized with {vector_db.get_num_docs()} entries'
-    vector_db.create(labels, blocks, variable_dictionaries, sources, embeddings)
+    vector_db.create(embeddings=embeddings,
+                     blockdata=create_blockdata(labels, blocks, variable_dictionaries, sources))
     assert vector_db.get_num_docs() == len(blocks), 'VectorDB should have created every block as a vector'
     print(f'Loaded data to vector database with {vector_db.get_num_docs()} entries and {len(vector_db)} triplets...')
 
-    model = MLP(input_dim=vector_db.get_feature_size(), layer_dims=[64, 32, 3])
+    model = MLP(input_dim=vector_db.get_feature_size(),
+            layer_dims=[64, 32, 3])
     optimizer = optim.Adam(model.parameters(), lr=0.001)
     print('Initialized MLP model...')
 
