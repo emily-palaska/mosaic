@@ -37,7 +37,7 @@ class VectorDB(Dataset):
         num_values = len(labels)
         doc_list = [
             self.BlockMergerDoc(
-                id=str(self.get_num_docs() +i),
+                id=str(self.get_num_docs() + i),
                 label=labels[i],
                 block=blocks[i],
                 source=sources[i],
@@ -48,6 +48,7 @@ class VectorDB(Dataset):
         ]
         self.db.index(inputs=DocList[self.BlockMergerDoc](doc_list))
         self.triplets = generate_triplets(self.get_num_docs())
+        self.db.persist()
 
     def read(self, embedding, limit=10):
         if len(self) == 0:
@@ -96,8 +97,63 @@ def empty_docs(workspace='./databases/'):
     for db_file in db_files:
         conn = sqlite3.connect(db_file)
         cursor = conn.cursor()
-        cursor.execute("DELETE FROM docs")
-        conn.commit()
+
+        cursor.execute("SELECT name FROM sqlite_master WHERE type='table';")
+        tables = cursor.fetchall()
+
+        for table in tables:
+            table_name = table[0]  # extract the string from the tuple
+            cursor.execute(f"DROP TABLE IF EXISTS `{table_name}`;")  # safer with backticks
+            conn.commit()
+        conn.close()
+
+
+def print_db_contents(workspace='./databases/'):
+    import sqlite3
+    import os
+
+    # Find all database files in the workspace
+    db_files =  find_db_files(workspace)
+    print(f'Found files: {db_files}')
+    for db_file in db_files:
+        full_path = os.path.join(workspace, db_file)
+        db_size = os.path.getsize(full_path)
+        print(f"\nContents of database {db_file} with size {db_size/1024:.2f} KB")
+
+
+        conn = sqlite3.connect(full_path)
+        cursor = conn.cursor()
+
+        # Get all table names in the database
+        cursor.execute("SELECT name FROM sqlite_master WHERE type='table';")
+        tables = cursor.fetchall()
+
+        for table in tables:
+            table_name = table[0]
+            cursor.execute(f"INSERT INTO {table_name} (label, data) VALUES ('John Doe', '555-1212');")
+
+            # Get table size (approximate)
+            cursor.execute(f"SELECT COUNT(*) FROM {table_name};")
+            row_count = cursor.fetchone()[0]
+
+            cursor.execute(f"PRAGMA table_info({table_name});")
+            columns = cursor.fetchall()
+            column_count = len(columns)
+
+            print(f"\nTable: {table_name}")
+            print(f"Rows: {row_count}, Columns: {column_count}")
+
+            # Get and print column names
+            column_names = [col[1] for col in columns]
+            print("Columns:", ", ".join(column_names))
+
+            # Print first few rows as sample
+            cursor.execute(f"SELECT * FROM {table_name} LIMIT 3;")
+            rows = cursor.fetchall()
+            print("\nSample rows:")
+            for row in rows:
+                print(row)
+
         conn.close()
 
 def main():
@@ -128,11 +184,16 @@ def main():
     vector_db = VectorDB(databasetype=HNSWVectorDB,
                          workspace='../../databases/',
                          feature_size=feature_size,
-                         empty=False)
+                         empty=True)
     print('Initialized vector database...')
-    #vector_db.create(labels, blocks, variable_dictionaries, sources, embeddings)
-    print(f'Database entries are {vector_db.get_num_docs()}')
-    print(f'Dataset length is {len(vector_db)}')
+    vector_db.create(labels, blocks, variable_dictionaries, sources, embeddings)
+    print(f'Entries: {vector_db.get_num_docs()}, Triplets: {len(vector_db)}\n')
+
+    print('Contents from code:')
+    for index in range(vector_db.get_num_docs()):
+        print(vector_db.db.get_by_id(str(index)))
+
+    print_db_contents(workspace='../../databases/')
 
 
 
