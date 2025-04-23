@@ -30,6 +30,7 @@ def _preprocess_code_lines(code_lines, accumulated_markdown):
                         blocks.append(current_block if isinstance(current_block, list) else [current_block])
                         labels.append(f"MARKDOWN: {md}\nCOMMENT: {current_label}")
                     _, current_label = line.split('#', 1)
+                    current_label = current_label.replace('```', '')
                     current_block = []
             else:  # Code without comment
                 current_block.append(line)
