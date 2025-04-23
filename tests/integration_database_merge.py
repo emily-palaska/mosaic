@@ -47,7 +47,7 @@ def main():
                      blockdata=create_blockdata(labels, blocks, variable_dictionaries, sources))
     assert vector_db.get_num_docs() == len(blocks), 'VectorDB should have created every block as a vector'
     print(f'Loaded data to vector database with {vector_db.get_num_docs()} entries and {len(vector_db)} triplets...')
-
+    exit(0)
     model = MLP(input_dim=vector_db.get_feature_size(),
             layer_dims=[64, 32, 3])
     optimizer = optim.Adam(model.parameters(), lr=0.001)

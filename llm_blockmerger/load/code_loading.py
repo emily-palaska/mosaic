@@ -23,19 +23,18 @@ def _preprocess_code_lines(code_lines, accumulated_markdown):
                 if not line.startswith('#'):  # Side-comment
                     before_hash, after_hash = line.split('#', 1)
                     blocks.append([before_hash])
-                    labels.append(f"MARKDOWN: {md}\nCOMMENT: {after_hash.strip()}")
+                    labels.append(f"MARKDOWN: {md}\nCOMMENT: {after_hash.strip()}".replace('```', ''))
                     current_block.append(before_hash)
                 else:  # Full-line
                     if current_block:
                         blocks.append(current_block if isinstance(current_block, list) else [current_block])
-                        labels.append(f"MARKDOWN: {md}\nCOMMENT: {current_label}")
+                        labels.append(f"MARKDOWN: {md}\nCOMMENT: {current_label}".replace('```', ''))
                     _, current_label = line.split('#', 1)
-                    current_label = current_label.replace('```', '')
                     current_block = []
             else:  # Code without comment
                 current_block.append(line)
 
         if current_block:  # Handle remaining lines in the current block
             blocks.append(current_block)
-            labels.append(f"MARKDOWN: {md}\nCOMMENT: {current_label.strip()}")
+            labels.append(f"MARKDOWN: {md}\nCOMMENT: {current_label.strip()}".replace('```', ''))
     return blocks, labels
