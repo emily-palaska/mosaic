@@ -74,7 +74,7 @@ class VectorDB(Dataset):
             raise IndexError(f'Index {index} out of range')
 
         anchor_idx, positive_idx, negative_idx = self.triplets[index]
-        print(anchor_idx, positive_idx, negative_idx)
+
         anchor = self.db.get_by_id(str(anchor_idx))
         positive = self.db.get_by_id(str(positive_idx))
         negative = self.db.get_by_id(str(negative_idx))
