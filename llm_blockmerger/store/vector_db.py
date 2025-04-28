@@ -73,9 +73,6 @@ class VectorDB(Dataset):
         results = self.db.search(inputs=DocList[self.BlockMergerDoc]([query]), limit=limit)
         return results[0].matches
 
-    def get_feature_size(self):
-        return self.feature_size
-
     def get_num_docs(self):
         return self.db.num_docs()['num_docs']
 

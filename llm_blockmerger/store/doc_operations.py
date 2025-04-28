@@ -1,6 +1,7 @@
-import sqlite3, os, json
+import sqlite3, os
 from docarray import BaseDoc
 from docarray.typing import TorchTensor
+from llm_blockmerger.core.utils import load_double_encoded_json
 
 def find_db_files(folder_path):
     db_files = []
@@ -32,10 +33,8 @@ def get_db_rows(db_file_path:str, table_name='docs'):
 def extract_rows_content(rows):
     embeddings, blockdata = [], []
     for row in rows:
-        print(row[-1])
-        data = json.loads(row[-1])
-        print(type(data))
-        embeddings.append(data['embedding'])
+        data = load_double_encoded_json(row[-1])
+        embeddings.append(data["embedding"])
         blockdata.append(data)
     return embeddings, blockdata
 

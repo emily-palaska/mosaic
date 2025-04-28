@@ -1,8 +1,5 @@
 import ast, textwrap, os, json
 
-from torch.nn.functional import embedding
-
-
 def concatenate_block(block):
     return '\n'.join(block) + '\n'
 
@@ -57,6 +54,12 @@ def ast_extraction(script=''):
         visit_node(node)
 
     return sorted(list(variables))
+
+def load_double_encoded_json(field: str):
+    loaded_once = json.loads(field)
+    if isinstance(loaded_once, str):
+        return json.loads(loaded_once)
+    return loaded_once
 
 def print_merge_result(specification, block_manager):
     print("\n" + "=" * 60)

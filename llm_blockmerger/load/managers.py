@@ -1,5 +1,5 @@
 import json
-from llm_blockmerger.core.utils import load_notebooks
+from llm_blockmerger.core.utils import load_notebooks, load_double_encoded_json
 from llm_blockmerger.load.code_loading import _preprocess_code_lines, _extract_cell_content
 
 class CodeBlocksManager:
@@ -25,11 +25,12 @@ class CodeBlocksManager:
         if variable_dictionaries is not None: self.variable_dictionaries = variable_dictionaries
 
     def append_doc(self, doc):
-        self.blocks.append(doc.block)
-        self.labels.append(doc.label)
-        self.variable_dictionaries.append(doc.variable_dictionary)
+        blockdata = load_double_encoded_json(doc.blockdata)
+        self.blocks.append(blockdata["blocks"])
+        self.labels.append(blockdata["label"])
+        self.variable_dictionaries.append(blockdata["variable_dictionary"])
         if not isinstance(self.sources, list): self.sources = [self.sources]
-        self.sources.append(doc.source)
+        self.sources.append(blockdata["source"])
 
     def unzip(self):
         return self.blocks, self.labels, self.variable_dictionaries, self.sources
@@ -60,8 +61,4 @@ def create_blockdata(block_managers, embeddings):
     ]
 
 def extract_labels(block_managers):
-    labels = []
-    for block_manager in block_managers:
-        labels.extend(block_manager.labels)
-    return labels
-
+    return [label for block_manager in block_managers for label in block_manager.labels]
