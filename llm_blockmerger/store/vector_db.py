@@ -1,62 +1,75 @@
 from docarray import DocList
 from vectordb import InMemoryExactNNVectorDB, HNSWVectorDB
-from llm_blockmerger.core.utils import find_db_files, generate_triplets
-from docarray import BaseDoc
-from docarray.typing import NdArray
+import numpy as np
 from torch.utils.data import Dataset
-import torch
-import json
+import torch, json
 
-def make_doc(feature_size=384):
-    class BlockMergerDoc(BaseDoc):
-        id: str
-        blockdata: str = ''
-        embedding: NdArray[feature_size]
-
-    return BlockMergerDoc
+from llm_blockmerger.store.doc_operations import (
+    find_db_files,
+    make_doc,
+    generate_triplets,
+    get_db_rows,
+    extract_rows_content,
+    empty_docs
+)
 
 class VectorDB(Dataset):
     def __init__(self,
                  databasetype=HNSWVectorDB,
                  workspace='./databases/',
                  feature_size=384,
-                 dtype=torch.float32,
+                 dataset_dtype=torch.float32,
                  empty=False):
         assert databasetype in [HNSWVectorDB, InMemoryExactNNVectorDB], "Invalid dbtype"
+
+        self.databasetype = databasetype
+        self.workspace = workspace
         self.feature_size = feature_size
-        self.dtype = dtype
+        self.dataset_dtype = dataset_dtype
         self.BlockMergerDoc = make_doc(feature_size)
 
-        if empty: empty_docs(workspace=workspace)
-        self.db = databasetype[self.BlockMergerDoc](workspace=workspace, index=True)
+        if empty: self._initialize_empty_db()
+        else: self._restore_db()
         self.triplets = generate_triplets(self.get_num_docs())
 
+    def _initialize_empty_db(self):
+        empty_docs(workspace=self.workspace)
+        self.db = self.databasetype[self.BlockMergerDoc](
+            workspace=self.workspace,
+            index=True,
+            ef=200
+        )
+        assert self.get_num_docs() == 0, f"VectorDB didn't initialize empty, got {self.get_num_docs()} entries"
+
+    def _restore_db(self):
+        db_files = find_db_files(self.workspace)
+        assert len(db_files) == 1, f"Multiple db files found in workspace {self.workspace}: {db_files}"
+        embeddings, blockdata = extract_rows_content(get_db_rows(db_files[0]))
+        self._initialize_empty_db()
+        self.create(embeddings, blockdata)
+
     def create(self, embeddings, blockdata):
-        num_values = len(embeddings)
         doc_list = [
             self.BlockMergerDoc(
                 id=str(self.get_num_docs() +i),
-                embedding=embeddings[i],
+                embedding=torch.tensor(embeddings[i], dtype=self.dataset_dtype),
                 blockdata=json.dumps(blockdata[i]),
             )
-            for i in range(num_values)
+            for i in range(len(embeddings))
         ]
-
         self.db.index(inputs=DocList[self.BlockMergerDoc](doc_list))
         self.triplets = generate_triplets(self.get_num_docs())
+        self.db.persist()
 
     def read(self, embedding, limit=10):
-        if len(self) == 0:
+        if self.get_num_docs() == 0:
             raise IndexError("VectorDB is empty")
 
-        if isinstance(embedding, list):
-            import numpy as np
-            embedding = np.array(embedding)
-        if not embedding.ndim == 1:
+        embedding = torch.tensor(embedding, dtype=self.dataset_dtype)
+        if embedding.ndim > 1:
             embedding = embedding.flatten()
 
         query = self.BlockMergerDoc(id='', embedding=embedding)
-
         results = self.db.search(inputs=DocList[self.BlockMergerDoc]([query]), limit=limit)
         return results[0].matches
 
@@ -72,88 +85,50 @@ class VectorDB(Dataset):
     def __getitem__(self, index):
         if index >= len(self.triplets):
             raise IndexError(f'Index {index} out of range')
-
-        anchor_idx, positive_idx, negative_idx = self.triplets[index]
-        print(anchor_idx, positive_idx, negative_idx)
-
-        anchor = self.db.get_by_id(str(anchor_idx))
-        positive = self.db.get_by_id(str(positive_idx))
-        negative = self.db.get_by_id(str(negative_idx))
-
-        anchor_embedding = torch.tensor(anchor.embedding, dtype=self.dtype)
-        positive_embedding = torch.tensor(positive.embedding, dtype=self.dtype)
-        negative_embedding = torch.tensor(negative.embedding, dtype=self.dtype)
-
-        return anchor_embedding, positive_embedding, negative_embedding
-
-def empty_docs(workspace='./databases/'):
-    import sqlite3
-
-    db_files = find_db_files(workspace)
-
-    for db_file in db_files:
-        conn = sqlite3.connect(db_file)
-        cursor = conn.cursor()
-
-        cursor.execute("SELECT name FROM sqlite_master WHERE type='table';")
-        tables = cursor.fetchall()
-
-        for table in tables:
-            table_name = table[0]  # extract the string from the tuple
-            cursor.execute(f"DROP TABLE IF EXISTS `{table_name}`;")  # safer with backticks
-            conn.commit()
-        conn.close()
-
+        indices = self.triplets[index]
+        docs = [self.db.get_by_id(str(idx)) for idx in indices]
+        embeddings = [doc.embedding for doc in docs]
+        return embeddings
 
 def main():
-    blocks = [
-        ['    return a + b '],
-        ['def add(a, b):\n', '    return a + b '],
-        ['print(result)  '],
-        ['result = add(2, 3)\n', 'print(result)  '],
-        ['print(result) '],
-        ['result = add(-1, 1)\n', 'print(result) ']
-    ]
-
-    labels = [
-        'MARKDOWN: # Functions in python\nSimple addition function\nCOMMENT: This is a simple addition function',
-        'MARKDOWN: # Functions in python\nSimple addition function\nCOMMENT: Example of usage:',
-        'MARKDOWN: Testing it with two examples\nCOMMENT: Should print 5',
-        'MARKDOWN: Testing it with two examples\nCOMMENT: ',
-        'MARKDOWN: Testing it with two examples\nCOMMENT: Should print 0',
-        'MARKDOWN: Testing it with two examples\nCOMMENT: '
-    ]
-    sources = ['' for _ in range(len(blocks))]
-    variable_dictionaries = [{} for _ in range(len(blocks))]
-    data = [{
-        'label': labels[i],
-        'blocks': blocks[i],
-        'variable_dictionary': variable_dictionaries[i],
-        'source': sources[i],
-    } for i in range(len(blocks))
-    ]
-
+    num_entries = 10
     feature_size = 10
-    embeddings = [[i for _ in range(feature_size)] for i in range(len(blocks))]
+    empty = True
+
+    embeddings = [
+        [i for _ in range(feature_size)]
+        for i in range(num_entries)
+    ]
+
+    data = [{
+        'label': f'This is label {i}',
+        'blocks': ['This is', f'block {i}'],
+        'variable_dictionary': {i:f'This is dictionary {i}'},
+        'source': f'This is source {i}',
+        'embedding': embeddings[i]
+    } for i in range(num_entries)
+    ]
+
+    dummy_embedding = np.array([0 for _ in range(feature_size)])
 
     vector_db = VectorDB(databasetype=HNSWVectorDB,
-                         workspace='../../databases/',
+                         workspace=r"D:\Σχολή\Διπλωματική\LlmBlockMerger-Diploma\databases",
                          feature_size=feature_size,
-                         empty=True)
-    print('Initialized vector database...')
-    vector_db.create(embeddings, data)
+                         empty=empty)
+
+    if empty: vector_db.create(embeddings, data)
+
     print(f'Database entries are {vector_db.get_num_docs()}')
     print(f'Dataset length is {len(vector_db)}')
-    result = vector_db.db.get_by_id(str(0))
-    print(result.id)
-    print(result.embedding)
-    blockdata = json.loads(result.blockdata)
-    print(blockdata['blocks'])
 
-    print('='*60)
+    print('\n' + '=' * 60)
+    print(vector_db.read(dummy_embedding))
 
-
-
+    print('\n' + '=' * 60)
+    from torch.utils.data import DataLoader
+    train_loader = DataLoader(vector_db, batch_size=32, shuffle=False)
+    for _ in train_loader: pass
+    print('Successful train loader pass...')
 
 if __name__ == "__main__":
     main()

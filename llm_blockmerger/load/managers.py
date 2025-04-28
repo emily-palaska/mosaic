@@ -1,3 +1,4 @@
+import json
 from llm_blockmerger.core.utils import load_notebooks
 from llm_blockmerger.load.code_loading import _preprocess_code_lines, _extract_cell_content
 
@@ -40,11 +41,27 @@ def initialize_managers(notebook_paths):
         managers[-1].preprocess_notebook(*load_notebooks(notebook_path))
     return managers
 
-def concatenate_managers(block_managers):
-    labels, blocks, sources, variable_dictionaries = [], [], [], []
+def create_blockdata(block_managers, embeddings):
+    total_blocks = sum(len(manager.blocks) for manager in block_managers)
+    assert total_blocks == len(embeddings), f"{total_blocks} != {len(embeddings)}"
+
+    embedding_iter = iter(embeddings.tolist())
+
+    return [
+        json.dumps({
+            "label": manager.labels[i],
+            "blocks": manager.blocks[i],
+            "variable_dictionary": manager.variable_dictionaries[i],
+            "source": manager.sources,
+            "embedding": next(embedding_iter)
+        })
+        for manager in block_managers
+        for i in range(len(manager))
+    ]
+
+def extract_labels(block_managers):
+    labels = []
     for block_manager in block_managers:
         labels.extend(block_manager.labels)
-        blocks.extend(block_manager.blocks)
-        variable_dictionaries.extend(block_manager.variable_dictionaries)
-        sources.extend(block_manager.sources for _ in range(len(block_manager)))
-    return blocks, labels, variable_dictionaries, sources
+    return labels
+
