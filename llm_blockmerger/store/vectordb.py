@@ -84,8 +84,7 @@ class BlockMergerVectorDB(Dataset):
             raise IndexError(f'Index {index} out of range')
         indices = self.triplets[index]
         docs = [self.db.get_by_id(str(idx)) for idx in indices]
-        embeddings = [doc.embedding for doc in docs]
-        return embeddings
+        return [doc.embedding for doc in docs]
 
 def main():
     num_entries = 10
