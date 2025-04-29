@@ -7,9 +7,8 @@ from llm_blockmerger.core import (
     LLM, print_merge_result)
 from llm_blockmerger.load.managers import initialize_managers, extract_labels, create_blockdata
 from llm_blockmerger.load.variable_extraction import extract_notebook_variables
-from llm_blockmerger.variable_merge import merge_variables
+from llm_blockmerger.merge import merge_variables, linear_embedding_merge, linear_string_merge
 from llm_blockmerger.store.vector_db import VectorDB, HNSWVectorDB
-from llm_blockmerger.block_merge import linear_embedding_merge, linear_string_merge
 
 def preprocessing_pipeline(notebook_paths, verbose=True):
     managers = initialize_managers(notebook_paths)

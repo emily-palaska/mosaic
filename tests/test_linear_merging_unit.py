@@ -1,6 +1,6 @@
 import pytest, sys
 sys.path.append("..")
-from llm_blockmerger.block_merge import *
+from merge.block_merge import *
 
 @pytest.fixture
 def projection_data():
