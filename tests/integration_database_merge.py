@@ -8,7 +8,7 @@ from llm_blockmerger.core import (
 from llm_blockmerger.load.managers import initialize_managers, extract_labels, create_blockdata
 from llm_blockmerger.load.variable_extraction import extract_notebook_variables
 from llm_blockmerger.merge import merge_variables, linear_embedding_merge, linear_string_merge
-from llm_blockmerger.store.vector_db import VectorDB, HNSWVectorDB
+from llm_blockmerger.store.vectordb import BlockMergerVectorDB, HNSWVectorDB
 
 def preprocessing_pipeline(notebook_paths, verbose=True):
     managers = initialize_managers(notebook_paths)
@@ -29,7 +29,7 @@ def preprocessing_pipeline(notebook_paths, verbose=True):
     for manager in managers: merge_variables(embedding_model, manager)
     if verbose: print('Merged variables...')
 
-    vector_db = VectorDB(databasetype=HNSWVectorDB, empty=True)
+    vector_db = BlockMergerVectorDB(databasetype=HNSWVectorDB, empty=True)
     if verbose: print('Initialized vector database...')
     vector_db.create(embeddings=embeddings,
                      blockdata=create_blockdata(managers, embeddings))
@@ -42,9 +42,9 @@ def ready_database_pipeline(verbose=True):
     embedding_model = LLM(task='embedding')
     if verbose: print('Initialized embedding model...')
 
-    vector_db = VectorDB(databasetype=HNSWVectorDB, empty=False)
+    vector_db = BlockMergerVectorDB(databasetype=HNSWVectorDB, empty=False)
     if verbose: print('Initialized vector database...')
-    assert vector_db.get_num_docs() != 0, f'Empty VectorDB'
+    assert vector_db.get_num_docs() != 0, f'Empty BlockMergerVectorDB'
     return embedding_model, vector_db
 
 def main():

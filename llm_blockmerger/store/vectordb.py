@@ -13,7 +13,7 @@ from llm_blockmerger.store.doc_operations import (
     empty_docs
 )
 
-class VectorDB(Dataset):
+class BlockMergerVectorDB(Dataset):
     def __init__(self,
                  databasetype=HNSWVectorDB,
                  workspace='./databases/',
@@ -39,7 +39,7 @@ class VectorDB(Dataset):
             index=True,
             ef=200
         )
-        assert self.get_num_docs() == 0, f"VectorDB didn't initialize empty, got {self.get_num_docs()} entries"
+        assert self.get_num_docs() == 0, f"BlockMergerVectorDB didn't initialize empty, got {self.get_num_docs()} entries"
 
     def _restore_db(self):
         db_files = find_db_files(self.workspace)
@@ -63,7 +63,7 @@ class VectorDB(Dataset):
 
     def read(self, embedding, limit=10):
         if self.get_num_docs() == 0:
-            raise IndexError("VectorDB is empty")
+            raise IndexError("BlockMergerVectorDB is empty")
 
         embedding = torch.tensor(embedding, dtype=self.dataset_dtype)
         if embedding.ndim > 1:
@@ -108,10 +108,10 @@ def main():
 
     dummy_embedding = np.array([0 for _ in range(feature_size)])
 
-    vector_db = VectorDB(databasetype=HNSWVectorDB,
-                         workspace=r"D:\Σχολή\Διπλωματική\LlmBlockMerger-Diploma\databases",
-                         feature_size=feature_size,
-                         empty=empty)
+    vector_db = BlockMergerVectorDB(databasetype=HNSWVectorDB,
+                                    workspace=r"D:\Σχολή\Διπλωματική\LlmBlockMerger-Diploma\databases",
+                                    feature_size=feature_size,
+                                    empty=empty)
 
     if empty: vector_db.create(embeddings, data)
 

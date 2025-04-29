@@ -3,11 +3,11 @@ os.chdir("../")
 
 import torch.optim as optim
 from torch.utils.data import DataLoader
-from llm_blockmerger.store.vector_db import VectorDB, HNSWVectorDB
+from llm_blockmerger.store.vectordb import BlockMergerVectorDB, HNSWVectorDB
 from llm_blockmerger.learn.mlp import MLP, train
 
 def main():
-    vector_db = VectorDB(databasetype=HNSWVectorDB, empty=False)
+    vector_db = BlockMergerVectorDB(databasetype=HNSWVectorDB, empty=False)
     print(f'Initialized vector database with {vector_db.get_num_docs()} entries and {len(vector_db)} triplets...')
 
     model = MLP(input_dim=vector_db.feature_size, layer_dims=[64, 32, 3])
