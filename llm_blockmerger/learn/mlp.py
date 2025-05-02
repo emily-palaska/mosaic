@@ -33,9 +33,9 @@ def transitive_contrastive_loss(a, b, c, threshold=0.8, margin=1.0):
     bc = normalized_cosine_similarity(b, c)
     ca = normalized_cosine_similarity(c, a)
 
-    label = (torch.sqrt(ab * bc) > threshold).float()
-    loss_similar = (1 - label) * torch.pow(ca, 2)
-    loss_dissimilar = label * torch.pow(torch.clamp(margin - ca, min=0.0), 2)
+    label = (ab * bc > threshold ** 2).float()
+    loss_similar = (1 - label) * ca
+    loss_dissimilar = label * (1 - ca)
 
     #print(f'\t Label distribution: {torch.sum(label, dim=0) / label.shape[0]}')
     #print(f'\t Similar: {torch.mean(loss_similar)} Dissimilar: {torch.mean(loss_dissimilar)}')
