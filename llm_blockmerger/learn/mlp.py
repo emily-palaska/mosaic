@@ -41,12 +41,12 @@ def transitive_contrastive_loss(a, b, c, threshold=0.8, margin=1.0):
     #print(f'\t Similar: {torch.mean(loss_similar)} Dissimilar: {torch.mean(loss_dissimilar)}')
     return torch.mean(0.5 * (loss_similar + loss_dissimilar))
 
-def train(model, train_loader, optimizer, epochs=10):
+def train(model, train_loader, optimizer, loss_function=transitive_contrastive_loss,epochs=10):
+    assert loss_function in [transitive_contrastive_loss], f'{loss_function} is not a valid loss function'
     model.train()
 
     for epoch in range(epochs):
-        total_loss = 0.0
-        num_batches = 0
+        total_loss, num_batches = 0.0, 0
 
         for batch in train_loader:
             a, b, c = batch
@@ -55,7 +55,6 @@ def train(model, train_loader, optimizer, epochs=10):
             optimizer.zero_grad()
             emb_a, emb_b, emb_c = model(a), model(b), model(c)
             loss = transitive_contrastive_loss(emb_a, emb_b, emb_c,)
-
             loss.backward()
             optimizer.step()
 

@@ -2,7 +2,7 @@ from docarray import DocList
 from vectordb import InMemoryExactNNVectorDB, HNSWVectorDB
 import numpy as np
 from torch.utils.data import Dataset
-import torch, json
+import torch, json, random
 
 from llm_blockmerger.store.doc_operations import (
     find_db_files,
@@ -19,18 +19,20 @@ class BlockMergerVectorDB(Dataset):
                  workspace='./databases/',
                  feature_size=384,
                  dataset_dtype=torch.float32,
-                 empty=False):
+                 empty=False,
+                 training_samples=None):
         assert databasetype in [HNSWVectorDB, InMemoryExactNNVectorDB], "Invalid dbtype"
 
         self.databasetype = databasetype
         self.workspace = workspace
         self.feature_size = feature_size
         self.dataset_dtype = dataset_dtype
+        self.training_samples = training_samples
         self.BlockMergerDoc = make_doc(feature_size)
 
         if empty: self._initialize_empty_db()
         else: self._restore_db()
-        self.triplets = generate_triplets(self.get_num_docs())
+        if self.training_samples is None: self.triplets = generate_triplets(self.get_num_docs())
 
     def _initialize_empty_db(self):
         empty_docs(workspace=self.workspace)
@@ -58,12 +60,11 @@ class BlockMergerVectorDB(Dataset):
             for i in range(len(embeddings))
         ]
         self.db.index(inputs=DocList[self.BlockMergerDoc](doc_list))
-        self.triplets = generate_triplets(self.get_num_docs())
+        if self.training_samples is None: self.triplets = generate_triplets(self.get_num_docs())
         self.db.persist()
 
     def read(self, embedding, limit=10):
-        if self.get_num_docs() == 0:
-            raise IndexError("BlockMergerVectorDB is empty")
+        if self.get_num_docs() == 0: raise IndexError("BlockMergerVectorDB is empty")
 
         embedding = torch.tensor(embedding, dtype=self.dataset_dtype)
         if embedding.ndim > 1:
@@ -77,12 +78,13 @@ class BlockMergerVectorDB(Dataset):
         return self.db.num_docs()['num_docs']
 
     def __len__(self):
-        return len(self.triplets)
+        return len(self.triplets) if self.training_samples is None else self.training_samples
 
     def __getitem__(self, index):
-        if index >= len(self.triplets):
-            raise IndexError(f'Index {index} out of range')
-        indices = self.triplets[index]
+        if index >= self.__len__(): raise IndexError(f'Index {index} out of range')
+
+        indices = self.triplets[index] if self.training_samples is None \
+            else random.sample(range(0, self.training_samples), 3)
         docs = [self.db.get_by_id(str(idx)) for idx in indices]
         return [doc.embedding for doc in docs]
 
