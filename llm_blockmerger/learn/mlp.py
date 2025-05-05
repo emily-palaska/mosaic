@@ -55,6 +55,7 @@ def train(model, train_loader, optimizer, loss_function=transitive_contrastive_l
             optimizer.zero_grad()
             emb_a, emb_b, emb_c = model(a), model(b), model(c)
             loss = transitive_contrastive_loss(emb_a, emb_b, emb_c,)
+            assert not torch.isnan(loss).any(), f"Loss is NaN at epoch {epoch + 1}, embeddings: {emb_a, emb_b, emb_c}"
             loss.backward()
             optimizer.step()
 
