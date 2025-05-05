@@ -15,12 +15,12 @@ def _preprocess_code_lines(code_lines, accumulated_markdown):
     blocks, labels = [], []
 
     for i, code in enumerate(code_lines):
-        md = accumulated_markdown[i]
+        md = accumulated_markdown[i].replace('#', '')
         current_block, current_label = [], ''
 
         for line in code:
             if '#' in line:  # Comment detected
-                if not line.startswith('#'):  # Side-comment
+                if not line.lstrip().startswith('#'):  # Side-comment
                     before_hash, after_hash = line.split('#', 1)
                     blocks.append([before_hash])
                     labels.append(f"MARKDOWN: {md}\nCOMMENT: {after_hash.strip()}".replace('```', ''))
