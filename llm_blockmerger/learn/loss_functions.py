@@ -1,4 +1,5 @@
 import torch.nn.functional as F
+import torch
 
 def normalized_cosine_similarity(embedding1, embedding2):
     cos_sim = F.cosine_similarity(embedding1, embedding2, dim=1)
