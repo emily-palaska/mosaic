@@ -40,7 +40,7 @@ def train(model, train_loader, optimizer, epochs=10):
 
             optimizer.zero_grad()
             emb_a, emb_b, emb_c = model(a), model(b), model(c)
-            loss = model.loss_fucntion(emb_a, emb_b, emb_c,)
+            loss = model.loss_function(emb_a, emb_b, emb_c,)
             assert not torch.isnan(loss).any(), f"Loss is NaN at epoch {epoch + 1}, embeddings: {emb_a, emb_b, emb_c}"
             loss.backward()
             optimizer.step()
