@@ -84,7 +84,7 @@ class BlockMergerVectorDB(Dataset):
         if index >= self.__len__(): raise IndexError(f'Index {index} out of range')
 
         indices = self.triplets[index] if self.training_samples is None \
-            else random.sample(range(0, self.training_samples), 3)
+            else random.sample(range(0, self.get_num_docs()), 3)
         docs = [self.db.get_by_id(str(idx)) for idx in indices]
         return [doc.embedding for doc in docs]
 
