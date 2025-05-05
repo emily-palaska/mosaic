@@ -6,7 +6,6 @@ def normalized_cosine_similarity(embedding1, embedding2):
     return (cos_sim + 1) / 2
 
 def transitive_contrastive_loss(a, b, c, threshold=0.8):
-    # Normalized cosine distances
     ab = normalized_cosine_similarity(a, b)
     bc = normalized_cosine_similarity(b, c)
     ca = normalized_cosine_similarity(c, a)
