@@ -64,5 +64,15 @@ def create_blockdata(block_managers, embeddings):
         for i in range(len(manager))
     ]
 
-def extract_labels(block_managers):
-    return [label for block_manager in block_managers for label in block_manager.labels]
+def extract_labels(block_managers, blocks=False):
+    if not blocks: return [label for block_manager in block_managers for label in block_manager.labels]
+    symbols = ['!', '"', "'", ',', '.', ':', '-', '+', '=', '-', '>', '<', '(', ')', '[', ']', '{', '}']
+
+    labels = [label for block_manager in block_managers for label in block_manager.labels]
+    blocks = [block for block_manager in block_managers for block in block_manager.blocks]
+    for block in blocks:
+        for symbol in symbols:
+            block.replace(symbol, ' ')
+    return [label + '\nCODE:\n' + block for label, block in zip(labels, blocks)]
+
+    
