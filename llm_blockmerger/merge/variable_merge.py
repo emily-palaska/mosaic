@@ -45,14 +45,19 @@ def _find_pair_merges(embedding_model, variable_dictionaries, threshold=0.9):
     return components
 
 def _find_group_merges(embedding_model, variable_dictionaries, threshold=0.9):
-    flat_variables = [v for block_dict in variable_dictionaries for v in block_dict]
-    flat_descriptions = [d for block_dict in variable_dictionaries for d in block_dict.values()]
+    if isinstance(variable_dictionaries, dict):
+        flat_variables = list(variable_dictionaries.keys())
+        flat_descriptions = list(variable_dictionaries.values())
+    elif isinstance(variable_dictionaries, list):
+        flat_variables = [v for block_dict in variable_dictionaries for v in block_dict]
+        flat_descriptions = [d for block_dict in variable_dictionaries for d in block_dict.values()]
+    else:
+        raise TypeError(f'Incorrect type {type(variable_dictionaries)} for variable_dictionaries')
 
     embeddings = embedding_model.encode_strings(flat_descriptions)
     similarity_matrix = compute_embedding_similarity(embeddings)
 
     graph = _build_similarity_graph(flat_variables, similarity_matrix, threshold)
-
     return _find_connected_components(graph)
 
 def _refactor_dictionaries(components, variable_dictionaries):

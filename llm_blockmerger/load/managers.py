@@ -1,12 +1,12 @@
 import json
-from llm_blockmerger.core.utils import load_notebooks, load_python_files, load_double_encoded_json
+from llm_blockmerger.core import load_notebooks, load_python_files, load_double_encoded_json
 from llm_blockmerger.load.code_loading import _preprocess_code_lines, _extract_cell_content
 
 class CodeBlocksManager:
     def __init__(self, blocks=None, labels=None, source=None, variable_dictionaries=None):
         self.labels = labels if labels else []
         self.blocks = blocks if blocks else []
-        self.variable_dictionaries = variable_dictionaries if variable_dictionaries else []
+        self.variable_dictionaries = variable_dictionaries if variable_dictionaries is not None else []
         self.sources = source if source else []
 
     def __len__(self):
@@ -30,7 +30,7 @@ class CodeBlocksManager:
         blockdata = load_double_encoded_json(doc.blockdata)
         self.blocks.append(blockdata["blocks"])
         self.labels.append(blockdata["label"])
-        self.variable_dictionaries.append(blockdata["variable_dictionary"])
+        self.variable_dictionaries.update(blockdata["variable_dictionary"])
         if not isinstance(self.sources, list): self.sources = [self.sources]
         self.sources.append(blockdata["source"])
 
@@ -49,9 +49,7 @@ def initialize_managers(paths):
 def create_blockdata(block_managers, embeddings):
     total_blocks = sum(len(manager.blocks) for manager in block_managers)
     assert total_blocks == len(embeddings), f"{total_blocks} != {len(embeddings)}"
-
     embedding_iter = iter(embeddings.tolist())
-
     return [
         json.dumps({
             "label": manager.labels[i],
@@ -75,4 +73,3 @@ def extract_labels(block_managers, blocks=False):
             block.replace(symbol, ' ')
     return [label + '\nCODE:\n' + block for label, block in zip(labels, blocks)]
 
-    

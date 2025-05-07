@@ -65,9 +65,9 @@ def load_double_encoded_json(field: str):
         return json.loads(loaded_once)
     return loaded_once
 
-def print_merge_result(specification, block_manager):
+def print_merge_result(specification, block_manager, merge_type='STRING'):
     print("\n" + "=" * 60)
-    print(' ' * 23 + "MERGE RESULT")
+    print(' ' * 15 + f"MERGE RESULT ({merge_type})")
     print("=" * 60)
 
     print("\nSPECIFICATION:")
@@ -75,14 +75,13 @@ def print_merge_result(specification, block_manager):
 
     blocks, labels, variable_dictionaries, sources = block_manager.unzip()
     print("VARIABLES:")
-    for block_dictionary in variable_dictionaries:
-        for v, d in block_dictionary.items():
-            print(f'\t{v}: {textwrap.fill(d,100)}')
+    for v, d in block_manager.variable_dictionaries.items():
+        print(f'\t{v}: {textwrap.fill(d,80)}')
     for i in range(len(block_manager)):
         print("-" * 60)
         print(f"SOURCE: {sources[i]}")
         print("LABEL:")
-        print(textwrap.indent(textwrap.fill(labels[i],100), '\t'))
+        print(textwrap.indent(textwrap.fill(labels[i],80), '\t'))
         print("CODE:")
         print(textwrap.indent(blocks[i], '\t'))
 
