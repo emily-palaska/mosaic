@@ -80,7 +80,7 @@ def print_merge_result(specification, block_manager):
         print("LABEL:")
         print(textwrap.indent(textwrap.fill(labels[i],100), '\t'))
         print("CODE:")
-        print(textwrap.indent(concatenate_block(blocks[i]), '\t'))
+        print(textwrap.indent(blocks[i], '\t'))
 
     print("\n" + "=" * 60)
 

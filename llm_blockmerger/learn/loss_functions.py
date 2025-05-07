@@ -22,6 +22,6 @@ def triplet_cross_entropy_loss(a, b, c, threshold=0.8):
     ac = normalized_cosine_similarity(a, c)
 
     labels = (ab * bc > threshold ** 2).float()
-    loss = - (labels * torch.log(ac) + (1 - labels) * torch.log(1 - ac))
+    loss = - (labels * torch.log(ac + 10**(-12)) + (1 - labels) * torch.log(1 - ac + 10**(-12)))
 
     return loss.mean()

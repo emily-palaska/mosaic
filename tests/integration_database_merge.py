@@ -48,9 +48,9 @@ def ready_database_pipeline(verbose=True):
     return embedding_model, vector_db
 
 def main():
-    #notebook_paths = ['notebooks/02.02-The-Basics-Of-NumPy-Arrays.ipynb']
-    #embedding_model, vector_db = preprocessing_pipeline(notebook_paths)
-    embedding_model, vector_db = ready_database_pipeline()
+    notebook_paths = ['notebooks/02.02-The-Basics-Of-NumPy-Arrays.ipynb']
+    embedding_model, vector_db = preprocessing_pipeline(notebook_paths)
+    #embedding_model, vector_db = ready_database_pipeline()
 
     specification = 'simple numpy program'
     print_merge_result(specification, merge_variables(*linear_string_merge(embedding_model, vector_db, specification)))

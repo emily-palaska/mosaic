@@ -1,6 +1,5 @@
 import textwrap
 from llm_blockmerger.core.utils import ast_extraction
-from llm_blockmerger.core.utils import concatenate_block
 
 def extract_notebook_variables(block_manager, model, empty=False):
     if empty:
@@ -11,8 +10,8 @@ def extract_notebook_variables(block_manager, model, empty=False):
     notebook_variables = set()
     for block in block_manager.blocks:
         try:
-            block_variables = _extract_block_variables(concatenate_block(block))
-            block_descriptions = _extract_block_descriptions(block_variables, concatenate_block(block), model)
+            block_variables = _extract_block_variables(block)
+            block_descriptions = _extract_block_descriptions(block_variables, block, model)
             notebook_variables.update((v, d) for v, d in zip(block_variables, block_descriptions))
         except IndentationError: continue
         except Exception: raise
@@ -25,7 +24,7 @@ def _separate_variables_per_block(blocks, notebook_variables):
     for block in blocks:
         block_dictionary = {}
         for variable, description in notebook_variables:
-            if variable in concatenate_block(block):
+            if variable in block:
                 block_dictionary[variable] = description
         variable_dictionaries.append(block_dictionary)
     return variable_dictionaries
