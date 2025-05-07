@@ -27,7 +27,7 @@ def linear_string_merge(embedding_model, vector_db, specification, max_iteration
         specification = new_specification
     return embedding_model, merge_block_manager
 
-def linear_embedding_merge(embedding_model, vector_db, specification, max_iterations=10, norm_threshold=0.1):
+def linear_embedding_merge(embedding_model, vector_db, specification, max_iterations=10, norm_threshold=0.5):
     merge_block_manager = CodeBlocksManager()
     current_embedding = embedding_model.encode_strings(specification)[0]
 

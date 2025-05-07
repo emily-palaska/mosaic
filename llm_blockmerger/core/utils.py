@@ -3,9 +3,13 @@ import ast, textwrap, os, json
 def concatenate_block(block):
     return '\n'.join(block) + '\n'
 
-def load_notebooks(nb_paths):
-    if not isinstance(nb_paths, list): return os.path.basename(nb_paths), json.load(open(nb_paths, 'r'))
-    return [(os.path.basename(path), json.load(open(path, 'r'))) for path in nb_paths]
+def load_notebooks(ipynb_paths):
+    if isinstance(ipynb_paths, str): return os.path.basename(ipynb_paths), json.load(open(ipynb_paths, 'r'))
+    return [(os.path.basename(path), json.load(open(path, 'r'))) for path in ipynb_paths]
+
+def load_python_files(py_paths):
+    if isinstance(py_paths, str): return [line for line in open(py_paths, 'r', encoding='utf-8')]
+    return [[line for line in open(path, 'r', encoding='utf-8')] for path in py_paths]
 
 def remove_common_words(original: str, to_remove: str, replacement='UNKNOWN') -> str:
     original = original.replace('\n', ' ')

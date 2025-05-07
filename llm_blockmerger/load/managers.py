@@ -1,5 +1,5 @@
 import json
-from llm_blockmerger.core.utils import load_notebooks, load_double_encoded_json
+from llm_blockmerger.core.utils import load_notebooks, load_python_files, load_double_encoded_json
 from llm_blockmerger.load.code_loading import _preprocess_code_lines, _extract_cell_content
 
 class CodeBlocksManager:
@@ -14,9 +14,11 @@ class CodeBlocksManager:
 
     def preprocess_notebook(self, path, notebook):
         blocks, labels = _preprocess_code_lines(*_extract_cell_content(notebook))
-        self.blocks = blocks
-        self.labels = labels
-        self.sources = path
+        self.blocks, self.labels, self.sources = blocks, labels, path
+
+    def preprocess_python_file(self, path, python_file):
+        blocks, labels = _preprocess_code_lines(python_file, '')
+        self.blocks, self.labels, self.sources = blocks, labels, path
 
     def set(self, blocks=None, labels=None, source=None, variable_dictionaries=None):
         if blocks is not None: self.blocks = blocks
@@ -35,11 +37,13 @@ class CodeBlocksManager:
     def unzip(self):
         return self.blocks, self.labels, self.variable_dictionaries, self.sources
 
-def initialize_managers(notebook_paths):
+def initialize_managers(paths):
     managers = []
-    for notebook_path in notebook_paths:
+    for path in paths:
         managers.append(CodeBlocksManager())
-        managers[-1].preprocess_notebook(*load_notebooks(notebook_path))
+        if '.ipynb' in path: managers[-1].preprocess_notebook(*load_notebooks(path))
+        elif '.py' in path: managers[-1].preprocess_python_file(*load_python_files(path))
+        else: raise TypeError(f"Notebooks paths invalid datatype: {path}")
     return managers
 
 def create_blockdata(block_managers, embeddings):
