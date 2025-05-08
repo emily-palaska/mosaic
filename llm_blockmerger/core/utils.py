@@ -8,8 +8,8 @@ def load_notebooks(ipynb_paths):
     return [(os.path.basename(path), json.load(open(path, 'r'))) for path in ipynb_paths]
 
 def load_python_files(py_paths):
-    if isinstance(py_paths, str): return [line for line in open(py_paths, 'r', encoding='utf-8')]
-    return [[line for line in open(path, 'r', encoding='utf-8')] for path in py_paths]
+    if isinstance(py_paths, str): return os.path.basename(py_paths), [line for line in open(py_paths, 'r', encoding='utf-8')]
+    return [(os.path.basename(path), [line for line in open(path, 'r', encoding='utf-8')]) for path in py_paths]
 
 def remove_common_words(original: str, to_remove: str, replacement='UNKNOWN') -> str:
     original = original.replace('\n', ' ')
@@ -86,4 +86,13 @@ def print_merge_result(specification, block_manager, merge_type='STRING'):
         print(textwrap.indent(blocks[i], '\t'))
 
     print("\n" + "=" * 60)
+
+def print_managers(block_managers):
+    print('=' * 55)
+    for manager in block_managers:
+        for label, block in zip(manager.labels, manager.blocks):
+            print(textwrap.fill(label, 80) + '\n')
+            print(textwrap.indent(block, '\t'))
+            print('-' * 60)
+    print('=' * 55)
 

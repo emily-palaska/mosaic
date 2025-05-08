@@ -7,20 +7,24 @@ from llm_blockmerger.store import BlockMergerVectorDB, HNSWVectorDB, InMemoryExa
 from llm_blockmerger.core import (
     plot_similarity_matrix,
     compute_embedding_similarity,
-    LLM, print_merge_result)
+    LLM, print_merge_result,
+    print_managers)
 
-def preprocessing_pipeline(notebook_paths, verbose=True):
-    managers = initialize_managers(notebook_paths)
+def preprocessing_pipeline(paths, verbose=True):
+    managers = initialize_managers(paths)
     if verbose: print('Initialized managers...')
+    print_managers(managers)
 
     llama = LLM(task='question')
     if verbose: print('Loaded llama model...')
-    for manager in managers: extract_notebook_variables(manager, llama)
-    if verbose: print('Extracted notebook variables...')
+    for i, manager in enumerate(managers):
+        print(f'\r{100 * i / len(managers) : .2f}%', end='')
+        extract_notebook_variables(manager, llama)
+    if verbose: print('\rExtracted notebook variables...')
 
     embedding_model = LLM(task='embedding')
     if verbose: print('Initialized embedding model...')
-    embeddings = embedding_model.encode_strings(extract_labels(managers))
+    embeddings = embedding_model.encode_strings(extract_labels(managers, blocks=True))
     if verbose: print(f'Encoded embeddings with shape {embeddings.shape}...')
     plot_similarity_matrix(compute_embedding_similarity(embeddings), './plots/similarity_matrix.png')
     if verbose: print('Plotted similarity matrix...')
@@ -46,11 +50,12 @@ def ready_database_pipeline(verbose=True):
     return embedding_model, vector_db
 
 def main():
-    notebook_paths = ['notebooks/02.02-The-Basics-Of-NumPy-Arrays.ipynb']
-    #embedding_model, vector_db = preprocessing_pipeline(notebook_paths)
-    embedding_model, vector_db = ready_database_pipeline()
+    paths = ['notebooks/example.py', 'notebooks/example_more.py', 'notebooks/pygrank_snippets.py']
+    #paths = ['notebooks/02.02-The-Basics-Of-NumPy-Arrays.ipynb']
+    specification = 'a simple program that trains a model'
 
-    specification = 'a simple numpy program'
+    embedding_model, vector_db = preprocessing_pipeline(paths)
+    #embedding_model, vector_db = ready_database_pipeline()
     print_merge_result(specification,
                        linear_string_merge(embedding_model, vector_db, specification),
                        merge_type='STRING')

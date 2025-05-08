@@ -71,7 +71,7 @@ def _process_function_section(section_lines, md_prefix):
         if stripped.startswith('#'): comment_lines.append(stripped[1:].strip())
         else: block_lines.append(line)
 
-    return [''.join(block_lines)], [md_prefix + '\n'.join(comment_lines)]
+    return [''.join(block_lines)], [md_prefix + ' '.join(comment_lines)]
 
 
 def _process_non_function_section(section_lines, md_prefix):

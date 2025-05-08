@@ -12,12 +12,16 @@ class CodeBlocksManager:
     def __len__(self):
         return len(self.blocks)
 
+    def __str__(self):
+        # todo implement this
+        return NotImplemented
+
     def preprocess_notebook(self, path, notebook):
         blocks, labels = _preprocess_code_lines(*_extract_cell_content(notebook))
         self.blocks, self.labels, self.sources = blocks, labels, path
 
     def preprocess_python_file(self, path, python_file):
-        blocks, labels = _preprocess_code_lines(python_file, '')
+        blocks, labels = _preprocess_code_lines([python_file], [''])
         self.blocks, self.labels, self.sources = blocks, labels, path
 
     def set(self, blocks=None, labels=None, source=None, variable_dictionaries=None):
