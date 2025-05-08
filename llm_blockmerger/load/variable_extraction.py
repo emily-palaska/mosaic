@@ -1,4 +1,4 @@
-import textwrap
+import textwrap, re
 from llm_blockmerger.core.utils import ast_extraction
 
 def extract_notebook_variables(block_manager, model, empty=False):
@@ -19,12 +19,12 @@ def extract_notebook_variables(block_manager, model, empty=False):
     block_manager.set(variable_dictionaries=variable_dictionaries)
 
 def _separate_variables_per_block(blocks, notebook_variables):
-    # todo try reg ex
     variable_dictionaries = []
     for block in blocks:
         block_dictionary = {}
         for variable, description in notebook_variables:
-            if variable in block:
+            # Use regex to match whole words only
+            if re.search(rf'\b{variable}\b', block):
                 block_dictionary[variable] = description
         variable_dictionaries.append(block_dictionary)
     return variable_dictionaries
@@ -94,7 +94,7 @@ def main():
     model_name = "meta-llama/Llama-3.2-3B"
     llama = LLM(task='question', model_name=model_name, verbose=False)
 
-    blocks = [['x = 1', 'y = 2'], ['z = x + y']]
+    blocks = ['x = 1\ny = 2\na=3', 'z = x + y\nz="create"']
     labels = ['Simple addition code']
 
     from llm_blockmerger.load.managers import CodeBlocksManager
