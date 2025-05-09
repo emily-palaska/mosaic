@@ -33,23 +33,26 @@ def train(model, train_loader, optimizer, epochs=10):
 
     for epoch in range(epochs):
         total_loss, num_batches = 0.0, 0
+        total_var = 0.0
 
         for batch in train_loader:
             a, b, c = batch
             a, b, c = a.to(model.device), b.to(model.device), c.to(model.device)
 
             optimizer.zero_grad()
-            emb_a, emb_b, emb_c = model(a), model(b), model(c)
-            loss = model.loss_function(emb_a, emb_b, emb_c,)
-            assert not torch.isnan(loss).any(), f"Loss is NaN at epoch {epoch + 1}, embeddings: {emb_a, emb_b, emb_c}"
+            a_out, c_out = model(a), model(c)
+            loss = model.loss_function(a, b, c, a_out, c_out)
+            assert not torch.isnan(loss).any(), f"Loss is NaN at epoch {epoch + 1}"
             loss.backward()
             optimizer.step()
 
             total_loss += loss.item()
+            total_var += torch.var(c_out).item()
             num_batches += 1
 
         avg_loss = total_loss / num_batches
-        print(f'\tEpoch [{epoch + 1}/{epochs}]\t Loss: {avg_loss:.4f}')
+        avg_var = total_var / num_batches
+        print(f'\tEpoch [{epoch + 1}/{epochs}]\t Loss: {avg_loss:.4f}\t Variance: {avg_var:.4f}')
 
 def main():
     feat_dim, num_samples, batch_size, lr, epochs, layer_dims = 128, 1000, 32, 0.001, 10, [64, 32]

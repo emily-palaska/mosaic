@@ -8,8 +8,8 @@ from llm_blockmerger.learn.mlp import MLP, train, triplet_cross_entropy_loss, tr
 
 def main():
     samples = 1000
-    loss_function = transitive_contrastive_loss
-    layer_dims, lr, batch_size, epochs = [64, 32, 16], 0.001, 128, 10
+    loss_function = triplet_cross_entropy_loss
+    layer_dims, lr, batch_size, epochs = [128, 64, 32], 0.001, 1000, 10
 
     vector_db = BlockMergerVectorDB(databasetype=HNSWVectorDB, empty=False, training_samples=samples)
     print(f'Initialized vector database with {vector_db.get_num_docs()} entries and {len(vector_db)} training samples...')

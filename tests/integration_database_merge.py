@@ -51,8 +51,8 @@ def main():
     #paths = ['notebooks/02.02-The-Basics-Of-NumPy-Arrays.ipynb']
     specification = 'Train and evaluate a logistic regression model using standardization on training data.'
 
-    embedding_model, vector_db = preprocessing_pipeline(paths)
-    #embedding_model, vector_db = ready_database_pipeline()
+    #embedding_model, vector_db = preprocessing_pipeline(paths)
+    embedding_model, vector_db = ready_database_pipeline()
     print_merge_result(specification,
                        linear_string_merge(embedding_model=embedding_model,
                                            vector_db=vector_db,
