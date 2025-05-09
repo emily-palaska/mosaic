@@ -1,14 +1,23 @@
+from core import remove_common_indentation
+
+
 def _extract_cell_content(notebook):
     code_lines, accumulated_markdown = [], []
-    cell_markdown = ''
+    current_markdown = ''
 
     for cell in notebook.get('cells', []):
         if cell['cell_type'] == 'markdown':
-            cell_markdown += ''.join(cell['source'])
+            current_markdown += ''.join(cell['source'])
+
         elif cell['cell_type'] == 'code':
             code_lines.append(cell['source'])
-            accumulated_markdown.append(cell_markdown.replace('#', '')  if cell_markdown else accumulated_markdown[-1])
-            cell_markdown = ''
+
+            if current_markdown:  markdown = current_markdown.replace('#', '')
+            elif accumulated_markdown: markdown = accumulated_markdown[-1]
+            else: markdown = ''
+            accumulated_markdown.append(markdown)
+            current_markdown = ''
+
     return code_lines, accumulated_markdown
 
 
@@ -21,7 +30,7 @@ def _preprocess_code_lines(code_lines, accumulated_markdown):
 
         for section_function, section_lines in sections:
             section_blocks, section_labels = section_function(section_lines, md_prefix)
-
+            section_blocks = remove_common_indentation(section_blocks)
             blocks.extend(section_blocks)
             labels.extend(section_labels)
     return blocks, labels
@@ -93,10 +102,11 @@ def _process_non_function_section(section_lines, md_prefix):
         # Handle full-line comments
         if stripped.startswith('#'):
             if current_block:
+
                 blocks.append(''.join(current_block))
                 labels.append(md_prefix + '\n'.join(current_comments))
-                current_block = []
-                current_comments = []
+                current_block, current_comments = [], []
+
             current_comments.append(stripped[1:].strip())
         else:
             current_block.append(line)
@@ -106,3 +116,4 @@ def _process_non_function_section(section_lines, md_prefix):
         labels.append(md_prefix + '\n'.join(current_comments))
 
     return blocks, labels
+

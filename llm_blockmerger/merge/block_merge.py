@@ -37,7 +37,7 @@ def linear_embedding_merge(embedding_model: LLM,
                            vector_db: BlockMergerVectorDB,
                            specification: str,
                            max_iterations=10,
-                           norm_threshold=0.5,
+                           norm_threshold=0.2,
                            variable_merge=True):
     merge_block_manager = CodeBlocksManager(variable_dictionaries=dict())
     current_embedding = embedding_model.encode_strings(specification)[0]

@@ -1,4 +1,4 @@
-import ast, textwrap, os, json
+import ast, textwrap, os, json, re
 
 def concatenate_block(block):
     return '\n'.join(block) + '\n'
@@ -21,6 +21,29 @@ def remove_common_words(original: str, to_remove: str, replacement='UNKNOWN') ->
         for word in original_words
     ]
     return ' '.join(replaced_words)
+
+
+def remove_common_indentation(blocks):
+    unintended_blocks = []
+    for block in blocks:
+        lines = block.splitlines()
+        non_empty_lines = [line for line in lines if line.strip()]
+        indentations = [
+            len(re.match(r'^\s*', line).group())
+                for line in non_empty_lines
+        ]
+
+        if not indentations:
+            unintended_blocks.append(block)
+            continue
+        common_indent = min(indentations)
+
+        unindented_lines = []
+        for line in lines:
+            unindented_lines.append(line[common_indent:] if line.strip() else '')
+        unintended_blocks.append('\n'.join(unindented_lines))
+    return unintended_blocks
+
 
 def ast_extraction(script=''):
     tree = ast.parse(script)

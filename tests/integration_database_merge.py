@@ -2,7 +2,7 @@ import os
 os.chdir("../")
 
 from llm_blockmerger.load import initialize_managers, extract_labels, create_blockdata, extract_notebook_variables
-from llm_blockmerger.merge import merge_variables, linear_embedding_merge, linear_string_merge
+from llm_blockmerger.merge import linear_embedding_merge, linear_string_merge
 from llm_blockmerger.store import BlockMergerVectorDB, HNSWVectorDB, InMemoryExactNNVectorDB
 from llm_blockmerger.core import (
     plot_similarity_matrix,
@@ -29,9 +29,6 @@ def preprocessing_pipeline(paths, verbose=True):
     plot_similarity_matrix(compute_embedding_similarity(embeddings), './plots/similarity_matrix.png')
     if verbose: print('Plotted similarity matrix...')
 
-    for manager in managers: merge_variables(embedding_model, manager)
-    if verbose: print('Merged variables...')
-
     vector_db = BlockMergerVectorDB(databasetype=HNSWVectorDB, empty=True)
     if verbose: print('Initialized vector database...')
     vector_db.create(embeddings=embeddings,
@@ -50,17 +47,23 @@ def ready_database_pipeline(verbose=True):
     return embedding_model, vector_db
 
 def main():
-    paths = ['notebooks/example.py', 'notebooks/example_more.py', 'notebooks/pygrank_snippets.py']
+    paths = ['notebooks/example.ipynb', 'notebooks/example_more.ipynb', 'notebooks/pygrank_snippets.ipynb']
     #paths = ['notebooks/02.02-The-Basics-Of-NumPy-Arrays.ipynb']
-    specification = 'a simple program that trains a model'
+    specification = 'Train and evaluate a logistic regression model using standardization on training data.'
 
     embedding_model, vector_db = preprocessing_pipeline(paths)
     #embedding_model, vector_db = ready_database_pipeline()
     print_merge_result(specification,
-                       linear_string_merge(embedding_model, vector_db, specification),
+                       linear_string_merge(embedding_model=embedding_model,
+                                           vector_db=vector_db,
+                                           specification=specification,
+                                           variable_merge=False),
                        merge_type='STRING')
     print_merge_result(specification,
-                       linear_embedding_merge(embedding_model, vector_db, specification),
+                       linear_embedding_merge(embedding_model=embedding_model,
+                                              vector_db=vector_db,
+                                              specification=specification,
+                                              variable_merge=False),
                        merge_type='EMBEDDING')
 
 if __name__ == '__main__':
