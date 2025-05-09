@@ -1,6 +1,5 @@
 import pygrank as pg
 
-
 def test_pagerank(alpha=0.9):
     # load a small graph
     graph = pg.load_data(["graph9"])
