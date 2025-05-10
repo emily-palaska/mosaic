@@ -1,4 +1,7 @@
 import json
+
+from requests.utils import OrderedDict
+
 from llm_blockmerger.core import load_notebooks, load_python_files, load_double_encoded_json
 from llm_blockmerger.load.code_loading import _preprocess_code_lines, _extract_cell_content
 
@@ -34,9 +37,16 @@ class CodeBlocksManager:
         blockdata = load_double_encoded_json(doc.blockdata)
         self.blocks.append(blockdata["blocks"])
         self.labels.append(blockdata["label"])
-        self.variable_dictionaries.update(blockdata["variable_dictionary"])
+        self.variable_dictionaries.append(blockdata["variable_dictionary"])
         if not isinstance(self.sources, list): self.sources = [self.sources]
         self.sources.append(blockdata["source"])
+
+    def rearrange(self, order):
+        assert len(order) == len(self.blocks), 'Inconsistent order'
+        if self.blocks: self.blocks = [self.blocks[i] for i in order]
+        if self.labels: self.labels = [self.labels[i] for i in order]
+        self.variable_dictionaries = {k: v for d in self.variable_dictionaries for k, v in d.items()}
+        if isinstance(self.sources, list) and self.sources: self.sources = [self.sources[i] for i in order]
 
     def unzip(self):
         return self.blocks, self.labels, self.variable_dictionaries, self.sources

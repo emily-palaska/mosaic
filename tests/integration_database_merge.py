@@ -54,16 +54,14 @@ def main():
     #embedding_model, vector_db = preprocessing_pipeline(paths)
     embedding_model, vector_db = ready_database_pipeline()
     print_merge_result(specification,
-                       linear_string_merge(embedding_model=embedding_model,
-                                           vector_db=vector_db,
-                                           specification=specification,
-                                           variable_merge=False),
+                       linear_string_merge(embedding_model=embedding_model, vector_db=vector_db,
+                                           specification=specification, var_merge=False),
                        merge_type='STRING')
     print_merge_result(specification,
                        linear_embedding_merge(embedding_model=embedding_model,
                                               vector_db=vector_db,
                                               specification=specification,
-                                              variable_merge=False),
+                                              var_merge=False),
                        merge_type='EMBEDDING')
 
 if __name__ == '__main__':
