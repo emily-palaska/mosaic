@@ -4,11 +4,11 @@ import torch.optim as optim
 from torch.utils.data import DataLoader
 
 from llm_blockmerger.learn.dummy_dataset import DummyTripletDataset
-from llm_blockmerger.learn.loss_functions import triplet_cross_entropy_loss, transitive_contrastive_loss
+from llm_blockmerger.learn.loss_functions import transitive_cross_entropy_loss, transitive_contrastive_loss
 
 class MLP(nn.Module):
-    def __init__(self, input_dim, layer_dims=None, loss_function=triplet_cross_entropy_loss):
-        assert loss_function in [transitive_contrastive_loss, triplet_cross_entropy_loss], \
+    def __init__(self, input_dim, layer_dims=None, loss_function=transitive_cross_entropy_loss):
+        assert loss_function in [transitive_contrastive_loss, transitive_cross_entropy_loss], \
             f'{loss_function} is not a valid loss function'
         self.device = torch.device('cuda' if torch.cuda.is_available() else 'cpu')
         self.input_dim = input_dim
@@ -57,7 +57,7 @@ def train(model, train_loader, optimizer, epochs=10):
 def main():
     feat_dim, num_samples, batch_size, lr, epochs, layer_dims = 128, 1000, 32, 0.001, 10, [64, 32]
 
-    model = MLP(input_dim=feat_dim, layer_dims=layer_dims, loss_function=triplet_cross_entropy_loss)
+    model = MLP(input_dim=feat_dim, layer_dims=layer_dims, loss_function=transitive_cross_entropy_loss)
     optimizer = optim.Adam(model.parameters(), lr=lr)
     dataset = DummyTripletDataset(num_samples=num_samples, feat_dim=feat_dim)
     train_loader = DataLoader(dataset, batch_size=batch_size, shuffle=True)

@@ -3,12 +3,12 @@ os.chdir("../")
 
 import torch.optim as optim
 from torch.utils.data import DataLoader
-from llm_blockmerger.store.vectordb import BlockMergerVectorDB, HNSWVectorDB
-from llm_blockmerger.learn.mlp import MLP, train, triplet_cross_entropy_loss, transitive_contrastive_loss
+from llm_blockmerger.store import BlockMergerVectorDB, HNSWVectorDB
+from llm_blockmerger.learn import MLP, train, transitive_cross_entropy_loss, transitive_contrastive_loss
 
 def main():
     samples = 1000
-    loss_function = triplet_cross_entropy_loss
+    loss_function = transitive_cross_entropy_loss
     layer_dims, lr, batch_size, epochs = [128, 64, 32], 0.001, 1000, 10
 
     vector_db = BlockMergerVectorDB(databasetype=HNSWVectorDB, empty=False, training_samples=samples)
