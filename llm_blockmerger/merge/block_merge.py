@@ -48,6 +48,10 @@ def linear_embedding_merge(embedding_model: LLM, vector_db: BlockMergerVectorDB,
         if np.linalg.norm(projection) < norm_threshold: break # Break condition: Perpendicular embeddings
 
         current_embedding = current_embedding - projection
+    merge_block_manager.rearrange(find_block_order(
+        blocks=merge_block_manager.blocks,
+        var_dicts=merge_block_manager.variable_dictionaries
+    ))
     return merge_variables(embedding_model, merge_block_manager) if var_merge else merge_block_manager
 
 

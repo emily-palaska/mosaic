@@ -70,7 +70,7 @@ def find_block_order(blocks:list, var_dicts:list):
         var_split = split_io_variables(var_dicts[i], blocks[i])
         var_splits.append(var_split)
         all_outputs |= var_split['output']
-    for v in var_splits: print(v)
+
     order, used_outputs = [], set()
     remaining = set(range(len(blocks)))
     while remaining:
