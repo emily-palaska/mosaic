@@ -6,7 +6,7 @@ def normalized_cosine_similarity(a, b):
     dot_product = torch.sum(a * b, dim=-1)
     norm_a = torch.norm(a, dim=-1)
     norm_b = torch.norm(b, dim=-1)
-    denominator = norm_a * norm_b + 1e-8
+    denominator = norm_a * norm_b + 1.0e-8
     cosine_sim = dot_product / denominator
     return (cosine_sim + 1) / 2
 
