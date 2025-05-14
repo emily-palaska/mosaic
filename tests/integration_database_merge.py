@@ -49,7 +49,7 @@ def ready_database_pipeline(verbose=True):
 def main():
     paths = ['notebooks/example.ipynb', 'notebooks/example_more.ipynb', 'notebooks/pygrank_snippets.ipynb']
     #paths = ['notebooks/02.02-The-Basics-Of-NumPy-Arrays.ipynb']
-    specification = 'Train and evaluate a logistic regression model using standardization on training data.'
+    specification = 'Train and evaluate a logistic regression model using standardization on training data inputs and training outputs.'
 
     #embedding_model, vector_db = preprocessing_pipeline(paths)
     embedding_model, vector_db = ready_database_pipeline()
