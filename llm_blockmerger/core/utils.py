@@ -19,9 +19,10 @@ def remove_common_words(original: str, to_remove: str, replacement='UNKNOWN') ->
     replaced_words = []
     for word in original_words:
         word = word.lower()
-        if word in remove_words: replaced_words.append(replacement)
+        if word in remove_words:
+            replaced_words.append(replacement)
+            remove_words.remove(word)
         else: replaced_words.append(word)
-        remove_words.remove(word)
 
     return ' '.join(replaced_words)
 
