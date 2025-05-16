@@ -16,12 +16,13 @@ def remove_common_words(original: str, to_remove: str, replacement='UNKNOWN') ->
     original_words = original.split()
     remove_words = set(word.lower() for word in to_remove.split())
 
-    replaced_words = [
-        replacement if word.lower() in remove_words else word
-        for word in original_words
-    ]
-    return ' '.join(replaced_words)
+    replaced_words = []
+    for word in original_words:
+        if word.lower() in remove_words: replaced_words.append(replacement)
+        else: replaced_words.append(word)
+        remove_words.remove(word)
 
+    return ' '.join(replaced_words)
 
 def remove_common_indentation(blocks):
     unintended_blocks = []
