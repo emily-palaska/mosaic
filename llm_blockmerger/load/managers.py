@@ -1,7 +1,5 @@
 import json
 
-from requests.utils import OrderedDict
-
 from llm_blockmerger.core import load_notebooks, load_python_files, load_double_encoded_json
 from llm_blockmerger.load.code_loading import _preprocess_code_lines, _extract_cell_content
 
@@ -78,8 +76,8 @@ def create_blockdata(block_managers, embeddings):
 
 def extract_labels(block_managers, blocks=False):
     if not blocks: return [label for block_manager in block_managers for label in block_manager.labels]
-    symbols = ['!', '"', "'", ',', '.', ':', '-', '+', '=', '-', '>', '<', '(', ')', '[', ']', '{', '}']
 
+    symbols = ['!', '"', "'", ',', '.', ':', '-', '+', '=', '-', '>', '<', '(', ')', '[', ']', '{', '}']
     labels = [label for block_manager in block_managers for label in block_manager.labels]
     blocks = [block for block_manager in block_managers for block in block_manager.blocks]
     for block in blocks:
