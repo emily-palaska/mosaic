@@ -1,5 +1,12 @@
 import torch
 
+def vector_variance(vector_batch):
+    assert vector_batch.shape[0] != 1, "Expected batch of vectors, not singular vector"
+    mean = torch.mean(vector_batch, dim=0)
+    squared_diffs = (vector_batch - mean) ** 2
+    var_per_dim = torch.mean(squared_diffs, dim=0)
+    return torch.mean(var_per_dim)
+
 def normalized_cosine_similarity(a, b):
     #cos_sim = F.cosine_similarity(embedding1, embedding2, dim=1)
     #return (cos_sim + 1) / 2 - 1.0e-6
@@ -23,15 +30,16 @@ def transitive_contrastive_loss(a, b, c, a_out, c_out, threshold=0.98, alpha=100
     loss = alpha * torch.var(c_out) - similar - dissimilar
     return loss.mean()
 
-def transitive_cross_entropy_loss(a, b, c, a_out, c_out, threshold=0.98, alpha=1000):
+def transitive_cross_entropy_loss(a, b, c, var_c, threshold=0.99, alpha=0.01):
     ab = normalized_cosine_similarity(a, b)
     bc = normalized_cosine_similarity(b, c)
-    ac_out = normalized_cosine_similarity(a_out, c_out)
+    ac = normalized_cosine_similarity(a, c)
 
     labels = (ab * bc > threshold ** 2).float()
+    print(sum(labels) / len(labels))
 
-    similar = labels * torch.log(ac_out + 1.0e-12)
-    dissimilar = (1 - labels) * torch.log(1 - ac_out + 1.0e-12)
+    similar = labels * torch.log(ac + 1.0e-12)
+    dissimilar = (1 - labels) * torch.log(1 - ac + 1.0e-12)
 
-    loss = alpha * torch.var(c_out) - similar - dissimilar
+    loss = alpha * var_c - similar - dissimilar
     return loss.mean()
