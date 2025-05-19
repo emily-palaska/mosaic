@@ -12,15 +12,14 @@ def load_python_files(py_paths):
     return [(os.path.basename(path), [line for line in open(path, 'r', encoding='utf-8')]) for path in py_paths]
 
 def remove_common_words(original: str, to_remove: str, replacement='UNKNOWN') -> str:
-    original = original.replace('\n', ' ')
-    original_words = original.split()
+    original_words = original.replace('\n', ' ').split()
     remove_words = set(word.lower() for word in to_remove.split())
 
     replaced_words = []
     for word in original_words:
         word = word.lower()
         if word in remove_words:
-            replaced_words.append(replacement)
+            replaced_words.append(replacement.lower())
             remove_words.remove(word)
         else: replaced_words.append(word)
 
