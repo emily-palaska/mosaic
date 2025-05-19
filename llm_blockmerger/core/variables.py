@@ -1,4 +1,5 @@
 import ast, re
+from llm_blockmerger.core import remove_common_indentation
 
 class VariableAnalyzer(ast.NodeVisitor):
     def __init__(self, io_split=False):
@@ -37,24 +38,33 @@ class VariableAnalyzer(ast.NodeVisitor):
             for elt in target.elts:
                 self._recursive_tuple(elt)  # Recursively handle nested tuples
 
+def parse_script(script:str):
+    while script != '':
+        try:
+            tree = ast.parse(script)
+            return tree
+        except (IndentationError, SyntaxError):
+            script = remove_common_indentation(script.split('\n', 1)[1])[0]
+    return None
 
 def ast_extraction(script: str):
-    analyzer = VariableAnalyzer(io_split=True)
-    tree = ast.parse(script)
+    analyzer, tree = VariableAnalyzer(), parse_script(script)
+    if tree is None: return []
     analyzer.visit(tree)
     return sorted(list(analyzer.variables))
 
 def ast_io_split(variables: dict, script: str):
-    analyzer = VariableAnalyzer()
-    analyzer.visit(ast.parse(script))
-    input_vars, output_vars = set(), set()
+    analyzer, tree = VariableAnalyzer(io_split=True), parse_script(script)
+    if tree is None: return {'input': set(), 'output': set()}
+    analyzer.visit(tree)
 
+    input_vars, output_vars = set(), set()
     for var in variables:
         is_read = var in analyzer.read
         is_written = var in analyzer.written
 
         if is_read and not is_written: input_vars.add(var)
-        elif is_written and not is_read: output_vars.add(var)
+        elif is_written: output_vars.add(var)
 
     return {'input': input_vars, 'output': output_vars}
 
