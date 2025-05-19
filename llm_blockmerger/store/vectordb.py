@@ -59,7 +59,7 @@ class BlockMergerVectorDB(Dataset):
             )
             for i in range(len(embeddings))
         ]
-        self.db.index(inputs=DocList[self.BlockMergerDoc](doc_list))
+        self.db.index(sapce='cosine', inputs=DocList[self.BlockMergerDoc](doc_list))
         if self.training_samples is None: self.triplets = generate_triplets(self.get_num_docs())
         self.db.persist()
 
