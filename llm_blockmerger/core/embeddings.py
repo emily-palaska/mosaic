@@ -3,8 +3,7 @@ import matplotlib.pyplot as plt
 import numpy as np
 
 def embedding_projection(current_embedding, neighbor_embedding):
-    if np.all(current_embedding == 0):
-        return None
+    if np.all(current_embedding == 0): return None
     inner_product = np.dot(neighbor_embedding, current_embedding) / np.dot(current_embedding, current_embedding)
     return inner_product * current_embedding
 
