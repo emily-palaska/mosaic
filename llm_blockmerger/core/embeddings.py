@@ -1,10 +1,13 @@
 from sentence_transformers import util
 import matplotlib.pyplot as plt
-import numpy as np
+import torch
 
 def embedding_projection(current_embedding, neighbor_embedding):
-    if np.all(current_embedding == 0): return None
-    inner_product = np.dot(neighbor_embedding, current_embedding) / np.dot(current_embedding, current_embedding)
+    if not isinstance(current_embedding, torch.Tensor): current_embedding = torch.tensor(current_embedding)
+    if not isinstance(neighbor_embedding, torch.Tensor): neighbor_embedding = torch.tensor(neighbor_embedding)
+
+    if torch.all(current_embedding == 0): return None
+    inner_product = torch.dot(neighbor_embedding, current_embedding) / torch.dot(current_embedding, current_embedding)
     return inner_product * current_embedding
 
 def compute_embedding_similarity(embeddings):
