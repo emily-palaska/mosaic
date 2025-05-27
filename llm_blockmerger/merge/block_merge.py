@@ -1,5 +1,3 @@
-import textwrap
-
 from llm_blockmerger.load import CodeBlocksManager
 from llm_blockmerger.core import (remove_common_words, load_double_encoded_json,
                                   embedding_projection, LLM, ast_io_split)
@@ -35,36 +33,29 @@ def linear_string_merge(embedding_model: LLM, vector_db: BlockMergerVectorDB, sp
 
 
 def linear_embedding_merge(embedding_model: LLM, vector_db: BlockMergerVectorDB, specification: str,
-                           l=0.2, max_rep=1, max_it=10, norm_threshold=0.05, var_merge=True):
+                           k=0.9, l=1.4, max_it=10, norm_threshold=0.05, var_merge=True):
     merge_block_manager = CodeBlocksManager()
     search_embedding = tensor(embedding_model.encode_strings(specification)[0])
-    info_embedding = tensor(embedding_model.encode_strings(specification)[0])
-    neighbor_ids = []
+    specification_embedding = tensor(embedding_model.encode_strings(specification)[0])
+    information = specification_embedding.norm().item()
 
     for _ in range(max_it):
-        print(f'Search embedding: {search_embedding.norm().item(): .2f}, Information: {info_embedding.norm().item(): .2f}')
-        if info_embedding.norm() < norm_threshold: break # Break condition: Embedding norm below threshold
+        print(f'Search embedding: {search_embedding.norm().item(): .2f}, Information: {information: .2f}')
+        if information < norm_threshold: break # Break condition: Embedding norm below threshold
 
-        #nearest_neighbor = check_repetitions(max_rep, neighbor_ids, vector_db.read(search_embedding, limit=3))
         nearest_neighbor = vector_db.read(search_embedding, limit=1)[0]
         if nearest_neighbor is None: break  # Break condition: No neighbors
 
-        neighbor_ids.append(nearest_neighbor.id)
         neighbor_embedding = nearest_neighbor.embedding
-
-        search_projection = embedding_projection(search_embedding, neighbor_embedding)
-        if norm(search_projection) < norm_threshold: break  # Break condition: Perpendicular embeddings
-        #if search_projection.norm() > 0.98: break # Break condition: Identical embeddings
-
-        info_projection = embedding_projection(info_embedding, neighbor_embedding)
-        if info_projection.norm() < norm_threshold: break  # Break condition: Perpendicular embeddings
-        #if info_projection.norm() > 0.98: break  # Break condition: Identical embeddings
+        neighbor_projection = embedding_projection(neighbor_embedding, search_embedding)
+        info_projection = embedding_projection(specification_embedding, neighbor_embedding)
+        if norm(neighbor_projection) < norm_threshold: break  # Break condition: Perpendicular embeddings
 
         merge_block_manager.append_doc(nearest_neighbor)
 
-        search_embedding = neighbor_embedding - search_embedding
+        search_embedding = l * neighbor_projection - search_embedding
         search_embedding /= search_embedding.norm()
-        info_embedding = info_embedding - l*info_projection
+        information -= k * info_projection.norm().item()
 
     merge_block_manager.rearrange(find_block_order(cumulative_io_split(merge_block_manager)))
     return merge_variables(embedding_model, merge_block_manager) if var_merge else merge_block_manager
