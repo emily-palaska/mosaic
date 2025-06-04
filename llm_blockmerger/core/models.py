@@ -26,7 +26,7 @@ class LLM:
 
     def _set_verbosity(self):
         # Suppress warnings, logs and progress bars
-        # (UserWarning: 1Torch was not compiled with flash attention.)
+        # (UserWarning: Torch was not compiled with flash attention.)
         if not self.verbose:
             from transformers.utils.logging import disable_progress_bar
             disable_progress_bar()
