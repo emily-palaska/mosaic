@@ -1,7 +1,7 @@
 from llm_blockmerger.load import CodeBlocksManager
 from llm_blockmerger.core import (remove_common_words, load_double_encoded_json,
-                                  embedding_projection, LLM, ast_io_split)
-from llm_blockmerger.merge import merge_variables
+                                  embedding_projection, LLM)
+from llm_blockmerger.merge import merge_variables, find_block_order, cumulative_io_split
 from llm_blockmerger.store import BlockMergerVectorDB
 from torch import norm, tensor
 
@@ -41,7 +41,7 @@ def linear_embedding_merge(embedding_model: LLM, vector_db: BlockMergerVectorDB,
 
     for _ in range(max_it):
         print(f'Search embedding: {search_embedding.norm().item(): .2f}, Information: {information: .2f}')
-        if information < norm_threshold: break # Break condition: Embedding norm below threshold
+        if information < norm_threshold: break # Break condition: Embedding norm below the norm threshold
 
         nearest_neighbor = vector_db.read(search_embedding, limit=1)[0]
         if nearest_neighbor is None: break  # Break condition: No neighbors
@@ -66,30 +66,3 @@ def check_repetitions(max_rep:int, neighbor_ids:list, top_nearest_neighbors:list
         if neighbor_ids.count(neighbor.id) < max_rep:
             return neighbor
     return None
-
-
-def cumulative_io_split(manager:CodeBlocksManager):
-    return [
-        ast_io_split(script=block, variables=var_dict)
-            for block, var_dict in zip(manager.blocks, manager.variable_dictionaries)
-    ]
-
-
-def find_block_order(io_splits: list):
-    all_outputs = set()
-    all_outputs.add(output_var for io_split in io_splits for output_var in io_split['output'])
-
-    order, used_outputs = [], set()
-    remaining = set(range(len(io_splits)))
-    while remaining:
-        min_violations, min_index = float('inf'), 0
-        for i in list(remaining):
-            violations = len(io_splits[i]['input'] - used_outputs)
-            if violations < min_violations:
-                min_violations = violations
-                min_index = i
-
-        order.append(min_index)
-        used_outputs |= io_splits[min_index]['output']
-        remaining.remove(min_index)
-    return order

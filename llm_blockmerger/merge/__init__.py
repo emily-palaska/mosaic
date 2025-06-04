@@ -1,2 +1,3 @@
 from llm_blockmerger.merge.variable_merge import merge_variables
 from llm_blockmerger.merge.block_merge import linear_embedding_merge, linear_string_merge
+from llm_blockmerger.merge.block_reorder import find_block_order, cumulative_io_split
