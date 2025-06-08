@@ -1,4 +1,3 @@
-from sentence_transformers import util
 import matplotlib.pyplot as plt
 import torch
 
@@ -10,8 +9,27 @@ def embedding_projection(current_embedding, neighbor_embedding):
     inner_product = torch.dot(neighbor_embedding, current_embedding) / torch.dot(current_embedding, current_embedding)
     return inner_product * current_embedding
 
-def compute_embedding_similarity(embeddings):
-    return util.pytorch_cos_sim(embeddings, embeddings)
+def pairwise_norm_cos_sim(batch1, batch2=None, dtype=torch.float):
+    if not isinstance(batch1, torch.Tensor): batch1 = torch.tensor(batch1, dtype=dtype)
+    if not isinstance(batch2, torch.Tensor): batch2 = torch.tensor(batch2, dtype=dtype)
+
+    a = batch1.unsqueeze(1)
+    b = batch2.unsqueeze(0) if batch2 is not None else batch1
+
+    dot_product = torch.sum(a * b, dim=-1)
+    norm_a = torch.norm(a, dim=-1)
+    norm_b = torch.norm(b, dim=-1)
+    denominator = norm_a * norm_b + 1e-8
+
+    cosine_sim = dot_product / denominator
+    return (cosine_sim + 1) / 2
+
+def vector_variance(vector_batch):
+    assert vector_batch.shape[0] != 1, "Expected batch of vectors, not singular vector"
+    mean = torch.mean(vector_batch, dim=0)
+    squared_diffs = (vector_batch - mean) ** 2
+    var_per_dim = torch.mean(squared_diffs, dim=0)
+    return torch.mean(var_per_dim)
 
 def plot_similarity_matrix(similarity_matrix, save_path='../plots/similarity_matrix.png'):
     plt.figure(figsize=(12, 12))

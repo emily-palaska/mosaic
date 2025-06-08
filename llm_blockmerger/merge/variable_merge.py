@@ -1,4 +1,4 @@
-from llm_blockmerger.core.embeddings import compute_embedding_similarity
+from llm_blockmerger.core.embeddings import pairwise_norm_cos_sim
 from llm_blockmerger.load.managers import CodeBlocksManager
 from collections import defaultdict
 
@@ -35,7 +35,7 @@ def _find_pair_merges(embedding_model, variable_dictionaries, threshold=0.9):
     flat_variables = [v for block_dict in variable_dictionaries for v in block_dict]
     flat_descriptions = [d for block_dict in variable_dictionaries for d in block_dict.values()]
 
-    similarity_matrix = compute_embedding_similarity(embedding_model.encode_strings(flat_descriptions),)
+    similarity_matrix = pairwise_norm_cos_sim(embedding_model.encode_strings(flat_descriptions))
     components = [
         [flat_variables[i], flat_variables[j]]
                 for i in range(len(flat_variables))
@@ -55,7 +55,7 @@ def _find_group_merges(embedding_model, variable_dictionaries, threshold=0.9):
         raise TypeError(f'Incorrect type {type(variable_dictionaries)} for variable_dictionaries')
 
     embeddings = embedding_model.encode_strings(flat_descriptions)
-    similarity_matrix = compute_embedding_similarity(embeddings)
+    similarity_matrix = pairwise_norm_cos_sim(embeddings)
 
     graph = _build_similarity_graph(flat_variables, similarity_matrix, threshold)
     return _find_connected_components(graph)

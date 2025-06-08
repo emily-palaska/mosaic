@@ -6,7 +6,7 @@ from llm_blockmerger.merge import linear_embedding_merge, linear_string_merge
 from llm_blockmerger.store import BlockMergerVectorDB, HNSWVectorDB, InMemoryExactNNVectorDB
 from llm_blockmerger.core import (
     plot_similarity_matrix,
-    compute_embedding_similarity,
+    pairwise_norm_cos_sim,
     LLM, print_merge_result,
     print_managers)
 
@@ -26,7 +26,7 @@ def preprocessing_pipeline(paths, verbose=True):
     if verbose: print('Initialized embedding model...')
     embeddings = embedding_model.encode_strings(extract_labels(managers, blocks=True))
     if verbose: print(f'Encoded embeddings with shape {embeddings.shape}...')
-    plot_similarity_matrix(compute_embedding_similarity(embeddings), './plots/similarity_matrix.png')
+    plot_similarity_matrix(pairwise_norm_cos_sim(embeddings), './plots/similarity_matrix.png')
     if verbose: print('Plotted similarity matrix...')
 
     vector_db = BlockMergerVectorDB(databasetype=HNSWVectorDB, empty=True)
