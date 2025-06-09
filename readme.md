@@ -78,4 +78,4 @@ information = specification_embedding.norm().item()
 
 
 A visual representation of the core idea behind the search embedding rotation:
-<p align=center> <img title="Absttract Flowchart" alt="LLM-BlockMerger" src="plots/sphere.png" height=400px> <img title="Absttract Flowchart" alt="LLM-BlockMerger" src="plots/vectors.png" height=400px> 
+<p align=center> <img title="Absttract Flowchart" alt="LLM-BlockMerger" src="plots/sphere.png" height=350px> <img title="Absttract Flowchart" alt="LLM-BlockMerger" src="plots/vectors.png" height=350px> 
