@@ -19,20 +19,18 @@ class BlockMergerVectorDB(Dataset):
                  workspace='./databases/',
                  feature_size=384,
                  dataset_dtype=torch.float32,
-                 empty=False,
-                 training_samples=None):
+                 empty=False):
         assert databasetype in [HNSWVectorDB, InMemoryExactNNVectorDB], "Invalid dbtype"
 
         self.databasetype = databasetype
         self.workspace = workspace
         self.feature_size = feature_size
         self.dataset_dtype = dataset_dtype
-        self.training_samples = training_samples
         self.BlockMergerDoc = make_doc(feature_size)
 
         if empty: self._initialize_empty_db()
         else: self._restore_db()
-        if self.training_samples is None: self.triplets = generate_triplets(self.get_num_docs())
+        self.triplets = generate_triplets(self.get_num_docs())
 
     def _initialize_empty_db(self):
         empty_docs(workspace=self.workspace)
@@ -60,7 +58,7 @@ class BlockMergerVectorDB(Dataset):
             for i in range(len(embeddings))
         ]
         self.db.index(sapce='cosine', inputs=DocList[self.BlockMergerDoc](doc_list))
-        if self.training_samples is None: self.triplets = generate_triplets(self.get_num_docs())
+        self.triplets = generate_triplets(self.get_num_docs())
         self.db.persist()
 
     def read(self, embedding, limit=10):
@@ -78,14 +76,12 @@ class BlockMergerVectorDB(Dataset):
         return self.db.num_docs()['num_docs']
 
     def __len__(self):
-        return len(self.triplets) if self.training_samples is None else self.training_samples
+        return len(self.triplets)
 
     def __getitem__(self, index):
         if index >= self.__len__(): raise IndexError(f'Index {index} out of range')
 
-        indices = self.triplets[index] if self.training_samples is None \
-            else random.sample(range(0, self.get_num_docs()), 3)
-        docs = [self.db.get_by_id(str(idx)) for idx in indices]
+        docs = [self.db.get_by_id(str(idx)) for idx in self.triplets[index]]
         return [doc.embedding for doc in docs]
 
 def main():

@@ -33,43 +33,59 @@ class MLP(nn.Module):
     def forward(self, x):
         return self.network(x)
 
+def eval_feed(model, loss_function, loader):
+    model.eval()
+    with torch.no_grad():
+        loss = labels = var = loss_sim = n = 0
+        for a, b, c in loader:
+            a, b, c = a.to(model.device), b.to(model.device), c.to(model.device)
+            ao, bo, co = model(a), model(b), model(c)
+            l, lab, v, lsim = loss_function(ao, bo, co)
+            loss += l.item(); labels += lab.item(); var += v.item(); loss_sim += lsim.item(); n += 1
 
-def train(model, train_loader, optimizer, loss_function, epochs=10, verbose=True):
+    return loss/n, labels/n, var/n, loss_sim/n
+
+def train_feed(model, optimizer, loss_function, loader):
+    model.train()
+    loss = labels = var = loss_sim = n = 0
+    for a, b, c in loader:
+        a, b, c = a.to(model.device), b.to(model.device), c.to(model.device)
+        optimizer.zero_grad()
+        ao, bo, co = model(a), model(b), model(c)
+        l, lab, v, lsim = loss_function(ao, bo, co)
+        assert not torch.isnan(l).any(), f"Loss is NaN"
+        l.backward(); optimizer.step()
+        loss += l.item(); labels += lab.item(); var += v.item(); loss_sim += lsim.item(); n += 1
+    return loss / n, labels / n, var / n, loss_sim / n
+
+def train(model, train_loader, val_loader, optimizer, loss_function, epochs=10, verbose=True):
     model.train()
     metadata = model.metadata | loss_function.metadata | {"lr": optimizer.param_groups[0]["lr"]}
-    results = {"loss": [], "labels": [], "var": [], "loss_sim": [], "time":[], "metadata": metadata}
+    results = {
+        "metadata": metadata,
+        "time": [],
+        "train": {"loss": [], "labels": [], "var": [], "loss_sim": []},
+        "val":   {"loss": [], "labels": [], "var": [], "loss_sim": []}
+    }
+
     for epoch in range(epochs):
-        start_time = time.time()
-        loss = labels =  var = loss_sim = num_batches = 0
+        start = time.time()
 
-        for batch in train_loader:
-            a, b, c = batch
-            a, b, c = a.to(model.device), b.to(model.device), c.to(model.device)
+        loss, labels, var, loss_sim = train_feed(model, optimizer, loss_function, train_loader)
+        for key, val in zip(["loss", "labels", "var", "loss_sim"], [loss, labels, var, loss_sim]):
+            results["train"][key].append(val)
 
-            optimizer.zero_grad()
-            a_out, b_out, c_out = model(a), model(b), model(c)
+        val_loss, val_labels, val_var, val_sim = eval_feed(model, loss_function, val_loader)
+        for key, val in zip(["loss", "labels", "var", "loss_sim"], [val_loss, val_labels, val_var, val_sim]):
+            results["val"][key].append(val)
 
-            batch_loss, batch_labels, batch_var, batch_loss_sim = loss_function(a_out, b_out, c_out)
-            assert not torch.isnan(batch_loss).any(), f"Loss is NaN at epoch {epoch + 1}"
-            batch_loss.backward()
-            optimizer.step()
-
-            loss += batch_loss.item()
-            labels += batch_labels.item()
-            var += batch_var.item()
-            loss_sim += batch_loss_sim.item()
-            num_batches += 1
-        results["loss"].append(loss / num_batches)
-        results["labels"].append(labels / num_batches)
-        results["var"].append(var / num_batches)
-        results["loss_sim"].append(loss_sim / num_batches)
-        results["time"].append(time.time() - start_time)
+        results["time"].append(time.time() - start)
         if verbose:
-            print(f'Epoch [{epoch + 1}/{epochs}]', end='\t')
-            print(f'Loss: {results["loss"][-1]: .3f}', end='\t')
-            print(f'Sim Loss: {results["loss_sim"][-1]: .3f}', end='\t')
-            print(f'Labels: {results["labels"][-1]: .3f}', end='\t')
-            print(f'Variance: {results["var"][-1]: .3f}', end='\n')
+            print(f"Epoch [{epoch+1}/{epochs}]\t"
+                  f"Train Loss: {loss:.3f}\t"
+                  f"Sim: {loss_sim:.3f}\t"
+                  f"Labels: {labels:.3f}\t"
+                  f"Var: {var:.3f}")
 
     return results
 
