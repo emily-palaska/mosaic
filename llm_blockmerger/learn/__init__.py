@@ -1,2 +1,3 @@
 from llm_blockmerger.learn.mlp import MLP, train
-from llm_blockmerger.learn.loss_functions import transitive_contrastive_loss, transitive_cross_entropy_loss
+from llm_blockmerger.learn.loss_functions import transitive_contrastive_loss, TransitiveCrossEntropyLoss
+from llm_blockmerger.learn.visualization import visualize_results
