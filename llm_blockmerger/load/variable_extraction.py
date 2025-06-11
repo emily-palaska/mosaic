@@ -49,7 +49,7 @@ Output:
 
 def _create_variable_description_prompt(variable, script=''):
     return f"""
-Given the following Python script provide a small description of the variable {variable}:.
+Given the following Python script provide a small description of the variable {variable}.
 Explain its role and significance within the script.
 
 Script:
