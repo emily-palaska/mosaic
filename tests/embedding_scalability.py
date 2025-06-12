@@ -1,6 +1,6 @@
 import os
 import numpy as np
-from llm_blockmerger.store.vectordb import BlockStore, HNSWVectorDB
+from llm_blockmerger.store.blockdb import BlockStore, HNSWVectorDB
 os.chdir("../")
 
 def noise_db_input(feature_size=200, instances=10):
