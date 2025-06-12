@@ -68,32 +68,32 @@ def ast_io_split(variables: dict, script: str):
 
     return {'input': input_vars, 'output': output_vars}
 
-def separate_variables_per_block(blocks, notebook_variables):
-    variable_dictionaries = []
+def var_separation(blocks, nb_vars):
+    var_dicts = []
     for block in blocks:
-        block_dictionary = {}
-        for variable, description in notebook_variables:
-            if re.search(rf'\b{variable}\b', block):
-                block_dictionary[variable] = description
-        variable_dictionaries.append(block_dictionary)
-    return variable_dictionaries
+        block_dict = {}
+        for var, desc in nb_vars:
+            if re.search(rf'\b{var}\b', block):
+                block_dict[var] = desc
+        var_dicts.append(block_dict)
+    return var_dicts
 
-def separate_variable_string(output_text):
-    if "Output:" in output_text:
-        variables_str = output_text.split("Output:")[1].strip()
-        variables_str = variables_str.split("\n")[0].strip()
-        variables = {
+def parse_vars(output):
+    if "Output:" in output:
+        var_str = output.split("Output:")[1].strip()
+        var_str = var_str.split("\n")[0].strip()
+        var_set = {
             var.strip().replace("[", "").replace("]", "")
-            for var in variables_str.split(",")
+            for var in var_str.split(",")
         }
-        variables.discard("")
+        var_set.discard("")
     else:
-        variables = set()
-    return sorted(variables)
+        var_set = set()
+    return sorted(var_set)
 
-def separate_description_string(output_text):
-    if "Output:" in output_text:
-        description_str = output_text.split("Output:")[1].strip()
+def parse_desc(output):
+    if "Output:" in output:
+        description_str = output.split("Output:")[1].strip()
         description_str = description_str.split(":")[1].strip()
         description_str = description_str.split("\n")[0].strip()
     else:

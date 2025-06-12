@@ -1,9 +1,9 @@
 import textwrap
 from llm_blockmerger.core import (
     ast_extraction,
-    separate_variables_per_block,
-    separate_variable_string,
-    separate_description_string
+    var_separation,
+    parse_vars,
+    parse_desc
 )
 
 def extract_notebook_variables(block_manager, model, empty=False):
@@ -19,20 +19,20 @@ def extract_notebook_variables(block_manager, model, empty=False):
             notebook_variables.update((v, d) for v, d in zip(block_variables, block_descriptions))
         except IndentationError: continue
         except Exception: raise
-    variable_dictionaries = separate_variables_per_block(block_manager.blocks, notebook_variables)
+    variable_dictionaries = var_separation(block_manager.blocks, notebook_variables)
     block_manager.set(variable_dictionaries=variable_dictionaries)
 
 def _extract_block_variables(script, model=None):
     if model is None:
         return ast_extraction(script)
     output_text = model.answer(_create_variable_extraction_prompt(script))
-    return separate_variable_string(output_text)
+    return parse_vars(output_text)
 
 def _extract_block_descriptions(variables, script, model):
     descriptions = []
     for variable in variables:
         output_text = model.answer(_create_variable_description_prompt(variable,script))
-        descriptions.append(separate_description_string(output_text))
+        descriptions.append(parse_desc(output_text))
     return descriptions
 
 def _create_variable_extraction_prompt(script=''):

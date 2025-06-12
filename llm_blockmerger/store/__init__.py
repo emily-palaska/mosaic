@@ -1,1 +1,1 @@
-from llm_blockmerger.store.vectordb import BlockMergerVectorDB, HNSWVectorDB, InMemoryExactNNVectorDB
+from llm_blockmerger.store.vectordb import BlockDB, HNSWVectorDB, InMemoryExactNNVectorDB

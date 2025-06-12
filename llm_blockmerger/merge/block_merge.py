@@ -1,11 +1,12 @@
 from llm_blockmerger.load import CodeBlocksManager
-from llm_blockmerger.core import (remove_common_words, load_double_encoded_json,
-                                  embedding_projection, LLM)
-from llm_blockmerger.merge import merge_variables, find_block_order, cumulative_io_split
-from llm_blockmerger.store import BlockMergerVectorDB
+from llm_blockmerger.core import (remove_common_words, encoded_json,
+                                  projection, LLM)
+from llm_blockmerger.merge.variable_merge import merge_variables
+from llm_blockmerger.merge.block_reorder import  find_block_order, cumulative_io_split
+from llm_blockmerger.store import BlockDB
 from torch import norm, tensor
 
-def linear_string_merge(embedding_model: LLM, vector_db: BlockMergerVectorDB, specification: str,
+def linear_string_merge(embedding_model: LLM, vector_db: BlockDB, specification: str,
                         max_rep=2, max_it=10, replacement='UNKNOWN', var_merge=True):
     merge_block_manager = CodeBlocksManager()
     neighbor_ids = []
@@ -20,7 +21,7 @@ def linear_string_merge(embedding_model: LLM, vector_db: BlockMergerVectorDB, sp
         if nearest_neighbor is None: break  # Break condition: No valid neighbors
 
         neighbor_ids.append(nearest_neighbor.id)
-        nearest_doc_label = load_double_encoded_json(nearest_neighbor.blockdata)['label']
+        nearest_doc_label = encoded_json(nearest_neighbor.blockdata)['label']
         new_specification = remove_common_words(original=specification, to_remove=''.join(nearest_doc_label),
                                                 replacement=replacement)
         if new_specification == specification: break # Break condition: Unchanged specification
@@ -32,7 +33,7 @@ def linear_string_merge(embedding_model: LLM, vector_db: BlockMergerVectorDB, sp
     return merge_variables(embedding_model, merge_block_manager) if var_merge else merge_block_manager
 
 
-def linear_embedding_merge(embedding_model: LLM, vector_db: BlockMergerVectorDB, specification: str,
+def linear_embedding_merge(embedding_model: LLM, vector_db: BlockDB, specification: str,
                            k=0.9, l=1.4, max_it=10, norm_threshold=0.05, var_merge=True):
     merge_block_manager = CodeBlocksManager()
     search_embedding = tensor(embedding_model.encode_strings(specification)[0])
@@ -47,8 +48,8 @@ def linear_embedding_merge(embedding_model: LLM, vector_db: BlockMergerVectorDB,
         if nearest_neighbor is None: break  # Break condition: No neighbors
 
         neighbor_embedding = nearest_neighbor.embedding
-        neighbor_projection = embedding_projection(neighbor_embedding, search_embedding)
-        info_projection = embedding_projection(specification_embedding, neighbor_embedding)
+        neighbor_projection = projection(neighbor_embedding, search_embedding)
+        info_projection = projection(specification_embedding, neighbor_embedding)
         if norm(neighbor_projection) < norm_threshold: break  # Break condition: Perpendicular embeddings
 
         merge_block_manager.append_doc(nearest_neighbor)

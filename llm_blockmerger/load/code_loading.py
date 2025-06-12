@@ -1,4 +1,4 @@
-from core import remove_common_indentation
+from llm_blockmerger.core import remove_common_indentation
 
 
 def _extract_cell_content(notebook):

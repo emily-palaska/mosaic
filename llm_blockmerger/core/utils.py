@@ -1,29 +1,32 @@
-import textwrap, os, json, re
+from os.path import basename
+from json import load, loads
+from re import match
+from textwrap import indent, fill
 
-def concatenate_block(block):
+def concat_block(block):
     return '\n'.join(block) + '\n'
 
-def load_notebooks(ipynb_paths):
-    if isinstance(ipynb_paths, str): return os.path.basename(ipynb_paths), json.load(open(ipynb_paths, 'r'))
-    return [(os.path.basename(path), json.load(open(path, 'r'))) for path in ipynb_paths]
+def load_nb(paths):
+    if isinstance(paths, str): return basename(paths), load(open(paths, 'r'))
+    return [(basename(path), load(open(path, 'r'))) for path in paths]
 
-def load_python_files(py_paths):
-    if isinstance(py_paths, str): return os.path.basename(py_paths), [line for line in open(py_paths, 'r', encoding='utf-8')]
-    return [(os.path.basename(path), [line for line in open(path, 'r', encoding='utf-8')]) for path in py_paths]
+def load_py(paths):
+    if isinstance(paths, str): return basename(paths), [line for line in open(paths, 'r', encoding='utf-8')]
+    return [(basename(path), [line for line in open(path, 'r', encoding='utf-8')]) for path in paths]
 
-def remove_common_words(original: str, to_remove: str, replacement='UNKNOWN') -> str:
-    original_words = original.replace('\n', ' ').split()
-    remove_words = set(word.lower() for word in to_remove.split())
+def remove_common_words(og: str, rem: str, repl='[UNK]'):
+    og_words = og.replace('\n', ' ').split()
+    rem_words = set(word.lower() for word in rem.split())
 
-    replaced_words = []
-    for word in original_words:
+    repl_words = []
+    for word in og_words:
         word = word.lower()
-        if word in remove_words:
-            replaced_words.append(replacement.lower())
-            remove_words.remove(word)
-        else: replaced_words.append(word)
+        if word in rem_words:
+            repl_words.append(repl.lower())
+            rem_words.remove(word)
+        else: repl_words.append(word)
 
-    return ' '.join(replaced_words)
+    return ' '.join(repl_words)
 
 def remove_common_indentation(blocks):
     unintended_blocks = []
@@ -31,7 +34,7 @@ def remove_common_indentation(blocks):
         lines = block.splitlines()
         non_empty_lines = [line for line in lines if line.strip()]
         indentations = [
-            len(re.match(r'^\s*', line).group())
+            len(match(r'^\s*', line).group())
                 for line in non_empty_lines
         ]
 
@@ -46,31 +49,31 @@ def remove_common_indentation(blocks):
         unintended_blocks.append('\n'.join(unindented_lines))
     return unintended_blocks
 
-def load_double_encoded_json(field: str):
-    loaded_once = json.loads(field)
+def encoded_json(field: str):
+    loaded_once = loads(field)
     if isinstance(loaded_once, str):
-        return json.loads(loaded_once)
+        return loads(loaded_once)
     return loaded_once
 
-def print_merge_result(specification, block_manager, merge_type='STRING'):
+def print_merge_result(specification, manager, title='STRING'):
     print("\n" + "=" * 60)
-    print(' ' * 15 + f"MERGE RESULT ({merge_type})")
+    print(' ' * 15 + f"MERGE RESULT ({title})")
     print("=" * 60)
 
     print("\nSPECIFICATION:")
-    print(textwrap.indent(specification, "    "))
+    print(indent(specification, "    "))
 
-    blocks, labels, variable_dictionaries, sources = block_manager.unzip()
+    blocks, labels, variable_dictionaries, sources = manager.unzip()
     print("VARIABLES:")
-    for v, d in block_manager.variable_dictionaries.items():
-        print(f'\t{v}: {textwrap.fill(d,80)}')
-    for i in range(len(block_manager)):
+    for v, d in manager.variable_dictionaries.items():
+        print(f'\t{v}: {fill(d,80)}')
+    for i in range(len(manager)):
         print("-" * 60)
         print(f"SOURCE: {sources[i]}")
         print("LABEL:")
-        print(textwrap.indent(textwrap.fill(labels[i],80), '\t'))
+        print(indent(fill(labels[i],80), '\t'))
         print("CODE:")
-        print(textwrap.indent(blocks[i], '\t'))
+        print(indent(blocks[i], '\t'))
 
     print("\n" + "=" * 60)
 
@@ -78,8 +81,11 @@ def print_managers(block_managers):
     print('=' * 55)
     for manager in block_managers:
         for label, block in zip(manager.labels, manager.blocks):
-            print(textwrap.fill(label, 80) + '\n')
-            print(textwrap.indent(block, '\t'))
+            print(fill(label, 80) + '\n')
+            print(indent(block, '\t'))
             print('-' * 60)
     print('=' * 55)
 
+def triplets(n):
+    from itertools import combinations
+    return list(combinations(range(0, n), 3))

@@ -1,6 +1,6 @@
 import json
 
-from llm_blockmerger.core import load_notebooks, load_python_files, load_double_encoded_json
+from llm_blockmerger.core import load_nb, load_py, encoded_json
 from llm_blockmerger.load.code_loading import _preprocess_code_lines, _extract_cell_content
 
 class CodeBlocksManager:
@@ -32,7 +32,7 @@ class CodeBlocksManager:
         if variable_dictionaries is not None: self.variable_dictionaries = variable_dictionaries
 
     def append_doc(self, doc):
-        blockdata = load_double_encoded_json(doc.blockdata)
+        blockdata = encoded_json(doc.blockdata)
         self.blocks.append(blockdata["blocks"])
         self.labels.append(blockdata["label"])
         self.variable_dictionaries.append(blockdata["variable_dictionary"])
@@ -53,8 +53,8 @@ def initialize_managers(paths):
     managers = []
     for path in paths:
         managers.append(CodeBlocksManager())
-        if '.ipynb' in path: managers[-1].preprocess_notebook(*load_notebooks(path))
-        elif '.py' in path: managers[-1].preprocess_python_file(*load_python_files(path))
+        if '.ipynb' in path: managers[-1].preprocess_notebook(*load_nb(path))
+        elif '.py' in path: managers[-1].preprocess_python_file(*load_py(path))
         else: raise TypeError(f"Notebooks paths invalid datatype: {path}")
     return managers
 

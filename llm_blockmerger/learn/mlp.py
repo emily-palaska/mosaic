@@ -3,7 +3,7 @@ import torch.nn as nn
 import time
 from torch.utils.data import DataLoader
 from llm_blockmerger.learn.dummy_dataset import DummyTripletDataset
-from llm_blockmerger.learn.loss_functions import TransitiveCrossEntropyLoss, transitive_contrastive_loss, vector_variance, pairwise_norm_cos_sim
+from llm_blockmerger.learn.loss_functions import TransitiveCrossEntropyLoss, transitive_contrastive_loss, variance, pairwise_norm_cos_sim
 from llm_blockmerger.learn.visualization import visualize_results
 
 class MLP(nn.Module):

@@ -1,5 +1,5 @@
 import torch
-from llm_blockmerger.core import pairwise_norm_cos_sim, vector_variance
+from llm_blockmerger.core import pairwise_norm_cos_sim, variance
 
 class TransitiveCrossEntropyLoss:
     def __init__(self, threshold=0.9, alpha=0.1, quantile=True, mean=True, var=True):
@@ -18,6 +18,9 @@ class TransitiveCrossEntropyLoss:
         }
 
     def __call__(self, a, b, c):
+        a = a / a.norm()
+        b = b / b.norm()
+        c = c / c.norm()
         ab = pairwise_norm_cos_sim(a, b)
         bc = pairwise_norm_cos_sim(b, c)
         ac = pairwise_norm_cos_sim(a, c)
@@ -26,7 +29,7 @@ class TransitiveCrossEntropyLoss:
         labels = ab * bc
         threshold = labels.quantile(0.9).item() if self.quantile else self.threshold ** 2
         labels = (labels > threshold).float()
-        var_ac = vector_variance(ac)
+        var_ac = variance(ac)
 
         similar = labels * torch.log(ac + 1.0e-12)
         dissimilar = (1 - labels) * torch.log(1 - ac + 1.0e-12)
