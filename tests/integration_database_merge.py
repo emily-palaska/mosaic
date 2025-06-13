@@ -1,7 +1,7 @@
 import os
 os.chdir("../")
 
-from llm_blockmerger.load import initialize_managers, extract_labels, create_blockdata, extract_notebook_variables
+from llm_blockmerger.load import init_managers, flat_labels, create_blockdata, nb_variables
 from llm_blockmerger.merge import linear_embedding_merge, linear_string_merge
 from llm_blockmerger.store import BlockStore, HNSWVectorDB, InMemoryExactNNVectorDB
 from llm_blockmerger.core import (
@@ -11,7 +11,7 @@ from llm_blockmerger.core import (
     print_managers)
 
 def preprocessing_pipeline(paths, verbose=True):
-    managers = initialize_managers(paths)
+    managers = init_managers(paths)
     if verbose: print('Initialized managers...')
     print_managers(managers)
 
@@ -24,7 +24,7 @@ def preprocessing_pipeline(paths, verbose=True):
 
     embedding_model = LLM(task='embedding')
     if verbose: print('Initialized embedding model...')
-    embeddings = embedding_model.encode_strings(extract_labels(managers, blocks=True))
+    embeddings = embedding_model.encode_strings(flat_labels(managers, code=True))
     if verbose: print(f'Encoded embeddings with shape {embeddings.shape}...')
     plot_sim(pairwise_norm_cos_sim(embeddings), './plots/similarity_matrix.png')
     if verbose: print('Plotted similarity matrix...')

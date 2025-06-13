@@ -1,5 +1,5 @@
 import ast, re
-from llm_blockmerger.core import remove_common_indentation
+from llm_blockmerger.core import dedent_blocks
 
 class VariableAnalyzer(ast.NodeVisitor):
     def __init__(self, io_split=False):
@@ -44,7 +44,7 @@ def parse_script(script:str):
             tree = ast.parse(script)
             return tree
         except (IndentationError, SyntaxError):
-            script = remove_common_indentation(script.split('\n', 1)[1])[0]
+            script = dedent_blocks(script.split('\n', 1)[1])[0]
     return None
 
 def ast_extraction(script: str):

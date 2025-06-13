@@ -1,5 +1,5 @@
 from llm_blockmerger.core.embeddings import pairwise_norm_cos_sim
-from llm_blockmerger.load.managers import CodeBlocksManager
+from llm_blockmerger.load.managers import BlockManager
 from collections import defaultdict
 
 def _build_similarity_graph(variables, similarity_matrix, threshold):
@@ -91,7 +91,7 @@ def merge_variables(embedding_model,
             for idx, block in enumerate(blocks):
                 blocks[idx] = _replace_variables(block, group[idg], group[0])
 
-    block_manager.set(blocks=blocks, variable_dictionaries=variable_dictionaries)
+    block_manager.set(blocks=blocks, var_dicts=variable_dictionaries)
     return block_manager
 
 # todo make tests out of this execution scenario
@@ -111,15 +111,12 @@ def main():
     from llm_blockmerger.core.models import LLM
     embedding_model = LLM(task='embedding')
 
-    manager = CodeBlocksManager(
-        blocks=demo_blocks,
-        variable_dictionaries=demo_variable_dictionaries
-    )
+    manager = BlockManager(blocks=demo_blocks, var_dicts=demo_variable_dictionaries)
 
     manager = merge_variables(embedding_model, manager)
     print(manager.blocks)
 
-    for block_dict in manager.variable_dictionaries:
+    for block_dict in manager.var_dicts:
         for v, d in block_dict.items():
             print(f'{v}: {d}')
         print('-'*40)

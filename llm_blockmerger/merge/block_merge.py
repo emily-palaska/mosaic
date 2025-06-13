@@ -1,4 +1,4 @@
-from llm_blockmerger.load import CodeBlocksManager
+from llm_blockmerger.load import BlockManager
 from llm_blockmerger.core import (remove_common_words, encoded_json,
                                   projection, LLM)
 from llm_blockmerger.merge.variable_merge import merge_variables
@@ -8,7 +8,7 @@ from torch import norm, tensor
 
 def linear_string_merge(embedding_model: LLM, vector_db: BlockDB, specification: str,
                         max_rep=2, max_it=10, replacement='UNKNOWN', var_merge=True):
-    merge_block_manager = CodeBlocksManager()
+    merge_block_manager = BlockManager()
     neighbor_ids = []
 
     import textwrap
@@ -35,7 +35,7 @@ def linear_string_merge(embedding_model: LLM, vector_db: BlockDB, specification:
 
 def linear_embedding_merge(embedding_model: LLM, vector_db: BlockDB, specification: str,
                            k=0.9, l=1.4, max_it=10, norm_threshold=0.05, var_merge=True):
-    merge_block_manager = CodeBlocksManager()
+    merge_block_manager = BlockManager()
     search_embedding = tensor(embedding_model.encode_strings(specification)[0])
     specification_embedding = tensor(embedding_model.encode_strings(specification)[0])
     information = specification_embedding.norm().item()

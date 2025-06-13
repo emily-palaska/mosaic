@@ -1,5 +1,5 @@
 import pytest
-from llm_blockmerger.load.code_loading import *
+from llm_blockmerger.load.scripts import *
 
 @pytest.fixture
 def notebook_data():

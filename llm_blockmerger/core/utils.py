@@ -28,26 +28,24 @@ def remove_common_words(og: str, rem: str, repl='[UNK]'):
 
     return ' '.join(repl_words)
 
-def remove_common_indentation(blocks):
-    unintended_blocks = []
+def dedent_blocks(blocks):
+    dedented_blocks = []
     for block in blocks:
         lines = block.splitlines()
-        non_empty_lines = [line for line in lines if line.strip()]
-        indentations = [
+        script_lines = [line for line in lines if line.strip()]
+        ind = [
             len(match(r'^\s*', line).group())
-                for line in non_empty_lines
+                for line in script_lines
         ]
 
-        if not indentations:
-            unintended_blocks.append(block)
+        if not ind:
+            dedented_blocks.append(block)
             continue
-        common_indent = min(indentations)
+        common_ind = min(ind)
 
-        unindented_lines = []
-        for line in lines:
-            unindented_lines.append(line[common_indent:] if line.strip() else '')
-        unintended_blocks.append('\n'.join(unindented_lines))
-    return unintended_blocks
+        dedented_lines = [line[common_ind:] if line.strip() else '' for line in lines]
+        dedented_blocks.append('\n'.join(dedented_lines))
+    return dedented_blocks
 
 def encoded_json(field: str):
     loaded_once = loads(field)
@@ -65,7 +63,7 @@ def print_merge_result(specification, manager, title='STRING'):
 
     blocks, labels, variable_dictionaries, sources = manager.unzip()
     print("VARIABLES:")
-    for v, d in manager.variable_dictionaries.items():
+    for v, d in manager.var_dicts.items():
         print(f'\t{v}: {fill(d,80)}')
     for i in range(len(manager)):
         print("-" * 60)
@@ -89,3 +87,9 @@ def print_managers(block_managers):
 def triplets(n):
     from itertools import combinations
     return list(combinations(range(0, n), 3))
+
+def remove_symbols(script):
+    symbols = ['!', '"', "'", ',', '.', ':', '-', '+', '=', '-', '>', '<', '(', ')', '[', ']', '{', '}']
+    for symbol in symbols:
+        script = script.replace(symbol, ' ')
+    return script

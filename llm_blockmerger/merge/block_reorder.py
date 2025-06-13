@@ -1,10 +1,10 @@
 from llm_blockmerger.core import ast_io_split
-from llm_blockmerger.load import CodeBlocksManager
+from llm_blockmerger.load import BlockManager
 
-def cumulative_io_split(manager:CodeBlocksManager):
+def cumulative_io_split(manager:BlockManager):
     return [
         ast_io_split(script=block, variables=var_dict)
-            for block, var_dict in zip(manager.blocks, manager.variable_dictionaries)
+            for block, var_dict in zip(manager.blocks, manager.var_dicts)
     ]
 
 

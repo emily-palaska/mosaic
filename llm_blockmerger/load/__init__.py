@@ -1,2 +1,2 @@
-from llm_blockmerger.load.managers import initialize_managers, extract_labels, create_blockdata, CodeBlocksManager
-from llm_blockmerger.load.variable_extraction import extract_notebook_variables
+from llm_blockmerger.load.managers import init_managers, flat_labels, create_blockdata, BlockManager
+from llm_blockmerger.load.variables import nb_variables
