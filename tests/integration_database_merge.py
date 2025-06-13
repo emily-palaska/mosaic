@@ -2,7 +2,7 @@ import os
 os.chdir("../")
 
 from llm_blockmerger.load import init_managers, flat_labels, create_blockdata, nb_variables
-from llm_blockmerger.merge import linear_embedding_merge, linear_string_merge
+from llm_blockmerger.merge import embedding_synthesis, string_synthesis
 from llm_blockmerger.store import BlockStore, HNSWVectorDB, InMemoryExactNNVectorDB
 from llm_blockmerger.core import (
     plot_sim,
@@ -24,7 +24,7 @@ def preprocessing_pipeline(paths, verbose=True):
 
     embedding_model = LLM(task='embedding')
     if verbose: print('Initialized embedding model...')
-    embeddings = embedding_model.encode_strings(flat_labels(managers, code=True))
+    embeddings = embedding_model.encode(flat_labels(managers, code=True))
     if verbose: print(f'Encoded embeddings with shape {embeddings.shape}...')
     plot_sim(pairwise_norm_cos_sim(embeddings), './plots/similarity_matrix.png')
     if verbose: print('Plotted similarity matrix...')
@@ -54,12 +54,10 @@ def main():
 
     embedding_model, vector_db = preprocessing_pipeline(paths)
     #embedding_model, vector_db = ready_database_pipeline()
-    print_merge_result(specification, linear_string_merge(embedding_model=embedding_model, vector_db=vector_db,
-                                                          specification=specification, var_merge=False), title='STRING')
-    print_merge_result(specification, linear_embedding_merge(embedding_model=embedding_model,
-                                                             vector_db=vector_db,
-                                                             specification=specification,
-                                                             var_merge=False), title='EMBEDDING')
+    print_merge_result(specification,
+                       string_synthesis(model=embedding_model, db=vector_db, spec=specification, var=False), title='STRING')
+    print_merge_result(specification,
+                       embedding_synthesis(model=embedding_model, db=vector_db, spec=specification, var=False), title='EMBEDDING')
 
 if __name__ == '__main__':
     main()

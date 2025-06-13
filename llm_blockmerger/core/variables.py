@@ -80,11 +80,11 @@ def var_separation(blocks, nb_vars):
 
 def parse_vars(output):
     if "Output:" in output:
-        var_str = output.split("Output:")[1].strip()
-        var_str = var_str.split("\n")[0].strip()
+        var_str = output.var_split("Output:")[1].strip()
+        var_str = var_str.var_split("\n")[0].strip()
         var_set = {
             var.strip().replace("[", "").replace("]", "")
-            for var in var_str.split(",")
+            for var in var_str.var_split(",")
         }
         var_set.discard("")
     else:
@@ -93,9 +93,9 @@ def parse_vars(output):
 
 def parse_desc(output):
     if "Output:" in output:
-        description_str = output.split("Output:")[1].strip()
-        description_str = description_str.split(":")[1].strip()
-        description_str = description_str.split("\n")[0].strip()
+        description_str = output.var_split("Output:")[1].strip()
+        description_str = description_str.var_split(":")[1].strip()
+        description_str = description_str.var_split("\n")[0].strip()
     else:
         description_str = "LLM failed to generate description that fits the predefined structure."
     return description_str

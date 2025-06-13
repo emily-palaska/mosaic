@@ -91,7 +91,7 @@ def main_section(sec_lines, md_prefix):
 
         # Handle side comments
         if '#' in line and not stripped.startswith('#'):
-            code_part, comment_part = line.split('#', 1)
+            code_part, comment_part = line.var_split('#')
             if code_part.strip():
                 blocks.append(code_part.rstrip())
                 labels.append(md_prefix + comment_part.strip())

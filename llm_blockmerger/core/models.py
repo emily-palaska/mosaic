@@ -33,7 +33,7 @@ class LLM:
             import warnings
             warnings.filterwarnings("ignore")
 
-    def encode_strings(self, labels):
+    def encode(self, labels):
         if self.task != 'embedding': return None
         if isinstance(labels, str): labels = [labels]
         return self.model.encode(labels)
@@ -43,8 +43,8 @@ class LLM:
         inputs = self.tokenizer(prompt, return_tensors="pt").to(self.device)
         outputs = self.model.generate(
             inputs["input_ids"],
-            min_length=len(prompt.split()) * 2,
-            max_length=len(prompt.split()) * 2 + 100,
+            min_length=len(prompt.var_split()) * 2,
+            max_length=len(prompt.var_split()) * 2 + 100,
             temperature=0.3,
             top_p=0.9,
             attention_mask=inputs["attention_mask"],

@@ -16,26 +16,26 @@ paths = ['notebooks/example_more.ipynb', 'notebooks/pygrank_snippets.ipynb']
 managers = initialize_managers(paths)
 llama = LLM(task='question')
 embedding_model = LLM(task='embedding')
-embeddings = embedding_model.encode_strings(extract_labels(managers, blocks=True))
+embeddings = embedding_model.encode(extract_labels(managers, blocks=True))
 plot_similarity_matrix(compute_embedding_similarity(embeddings), './plots/similarity_matrix.png')
 
 # store
 vector_db = BlockMergerVectorDB(databasetype=HNSWVectorDB, empty=True)
 vector_db.create(embeddings=embeddings,
-                     blockdata=create_blockdata(managers, embeddings))
+                 blockdata=create_blockdata(managers, embeddings))
 # merge
 specification = 'Initialize a logistic regression model. Use standardization on training inputs. Train the model.'
 print_merge_result(
-  specification,
-  linear_string_merge(embedding_model=embedding_model, vector_db=vector_db,
-                      specification=specification, var_merge=False),
-  merge_type='STRING'
+    specification,
+    linear_string_merge(embedding_model=embedding_model, vector_db=vector_db,
+                        specification=specification, var_merge=False),
+    merge_type='STRING'
 )
 print_merge_result(
-  specification,
-  linear_embedding_merge(embedding_model=embedding_model, vector_db=vector_db,
-                         specification=specification, var_merge=False),
-  merge_type='EMBEDDING'
+    specification,
+    linear_embedding_merge(embedding_model=embedding_model, vector_db=vector_db,
+                           specification=specification, var_merge=False),
+    merge_type='EMBEDDING'
 )
 ```
 
@@ -54,26 +54,26 @@ An abstracted high-level flow chart of the mechanism:
 This method is a unique element of the mechanism, which leverages vector operations to subtract infromation and iteratively query the VectorDB in order to retrieve blocks that implement a natural language specification. Its interests lies in the adaptation to the LLM's embedding space properties of semantic proximity between vectors.
 
 ```python
-search_embedding = tensor(embedding_model.encode_strings(specification)[0])
-specification_embedding = tensor(embedding_model.encode_strings(specification)[0])
+search_embedding = tensor(embedding_model.encode(specification)[0])
+specification_embedding = tensor(embedding_model.encode(specification)[0])
 information = specification_embedding.norm().item()
 
-  for _ in range(max_it):
-      if information < norm_threshold: break # Break condition: Embedding norm below the norm threshold
+for _ in range(max_it):
+    if information < norm_threshold: break  # Break condition: Embedding norm below the norm threshold
 
-      nearest_neighbor = vector_db.read(search_embedding, limit=1)[0]
-      if nearest_neighbor is None: break  # Break condition: No neighbors
+    nearest_neighbor = vector_db.read(search_embedding, limit=1)[0]
+    if nearest_neighbor is None: break  # Break condition: No neighbors
 
-      neighbor_embedding = nearest_neighbor.embedding
-      neighbor_projection = embedding_projection(neighbor_embedding, search_embedding)
-      info_projection = embedding_projection(specification_embedding, neighbor_embedding)
-      if norm(neighbor_projection) < norm_threshold: break  # Break condition: Perpendicular embeddings
+    neighbor_embedding = nearest_neighbor.embedding
+    neighbor_projection = embedding_projection(neighbor_embedding, search_embedding)
+    info_projection = embedding_projection(specification_embedding, neighbor_embedding)
+    if norm(neighbor_projection) < norm_threshold: break  # Break condition: Perpendicular embeddings
 
-      merge_block_manager.append_doc(nearest_neighbor)
+    merge_block_manager.append_doc(nearest_neighbor)
 
-      search_embedding = l * neighbor_projection - search_embedding
-      search_embedding /= search_embedding.norm()
-      information -= k * info_projection.norm().item()
+    search_embedding = l * neighbor_projection - search_embedding
+    search_embedding /= search_embedding.norm()
+    information -= k * info_projection.norm().item()
 ```
 
 
