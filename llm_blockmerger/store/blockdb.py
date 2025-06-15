@@ -33,7 +33,7 @@ class BlockDB(Dataset):
             index=True,
             ef=200
         )
-        assert self.num_docs() == 0, f"BlockMergerVectorDB didn't initialize empty, got {self.num_docs()} entries"
+        assert self.num_docs() == 0, f"BlockDB didn't initialize empty, got {self.num_docs()} entries"
 
     def _restore(self):
         files = find_docs(self.workspace)
@@ -41,6 +41,7 @@ class BlockDB(Dataset):
         embeddings, blockdata = separate_docs(get_docs(files[0]))
         self._init_empty()
         self.create(embeddings, blockdata)
+        assert self.db.num_docs() != 0, f"BlockDB wasn't restored successfully, got {self.db.num_docs()} entries"
 
     def create(self, embeddings, blockdata):
         doc_list = [
@@ -56,7 +57,7 @@ class BlockDB(Dataset):
         self.db.persist()
 
     def read(self, embedding, limit=10):
-        if self.num_docs() == 0: raise IndexError("BlockMergerVectorDB is empty")
+        if self.num_docs() == 0: raise IndexError("BlockDB is empty")
 
         embedding = tensor(embedding, dtype=self.precision)
         if embedding.ndim > 1:

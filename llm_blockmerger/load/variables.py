@@ -1,9 +1,10 @@
+from re import search
 from textwrap import indent
-from llm_blockmerger.core import ast_extraction, var_separation, parse_vars, parse_desc
+from llm_blockmerger.core import ast_extraction
 
 def nb_variables(manager, model, empty=False):
     if empty:
-        manager.set()
+        manager.set(var_dicts=[dict() for _ in manager.blocks])
         return
 
     nb_vars = set()
@@ -14,21 +15,35 @@ def nb_variables(manager, model, empty=False):
             nb_vars.update((v, d) for v, d in zip(block_vars, block_descs))
         except IndentationError: continue
         except Exception: raise
-    var_dicts = var_separation(manager.blocks, nb_vars)
+    var_dicts = _var_separation(manager.blocks, nb_vars)
     manager.set(var_dicts=var_dicts)
+
 
 def _block_vars(script, model=None):
     if model is None:
         return ast_extraction(script)
     output = model.answer(_var_prompt(script))
-    return parse_vars(output)
+    return _parse_vars(output)
+
 
 def _block_descs(variables, script, model):
     descriptions = []
     for variable in variables:
         output = model.answer(_desc_prompt(variable, script))
-        descriptions.append(parse_desc(output))
+        descriptions.append(_parse_desc(output))
     return descriptions
+
+
+def _var_separation(blocks, nb_vars):
+    var_dicts = []
+    for block in blocks:
+        block_dict = {}
+        for var, desc in nb_vars:
+            if search(rf'\b{var}\b', block):
+                block_dict[var] = desc
+        var_dicts.append(block_dict)
+    return var_dicts
+
 
 def _var_prompt(script=''):
     return f"""
@@ -54,3 +69,26 @@ Output:
 Small description of variable {variable}:
 """
 
+
+def _parse_vars(output):
+    if "Output:" in output:
+        var_str = output.split("Output:")[1].strip()
+        var_str = var_str.split("\n")[0].strip()
+        var_set = {
+            var.strip().replace("[", "").replace("]", "")
+            for var in var_str.split(",")
+        }
+        var_set.discard("")
+    else:
+        var_set = set()
+    return sorted(var_set)
+
+
+def _parse_desc(output):
+    if "Output:" in output:
+        description_str = output.split("Output:")[1].strip()
+        description_str = description_str.split(":")[1].strip()
+        description_str = description_str.split("\n")[0].strip()
+    else:
+        description_str = "LLM failed to generate description that fits the predefined structure."
+    return description_str

@@ -15,13 +15,18 @@ class BlockManager:
         return len(self.blocks)
 
     def __str__(self):
-        print('=' * 55)
-        print(self.sources)
-        for label, block in zip(self.labels, self.blocks):
-            print('-' * 60)
-            print(fill(label, 80) + '\n')
-            print(indent(block, '\t'))
-        print('=' * 55)
+        divider = '=' * 60 + '\n'
+        padding = '-' * 60 + '\n'
+        string = "Source:" + str(self.sources) + '\n'
+
+        for label, block, var_dict in zip(self.labels, self.blocks, self.var_dicts):
+            string += padding
+            string += fill(label, 80) + '\n'
+            string += 'CODE:' + '\n'
+            string += indent(block, '\t') + '\n'
+            string += 'VARS:' + '\n'
+            string += fill(dumps(var_dict, indent=2), 80) + '\n'
+        return divider + string + divider
 
     def set(self, blocks=None, labels=None, source=None, var_dicts=None):
         if blocks is not None: self.blocks = blocks
@@ -32,6 +37,7 @@ class BlockManager:
     def append_nb(self, path, nb):
         blocks, labels = generate_blocks(*cell_content(nb))
         self.blocks, self.labels, self.sources = blocks, labels, path
+        self.var_dicts = [{} for _ in blocks]
 
     def append_py(self, path, file):
         blocks, labels = generate_blocks([file], [''])
@@ -80,7 +86,7 @@ def create_blockdata(managers, embeddings):
         for i in range(len(manager))
     ]
 
-def flat_labels(managers, code=False):
+def flatten_labels(managers, code=False):
     if not code: return [label for block_manager in managers for label in block_manager.labels]
 
     labels = [label for block_manager in managers for label in block_manager.labels]

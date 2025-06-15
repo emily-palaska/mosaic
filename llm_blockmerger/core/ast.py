@@ -1,4 +1,4 @@
-import ast, re
+import ast
 from llm_blockmerger.core import dedent_blocks
 
 class VariableAnalyzer(ast.NodeVisitor):
@@ -67,35 +67,3 @@ def ast_io_split(variables: dict, script: str):
         elif is_written: output_vars.add(var)
 
     return {'input': input_vars, 'output': output_vars}
-
-def var_separation(blocks, nb_vars):
-    var_dicts = []
-    for block in blocks:
-        block_dict = {}
-        for var, desc in nb_vars:
-            if re.search(rf'\b{var}\b', block):
-                block_dict[var] = desc
-        var_dicts.append(block_dict)
-    return var_dicts
-
-def parse_vars(output):
-    if "Output:" in output:
-        var_str = output.var_split("Output:")[1].strip()
-        var_str = var_str.var_split("\n")[0].strip()
-        var_set = {
-            var.strip().replace("[", "").replace("]", "")
-            for var in var_str.var_split(",")
-        }
-        var_set.discard("")
-    else:
-        var_set = set()
-    return sorted(var_set)
-
-def parse_desc(output):
-    if "Output:" in output:
-        description_str = output.var_split("Output:")[1].strip()
-        description_str = description_str.var_split(":")[1].strip()
-        description_str = description_str.var_split("\n")[0].strip()
-    else:
-        description_str = "LLM failed to generate description that fits the predefined structure."
-    return description_str

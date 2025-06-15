@@ -7,12 +7,12 @@ def concat_block(block):
     return '\n'.join(block) + '\n'
 
 def load_nb(paths):
-    if isinstance(paths, str): return basename(paths), load(open(paths, 'r'))
-    return [(basename(path), load(open(path, 'r'))) for path in paths]
+    if isinstance(paths, str): return load(open(paths, 'r'))
+    return [load(open(path, 'r')) for path in paths]
 
 def load_py(paths):
-    if isinstance(paths, str): return basename(paths), [line for line in open(paths, 'r', encoding='utf-8')]
-    return [(basename(path), [line for line in open(path, 'r', encoding='utf-8')]) for path in paths]
+    if isinstance(paths, str): return open(paths, 'r', encoding='utf-8')
+    return [[line for line in open(path, 'r', encoding='utf-8')] for path in paths]
 
 def remove_common_words(og: str, rem: str, repl='[UNK]'):
     og_words = og.replace('\n', ' ').split()
@@ -53,7 +53,7 @@ def encoded_json(field: str):
         return loads(loaded_once)
     return loaded_once
 
-def print_merge_result(specification, manager, title='STRING'):
+def print_synthesis(specification, manager, title='STRING'):
     print("\n" + "=" * 60)
     print(' ' * 15 + f"MERGE RESULT ({title})")
     print("=" * 60)
@@ -75,14 +75,6 @@ def print_merge_result(specification, manager, title='STRING'):
 
     print("\n" + "=" * 60)
 
-def print_managers(block_managers):
-    print('=' * 55)
-    for manager in block_managers:
-        for label, block in zip(manager.labels, manager.blocks):
-            print(fill(label, 80) + '\n')
-            print(indent(block, '\t'))
-            print('-' * 60)
-    print('=' * 55)
 
 def triplets(n):
     from itertools import combinations

@@ -3,7 +3,6 @@ from llm_blockmerger.core import dedent_blocks
 def cell_content(nb):
     lines, acc_md = [], []
     curr_md = ''
-
     for cell in nb.get('cells', []):
         if cell['cell_type'] == 'markdown':
             curr_md += ''.join(cell['source'])
@@ -57,10 +56,7 @@ def _split_sections(section):
                 sections.append((types['main'], curr_sec))
                 curr_sec = []
 
-            types_stack.append({
-                'indent': curr_ind,
-                'lines': [line]
-            })
+            types_stack.append({'indent': curr_ind, 'lines': [line]})
             continue
 
         if types_stack: types_stack[-1]['lines'].append(line)
