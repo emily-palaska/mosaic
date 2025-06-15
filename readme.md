@@ -10,33 +10,40 @@ A Master Thesis exploring Automated Code Block Synthesis enhanced by LLMs.
 Clone this repository with `git clone https://github.com/emily-palaska/LlmBlockMerger-Diploma`<br>
 Install requirements with `pip install -r requirements.txt`<br>
 
+### Example of pre-processing pipeline
 ```python
-# load
-paths = ['notebooks/example_more.ipynb', 'notebooks/pygrank_snippets.ipynb']
-managers = initialize_managers(paths)
-llama = LLM(task='question')
-embedding_model = LLM(task='embedding')
-embeddings = embedding_model.encode(extract_labels(managers, blocks=True))
-plot_similarity_matrix(compute_embedding_similarity(embeddings), './plots/similarity_matrix.png')
+from llm_blockmerger.load import init_managers, flatten_labels, create_blockdata, nb_variables
+from llm_blockmerger.store import BlockDB
+from llm_blockmerger.core import plot_sim, pairwise_norm_cos_sim, LLM
 
-# store
-vector_db = BlockMergerVectorDB(databasetype=HNSWVectorDB, empty=True)
-vector_db.create(embeddings=embeddings,
-                 blockdata=create_blockdata(managers, embeddings))
-# merge
-specification = 'Initialize a logistic regression model. Use standardization on training inputs. Train the model.'
-print_merge_result(
-    specification,
-    linear_string_merge(embedding_model=embedding_model, vector_db=vector_db,
-                        specification=specification, var_merge=False),
-    merge_type='STRING'
-)
-print_merge_result(
-    specification,
-    linear_embedding_merge(embedding_model=embedding_model, vector_db=vector_db,
-                           specification=specification, var_merge=False),
-    merge_type='EMBEDDING'
-)
+paths = ['notebooks/example_more.ipynb', 'notebooks/pygrank_snippets.ipynb']
+managers = init_managers(paths)
+
+llama = LLM(task='question')
+for i, manager in enumerate(managers):
+    nb_variables(manager, llama)
+    print(manager)
+
+model = LLM(task='embedding')
+embeddings = model.encode(flatten_labels(managers, code=True))
+plot_sim(pairwise_norm_cos_sim(embeddings), './plots/similarity_matrix.png')
+
+db = BlockDB(empty=True)
+db.create(embeddings=embeddings, blockdata=create_blockdata(managers, embeddings))
+```
+### Example of merging scenario
+```python
+from llm_blockmerger.store import BlockDB
+from llm_blockmerger.core import LLM, print_synthesis
+from llm_blockmerger.merge import string_synthesis, embedding_synthesis
+
+spec = 'Initialize a logistic regression model. Use standardization on training inputs. Train the model.'
+model = LLM(task='embedding')
+db = BlockDB(empty=False)
+synthesis = string_synthesis(model, db, spec)
+print_synthesis(spec, synthesis, title='STRING')
+synthesis = embedding_synthesis(model, db, spec)
+print_synthesis(spec, synthesis, title='EMBEDDING')
 ```
 
 ## 🧠About
@@ -54,26 +61,39 @@ An abstracted high-level flow chart of the mechanism:
 This method is a unique element of the mechanism, which leverages vector operations to subtract infromation and iteratively query the VectorDB in order to retrieve blocks that implement a natural language specification. Its interests lies in the adaptation to the LLM's embedding space properties of semantic proximity between vectors.
 
 ```python
-search_embedding = tensor(embedding_model.encode(specification)[0])
-specification_embedding = tensor(embedding_model.encode(specification)[0])
-information = specification_embedding.norm().item()
+from llm_blockmerger.load import BlockManager
+from llm_blockmerger.core import projection, LLM
+from llm_blockmerger.merge.merger import merge_variables
+from llm_blockmerger.merge.order import  io_order, var_split
+from llm_blockmerger.store import BlockDB
+from torch import norm, tensor
 
-for _ in range(max_it):
-    if information < norm_threshold: break  # Break condition: Embedding norm below the norm threshold
+def embedding_synthesis(model: LLM, db: BlockDB, spec: str, k=0.9, l=1.4, max_it=10, t=0.05, var=True):
+    synthesis = BlockManager()
+    s = tensor(model.encode(spec)[0])
+    spec_emb = tensor(model.encode(spec)[0])
+    i = spec_emb.norm().item()
 
-    nearest_neighbor = vector_db.read(search_embedding, limit=1)[0]
-    if nearest_neighbor is None: break  # Break condition: No neighbors
+    for _ in range(max_it):
+        print(f'Search embedding: {s.norm().item(): .2f}, Information: {i: .2f}')
+        if i < t: break # Break condition: Embedding norm below the norm threshold
 
-    neighbor_embedding = nearest_neighbor.embedding
-    neighbor_projection = embedding_projection(neighbor_embedding, search_embedding)
-    info_projection = embedding_projection(specification_embedding, neighbor_embedding)
-    if norm(neighbor_projection) < norm_threshold: break  # Break condition: Perpendicular embeddings
+        nn = db.read(s, limit=1)[0]
+        if nn is None: break  # Break condition: No neighbors
 
-    merge_block_manager.append_doc(nearest_neighbor)
+        n = nn.embedding
+        n_proj = projection(n, s)
+        i_proj = projection(spec_emb, n)
+        if norm(n_proj) < t: break  # Break condition: Perpendicular embeddings
 
-    search_embedding = l * neighbor_projection - search_embedding
-    search_embedding /= search_embedding.norm()
-    information -= k * info_projection.norm().item()
+        synthesis.append_doc(nn)
+
+        s = l * n_proj - s
+        s /= s.norm()
+        i -= k * i_proj.norm().item()
+
+    synthesis.rearrange(io_order(var_split(synthesis)))
+    return merge_variables(model, synthesis) if var else synthesis
 ```
 
 
