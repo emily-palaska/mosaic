@@ -62,9 +62,9 @@ This method is a unique element of the mechanism, which leverages vector operati
 
 ```python
 from llm_blockmerger.load import BlockManager
-from llm_blockmerger.core import projection, LLM
+from llm_blockmerger.core import projection, LLM, ast_io_split
 from llm_blockmerger.merge.merger import merge_variables
-from llm_blockmerger.merge.order import  io_order, var_split
+from llm_blockmerger.merge.order import  io_order
 from llm_blockmerger.store import BlockDB
 from torch import norm, tensor
 
@@ -92,7 +92,7 @@ def embedding_synthesis(model: LLM, db: BlockDB, spec: str, k=0.9, l=1.4, max_it
         s /= s.norm()
         i -= k * i_proj.norm().item()
 
-    synthesis.rearrange(io_order(var_split(synthesis)))
+    synthesis.rearrange(io_order(ast_io_split(synthesis)))
     return merge_variables(model, synthesis) if var else synthesis
 ```
 
