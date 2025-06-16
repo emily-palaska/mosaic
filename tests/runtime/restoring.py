@@ -25,5 +25,5 @@ if __name__ == '__main__':
         start = time()
         restoring()
         with open(results, 'a') as file:
-            file.write(f'{time() - start: .3f}, ')
+            file.write(f'{time() - start: .3f},')
     print(f'\rExperiment completed')
