@@ -1,5 +1,5 @@
 import pytest, sys
-sys.path.append("..")
+sys.path.append("../..")
 from merge.block_merge import *
 
 @pytest.fixture

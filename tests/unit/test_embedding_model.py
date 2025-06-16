@@ -1,5 +1,5 @@
 import pytest, sys
-sys.path.append("..")
+sys.path.append("../..")
 from llm_blockmerger.store.embedding_similarity import *
 
 @pytest.fixture
