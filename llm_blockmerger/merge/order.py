@@ -1,13 +1,3 @@
-from llm_blockmerger.core import ast_io_split
-from llm_blockmerger.load import BlockManager
-
-def var_split(manager:BlockManager):
-    return [
-        ast_io_split(script=block, variables=var_dict)
-            for block, var_dict in zip(manager.blocks, manager.var_dicts)
-    ]
-
-
 def io_order(io_splits: list):
     outputs = set()
     outputs.add(out_var for io_split in io_splits for out_var in io_split['output'])

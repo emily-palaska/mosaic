@@ -36,7 +36,7 @@ if __name__ == '__main__':
     for i in range(A):
         print(f'\rProgress: {100 * i / A : .2f}%', end='')
         start = time()
-        preprocessing(demo_paths, plot=True)
+        preprocessing(demo_paths)
         with open(results, 'a') as file:
             file.write(f'{time() - start: .3f}, ')
     print(f'\rExperiment completed')

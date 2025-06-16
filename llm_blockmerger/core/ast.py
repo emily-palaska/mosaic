@@ -1,5 +1,6 @@
 import ast
 from llm_blockmerger.core import dedent_blocks
+from llm_blockmerger.load import BlockManager
 
 class VariableAnalyzer(ast.NodeVisitor):
     def __init__(self, io_split=False):
@@ -53,17 +54,20 @@ def ast_extraction(script: str):
     analyzer.visit(tree)
     return sorted(list(analyzer.variables))
 
-def ast_io_split(variables: dict, script: str):
-    analyzer, tree = VariableAnalyzer(io_split=True), parse_script(script)
-    if tree is None: return {'input': set(), 'output': set()}
-    analyzer.visit(tree)
+def ast_io_split(manager: BlockManager):
+    io_splits = []
+    for script, variables in zip(manager.blocks, manager.var_dicts):
+        analyzer, tree = VariableAnalyzer(io_split=True), parse_script(script)
+        if tree is None: return {'input': set(), 'output': set()}
+        analyzer.visit(tree)
 
-    input_vars, output_vars = set(), set()
-    for var in variables:
-        is_read = var in analyzer.read
-        is_written = var in analyzer.written
+        input_vars, output_vars = set(), set()
+        for var in variables:
+            is_read = var in analyzer.read
+            is_written = var in analyzer.written
 
-        if is_read and not is_written: input_vars.add(var)
-        elif is_written: output_vars.add(var)
+            if is_read and not is_written: input_vars.add(var)
+            elif is_written: output_vars.add(var)
+        io_splits.append({'input': input_vars, 'output': output_vars})
 
-    return {'input': input_vars, 'output': output_vars}
+    return io_splits

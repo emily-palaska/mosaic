@@ -17,7 +17,7 @@ def algorithm_comparison():
     # convert group to graph signal
     signal = pg.to_signal(graph, group)
     # split signal to training and test subsets
-    split = pg.var_split(signal)
+    split = pg.split(signal)
     train = split[0]
     test = split[1]
     # create default pagerank
