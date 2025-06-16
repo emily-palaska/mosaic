@@ -1,6 +1,5 @@
 import ast
 from llm_blockmerger.core import dedent_blocks
-from llm_blockmerger.load import BlockManager
 
 class VariableAnalyzer(ast.NodeVisitor):
     def __init__(self, io_split=False):
@@ -54,7 +53,7 @@ def ast_extraction(script: str):
     analyzer.visit(tree)
     return sorted(list(analyzer.variables))
 
-def ast_io_split(manager: BlockManager):
+def ast_io_split(manager):
     io_splits = []
     for script, variables in zip(manager.blocks, manager.var_dicts):
         analyzer, tree = VariableAnalyzer(io_split=True), parse_script(script)

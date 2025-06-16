@@ -9,6 +9,7 @@ from llm_blockmerger.store import BlockDB
 def restoring():
     model = LLM(task='embedding')
     db = BlockDB(empty=False)
+    print(db.num_docs())
     assert db.num_docs() != 0, f'Number of documents: {db.num_docs()}'
 
 if __name__ == '__main__':
@@ -17,7 +18,7 @@ if __name__ == '__main__':
     results = 'results/restoring.txt'
     timestamp = datetime.now().strftime("%d/%m %H:%M")
     with open(results, 'w') as file:
-        file.write(f'Paths: {demo_paths}\nExperiment: {timestamp}\n')
+        file.write(f'Paths: {demo_paths}\nExperiment: {timestamp}\n[')
 
     A = 1000
     for i in range(A):
@@ -26,4 +27,5 @@ if __name__ == '__main__':
         restoring()
         with open(results, 'a') as file:
             file.write(f'{time() - start: .3f},')
+            if i == A - 1: file.write(']')
     print(f'\rExperiment completed')

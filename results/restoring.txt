@@ -1,0 +1,3 @@
+Paths: ['notebooks/example_more.ipynb', 'notebooks/pygrank_snippets.ipynb']
+Experiment: 16/06 14:47
+[
