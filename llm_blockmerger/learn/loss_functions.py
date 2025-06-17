@@ -1,5 +1,6 @@
 import torch
-from llm_blockmerger.core import pairwise_norm_cos_sim, variance
+from llm_blockmerger.core import norm_cos_sim, variance, norm_batch
+from torch.nn.functional import leaky_relu
 
 class TransitiveCrossEntropy:
     def __init__(self, threshold=0.9, alpha=0.1, quantile=True, mean=True, var=True):
@@ -18,12 +19,9 @@ class TransitiveCrossEntropy:
         }
 
     def __call__(self, a, b, c):
-        a = a / a.norm()
-        b = b / b.norm()
-        c = c / c.norm()
-        ab = pairwise_norm_cos_sim(a, b)
-        bc = pairwise_norm_cos_sim(b, c)
-        ac = pairwise_norm_cos_sim(a, c)
+        a, b, c = norm_batch(a), norm_batch(b), norm_batch(c)
+        ab, bc, ac = norm_cos_sim(a, b), norm_cos_sim(b, c), norm_cos_sim(c, a)
+
         assert torch.min(ac) >= 0 and torch.max(ac) <= 1
 
         labels = ab * bc
@@ -61,13 +59,8 @@ class TransitiveContrastive:
         }
 
     def __call__(self, a, b, c):
-        a = a / a.norm(dim=-1, keepdim=True)
-        b = b / b.norm(dim=-1, keepdim=True)
-        c = c / c.norm(dim=-1, keepdim=True)
-
-        ab = pairwise_norm_cos_sim(a, b)
-        bc = pairwise_norm_cos_sim(b, c)
-        ac = pairwise_norm_cos_sim(a, c)
+        a, b, c = norm_batch(a), norm_batch(b), norm_batch(c)
+        ab, bc, ac = norm_cos_sim(a, b), norm_cos_sim(b, c), norm_cos_sim(c, a)
 
         labels = ab * bc
         threshold = labels.quantile(0.9).item() if self.quantile else self.threshold ** 2
@@ -77,7 +70,18 @@ class TransitiveContrastive:
         # Contrastive loss: pull similar pairs together, push dissimilar apart
         # Positive pair: L = (1 - sim)^2, Negative pair: L = max(0, sim - margin)^2
         positive_loss = labels * (1 - ac) * (1 - ac)
-        negative_loss = (1 - labels) * torch.relu(ac - self.margin) * torch.relu(ac - self.margin)
+        negative_loss = (1 - labels) * leaky_relu(ac - self.margin) * leaky_relu(ac - self.margin)
+
+        if torch.isnan(negative_loss).any():
+            nan_mask = torch.isnan(negative_loss)
+            indices = nan_mask.nonzero(as_tuple=True)
+            print("NaN found at positions:", indices)
+            print("ac at NaN positions:", ac[indices])
+            for i, j in zip(indices[0], indices[1]):
+                print(f"\na[{i}]: {a[i]}")
+                print(f"c[{j}]: {c[j]}")
+            exit(1)
+
         loss = positive_loss + negative_loss
 
         if self.mean: loss += (ac.mean() - 0.5) * (ac.mean() - 0.5)
@@ -85,3 +89,4 @@ class TransitiveContrastive:
 
         total_loss = loss.mean()
         return total_loss, labels.mean(), var_ac, (positive_loss + negative_loss).mean()
+
