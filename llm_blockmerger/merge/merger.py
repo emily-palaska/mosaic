@@ -1,7 +1,7 @@
 from collections import defaultdict
 from re import sub, escape
 
-from llm_blockmerger.core import pairwise_norm_cos_sim
+from llm_blockmerger.core import norm_cos_sim
 
 def _connected_components(graph):
     visited, components = set(), []
@@ -26,7 +26,7 @@ def _pair_merges(model, var_dicts, t=0.9):
     flat_vars = [v for block_dict in var_dicts for v in block_dict]
     flat_descs = [d for block_dict in var_dicts for d in block_dict.values()]
 
-    sim_mat = pairwise_norm_cos_sim(model.encode(flat_descs))
+    sim_mat = norm_cos_sim(model.encode(flat_descs))
     components = [
         [flat_vars[i], flat_vars[j]]
                 for i in range(len(flat_vars))
@@ -57,7 +57,7 @@ def _group_merges(model, var_dicts, t=0.9):
         raise TypeError(f'Incorrect type {type(var_dicts)} for var_dicts')
 
     embeddings = model.encode(flat_descs)
-    sim_mat = pairwise_norm_cos_sim(embeddings)
+    sim_mat = norm_cos_sim(embeddings)
     graph = _sim_graph(flat_vars, sim_mat, t)
     return _connected_components(graph)
 
