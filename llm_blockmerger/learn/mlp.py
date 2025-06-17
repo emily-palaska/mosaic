@@ -32,6 +32,21 @@ class MLP(Module):
     def forward(self, x):
         return self.network(x)
 
+    def save(self, path):
+        torch.save({
+            'model_state_dict': self.state_dict(),
+            'metadata': self.metadata,
+        }, path)
+
+    @classmethod
+    def load(cls, path, device=None):
+        checkpoint = torch.load(path, map_location=device or ('cuda' if torch.cuda.is_available() else 'cpu'))
+        metadata = checkpoint['metadata']
+        model = cls(input_dim=metadata['input_dim'], layer_dims=eval(metadata['layer_dims']))
+        model.load_state_dict(checkpoint['model_state_dict'])
+        model.to(model.device)
+        return model
+
 def loaders(dataset, batch, train_split=0.8):
     train_size = int(train_split * len(dataset))
     val_size = len(dataset) - train_size
