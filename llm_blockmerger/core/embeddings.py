@@ -9,7 +9,7 @@ def projection(a, b):
     dot = torch.dot(b, a) / torch.dot(a, a)
     return dot * a
 
-def pairwise_norm_cos_sim(batch1, batch2=None, dtype=torch.float):
+def norm_cos_sim(batch1, batch2=None, dtype=torch.float):
     if batch2 is None: batch2 = batch1
 
     if not isinstance(batch1, torch.Tensor): batch1 = torch.tensor(batch1, dtype=dtype)
@@ -21,7 +21,7 @@ def pairwise_norm_cos_sim(batch1, batch2=None, dtype=torch.float):
     dot = torch.sum(a * b, dim=-1)
     norm_a = torch.norm(a, dim=-1)
     norm_b = torch.norm(b, dim=-1)
-    denom = norm_a * norm_b + 1e-8
+    denom = norm_a * norm_b + 1.0e-8
 
     cos_sim = dot / denom
     return (cos_sim + 1) / 2
@@ -49,3 +49,7 @@ def plot_sim(sim_mat, path='../plots/similarity_matrix.png'):
     plt.tight_layout()
     plt.savefig(path)
     plt.close()
+
+
+def norm_batch(batch: torch.Tensor):
+    return batch / batch.norm(dim=-1, keepdim=True)
