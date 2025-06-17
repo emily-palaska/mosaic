@@ -11,10 +11,11 @@ Clone this repository with `git clone https://github.com/emily-palaska/LlmBlockM
 Install requirements with `pip install -r requirements.txt`<br>
 
 ### Example of pre-processing pipeline
+
 ```python
 from llm_blockmerger.load import init_managers, flatten_labels, create_blockdata, nb_variables
 from llm_blockmerger.store import BlockDB
-from llm_blockmerger.core import plot_sim, pairwise_norm_cos_sim, LLM
+from llm_blockmerger.core import plot_sim, norm_cos_sim, LLM
 
 paths = ['notebooks/example_more.ipynb', 'notebooks/pygrank_snippets.ipynb']
 managers = init_managers(paths)
@@ -26,7 +27,7 @@ for i, manager in enumerate(managers):
 
 model = LLM(task='embedding')
 embeddings = model.encode(flatten_labels(managers, code=True))
-plot_sim(pairwise_norm_cos_sim(embeddings), './plots/similarity_matrix.png')
+plot_sim(norm_cos_sim(embeddings), './plots/similarity_matrix.png')
 
 db = BlockDB(empty=True)
 db.create(embeddings=embeddings, blockdata=create_blockdata(managers, embeddings))

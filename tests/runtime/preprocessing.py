@@ -5,7 +5,7 @@ from time import time
 from datetime import datetime
 from llm_blockmerger.load import init_managers, flatten_labels, create_blockdata, nb_variables
 from llm_blockmerger.store import BlockDB
-from llm_blockmerger.core import plot_sim, pairwise_norm_cos_sim, LLM
+from llm_blockmerger.core import plot_sim, norm_cos_sim, LLM
 
 def preprocessing(paths: list, plot=False, db=False):
     managers = init_managers(paths)
@@ -16,7 +16,7 @@ def preprocessing(paths: list, plot=False, db=False):
 
     model = LLM(task='embedding')
     embeddings = model.encode(flatten_labels(managers, code=True))
-    if plot: plot_sim(pairwise_norm_cos_sim(embeddings), './plots/similarity_matrix.png')
+    if plot: plot_sim(norm_cos_sim(embeddings), './plots/similarity_matrix.png')
 
     if db:
         db = BlockDB(empty=True)
