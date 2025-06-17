@@ -1,7 +1,7 @@
 import matplotlib.pyplot as plt
 import json
 
-def visualize_results(results, path='../../plots/'):
+def train_plot(results, path='../../plots/'):
     metadata = json.dumps(results["metadata"], indent=2)
     keys = ["loss", "labels", "var", "loss_sim"]
 

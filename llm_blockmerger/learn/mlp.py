@@ -1,8 +1,11 @@
 import torch
-import torch.nn as nn
+import torch.nn.init as init
+
+from torch.nn import Module, Linear, Sequential, ReLU
+from torch.utils.data import DataLoader, random_split
 from time import time
 
-class MLP(nn.Module):
+class MLP(Module):
     def __init__(self, input_dim, layer_dims=None):
         self.device = torch.device('cuda' if torch.cuda.is_available() else 'cpu')
         self.input_dim = input_dim
@@ -16,18 +19,27 @@ class MLP(nn.Module):
         layers = []
         prev_dim = input_dim
         for dim in self.layer_dims:
-            linear = nn.Linear(prev_dim, dim)
-            nn.init.kaiming_uniform_(linear.weight, nonlinearity='relu')
-            nn.init.zeros_(linear.bias)  # Bias init to zero
+            linear = Linear(prev_dim, dim)
+            init.kaiming_uniform_(linear.weight, nonlinearity='relu')
+            init.zeros_(linear.bias)  # Bias init to zero
             layers.append(linear)
-            layers.append(nn.ReLU())
+            layers.append(ReLU())
             prev_dim = dim
 
-        self.network = nn.Sequential(*layers)
+        self.network = Sequential(*layers)
         self.network.to(self.device)
 
     def forward(self, x):
         return self.network(x)
+
+def loaders(dataset, batch, train_split=0.8):
+    train_size = int(train_split * len(dataset))
+    val_size = len(dataset) - train_size
+
+    train_dataset, val_dataset = random_split(dataset, [train_size, val_size])
+    train_loader = DataLoader(train_dataset, batch_size=batch, shuffle=True)
+    val_loader = DataLoader(val_dataset, batch_size=batch, shuffle=False)
+    return train_loader, val_loader
 
 def eval_feed(model, loss_func, loader):
     model.eval()

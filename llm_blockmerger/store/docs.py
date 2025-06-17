@@ -45,9 +45,9 @@ def separate_docs(rows):
 
 
 def find_docs(path):
-    files = []
+    docs = []
     for root, dirs, files in os.walk(path):
         for file in files:
             if file.endswith('.db'):
-                files.append(os.path.join(root, file))
-    return files
+                docs.append(os.path.join(root, file))
+    return docs

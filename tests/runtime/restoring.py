@@ -9,8 +9,7 @@ from llm_blockmerger.store import BlockDB
 def restoring():
     model = LLM(task='embedding')
     db = BlockDB(empty=False)
-    print(db.num_docs())
-    assert db.num_docs() != 0, f'Number of documents: {db.num_docs()}'
+    assert db.num_docs() == 31, f'Incorrect number of docs: {db.num_docs()}'
 
 if __name__ == '__main__':
     demo_paths = ['notebooks/example_more.ipynb', 'notebooks/pygrank_snippets.ipynb']
@@ -26,6 +25,6 @@ if __name__ == '__main__':
         start = time()
         restoring()
         with open(results, 'a') as file:
-            file.write(f'{time() - start: .3f},')
+            file.write(f'{time() - start:.3f}, ')
             if i == A - 1: file.write(']')
     print(f'\rExperiment completed')

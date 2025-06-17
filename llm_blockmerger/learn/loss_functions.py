@@ -1,7 +1,7 @@
 import torch
 from llm_blockmerger.core import pairwise_norm_cos_sim, variance
 
-class TransitiveCrossEntropyLoss:
+class TransitiveCrossEntropy:
     def __init__(self, threshold=0.9, alpha=0.1, quantile=True, mean=True, var=True):
         self.threshold = threshold
         self.alpha = alpha
@@ -42,15 +42,46 @@ class TransitiveCrossEntropyLoss:
         return loss.mean(), labels.mean(), var_ac, loss_similar.mean()
 
 
-def transitive_contrastive_loss(a, b, c, a_out, c_out, threshold=0.98, alpha=1000):
-    ab = pairwise_norm_cos_sim(a, b)
-    bc = pairwise_norm_cos_sim(b, c)
-    ac_out = pairwise_norm_cos_sim(a_out, c_out)
+class TransitiveContrastive:
+    def __init__(self, threshold=0.9, alpha=0.1, quantile=True, margin=0.2, mean=True, var=True):
+        self.threshold = threshold
+        self.alpha = alpha
+        self.margin = margin
+        self.mean = mean
+        self.var = var
+        self.quantile = quantile
+        self.metadata = {
+            "loss_function": "Transitive Contrastive",
+            "threshold": self.threshold,
+            "alpha": self.alpha,
+            "margin": self.margin,
+            "mean": self.mean,
+            "var": self.var,
+            "quantile": self.quantile,
+        }
 
-    labels = (ab * bc > threshold ** 2).float()
+    def __call__(self, a, b, c):
+        a = a / a.norm(dim=-1, keepdim=True)
+        b = b / b.norm(dim=-1, keepdim=True)
+        c = c / c.norm(dim=-1, keepdim=True)
 
-    similar = (1 - labels) * ac_out
-    dissimilar = labels * (1 - ac_out)
+        ab = pairwise_norm_cos_sim(a, b)
+        bc = pairwise_norm_cos_sim(b, c)
+        ac = pairwise_norm_cos_sim(a, c)
 
-    loss = alpha * torch.var(c_out) - similar - dissimilar
-    return loss.mean()
+        labels = ab * bc
+        threshold = labels.quantile(0.9).item() if self.quantile else self.threshold ** 2
+        labels = (labels > threshold).float()
+        var_ac = variance(ac)
+
+        # Contrastive loss: pull similar pairs together, push dissimilar apart
+        # Positive pair: L = (1 - sim)^2, Negative pair: L = max(0, sim - margin)^2
+        positive_loss = labels * (1 - ac) * (1 - ac)
+        negative_loss = (1 - labels) * torch.relu(ac - self.margin) * torch.relu(ac - self.margin)
+        loss = positive_loss + negative_loss
+
+        if self.mean: loss += (ac.mean() - 0.5) * (ac.mean() - 0.5)
+        if self.var: loss -= self.alpha * torch.log(var_ac + 1.0e-12)
+
+        total_loss = loss.mean()
+        return total_loss, labels.mean(), var_ac, (positive_loss + negative_loss).mean()
