@@ -1,7 +1,7 @@
 import os
 import numpy as np
 from llm_blockmerger.store.blockdb import BlockDB
-os.chdir("../")
+os.chdir("../../")
 
 def noise_db_input(features=200, instances=10):
     embeddings = np.random.rand(instances, features)

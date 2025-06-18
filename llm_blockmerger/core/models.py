@@ -3,14 +3,14 @@ from sentence_transformers import SentenceTransformer
 import torch
 
 class LLM:
-    def __init__(self, task, model_name=None, verbose=False):
+    def __init__(self, task, name=None, verbose=False):
         self.task = task
         self.verbose = verbose
         self._set_verbosity()
         self.device = torch.device("cuda" if torch.cuda.is_available() else "cpu")
 
         if task == 'question':
-            self.model_name = model_name if model_name else 'meta-llama/Llama-3.2-3B'
+            self.model_name = name if name else 'meta-llama/Llama-3.2-3B'
             self.tokenizer = AutoTokenizer.from_pretrained(self.model_name)
             if self.tokenizer.pad_token is None:
                 self.tokenizer.pad_token = self.tokenizer.eos_token
@@ -19,7 +19,7 @@ class LLM:
                 torch_dtype=torch.float16
             ).to(self.device)
         elif task == 'embedding':
-            self.model_name = model_name if model_name else 'sentence-transformers/all-MiniLM-L6-v2'
+            self.model_name = name if name else 'sentence-transformers/all-MiniLM-L6-v2'
             self.model = SentenceTransformer(self.model_name)
         else:
             raise TypeError("Task must be either 'question' or 'embedding'")
