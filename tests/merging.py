@@ -4,16 +4,16 @@ os.chdir("../")
 from tests.core.pipelines import merge
 
 def runtime():
-    """
-    test the times of retrieving something with exact and approximate nearest neighbor
-    """
+    """test the times of retrieving something with the exact and approximate nearest neighbor"""
     return NotImplemented
 
-def integration():
+def validation():
     demo = [
-        'Initialize a logistic regression model. Use standardization on training inputs. Train the model.'
+        'Initialize a logistic regression model. Use standardization on training inputs. Train the model.',
+        'Create a regression model.',
+        'Graph operations'
     ]
     merge(demo)
 
 if __name__ == '__main__':
-    pass
+    validation()

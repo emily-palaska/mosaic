@@ -30,15 +30,15 @@ def restore():
     return model, db
 
 
-def merge(queries: list, path='./results/'):
+def merge(queries: list, path='./results/synthesis/'):
     model = LLM(task='embedding')
     db = BlockDB(empty=False)
     print(f'Initialized BlockDB with {db.num_docs()} docs')
     for i, query in enumerate(queries):
-        qpath = os.path.join(path, f'query{i}.md')
+        qpath = os.path.join(path, f'query{i}')
         synthesis = string_synthesis(model, db, query)
-        synthesis_dumb(synthesis, query, 'String', qpath)
+        synthesis_dumb(synthesis, query, 'String', qpath + 's.md')
         synthesis = embedding_synthesis(model, db, query)
-        synthesis_dumb(synthesis, query, 'Embedding', qpath)
+        synthesis_dumb(synthesis, query, 'Embedding', qpath + 'e.md')
     print(f'Results saved in {path}')
 

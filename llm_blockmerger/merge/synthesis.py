@@ -35,7 +35,6 @@ def embedding_synthesis(model: LLM, db: BlockDB, spec: str, k=0.9, l=1.4, max_it
     i = spec_emb.norm().item()
 
     for _ in range(max_it):
-        print(f'Search embedding: {s.norm().item(): .2f}, Information: {i: .2f}')
         if i < t: break # Break condition: Embedding norm below the norm threshold
 
         nn = db.read(s, limit=1)[0]
