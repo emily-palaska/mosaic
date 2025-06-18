@@ -1,4 +1,3 @@
-from os.path import basename
 from json import load, loads
 from re import match
 from textwrap import indent, fill
@@ -53,7 +52,7 @@ def encoded_json(field: str):
         return loads(loaded_once)
     return loaded_once
 
-def print_synthesis(specification, manager, title='STRING'):
+def print_synthesis(manager, specification: str, title='STRING'):
     print("\n" + "=" * 60)
     print(' ' * 15 + f"MERGE RESULT ({title})")
     print("=" * 60)

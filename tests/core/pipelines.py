@@ -1,10 +1,10 @@
 import os
 
-from llm_blockmerger.core import LLM, plot_sim, norm_cos_sim
+from llm_blockmerger.core import LLM, plot_sim, norm_cos_sim, print_synthesis
 from llm_blockmerger.load import init_managers, nb_variables, flatten_labels, create_blockdata
 from llm_blockmerger.merge import string_synthesis, embedding_synthesis
 from llm_blockmerger.store import BlockDB
-from tests.core.utlis import synthesis_dumb
+from tests.core.utils import synthesis_dumb
 
 
 def preprocess(paths: list, plot=False, db=False):
@@ -30,15 +30,24 @@ def restore():
     return model, db
 
 
-def merge(queries: list, path='./results/synthesis/'):
+def merge(queries: list, path='./results/synthesis/', save=True, verbose=True):
     model = LLM(task='embedding')
     db = BlockDB(empty=False)
-    print(f'Initialized BlockDB with {db.num_docs()} docs')
+    if verbose: print(f'Initialized BlockDB with {db.num_docs()} docs')
+
+    synthesis = []
     for i, query in enumerate(queries):
-        qpath = os.path.join(path, f'query{i}')
-        synthesis = string_synthesis(model, db, query)
-        synthesis_dumb(synthesis, query, 'String', qpath + 's.md')
-        synthesis = embedding_synthesis(model, db, query)
-        synthesis_dumb(synthesis, query, 'Embedding', qpath + 'e.md')
-    print(f'Results saved in {path}')
+        synthesis.append((string_synthesis(model, db, query), embedding_synthesis(model, db, query)))
+
+    for i, ss, se in enumerate(synthesis):
+        if save:
+            qpath = os.path.join(path, f'query{i}')
+            synthesis_dumb(ss, queries[i], 'String', qpath + 's.md')
+            synthesis_dumb(se, queries[i], 'Embedding', qpath + 'e.md')
+        else:
+            print_synthesis(ss, queries[i], title='STRING')
+            print_synthesis(se, queries[i], title='EMBEDDING')
+    if save and verbose: print(f'Results saved in {path}')
+
+
 
