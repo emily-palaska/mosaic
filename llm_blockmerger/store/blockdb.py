@@ -39,6 +39,9 @@ class BlockDB(Dataset):
         files = find_docs(self.workspace)
         assert len(files) == 1, f"Multiple db files found in workspace {self.workspace}: {files}"
         embeddings, blockdata = separate_docs(get_docs(files[0]))
+        if (features := len(embeddings[0])) != self.features:
+            self.features = features
+            self.BlockDoc = doc_class(features)
         self._init_empty()
         self.create(embeddings, blockdata)
         assert self.db.num_docs() != 0, f"BlockDB wasn't restored successfully, got {self.db.num_docs()} entries"
@@ -72,6 +75,9 @@ class BlockDB(Dataset):
 
     def embeddings(self):
         return stack([self.db.get_by_id(str(i)).embedding for i in range(self.num_docs())])
+
+    def blockdata(self):
+        return [self.db.get_by_id(str(i)).blockdata for i in range(self.num_docs())]
 
     def __len__(self):
         return len(self.triplets)

@@ -41,6 +41,7 @@ def embedding_synthesis(model: LLM, db: BlockDB, spec: str, k=0.9, l=1.4, max_it
         if nn is None: break  # Break condition: No neighbors
 
         n = nn.embedding
+        print(n.shape)
         n_proj = projection(n, s)
         i_proj = projection(spec_emb, n)
         if norm(n_proj) < t: break  # Break condition: Perpendicular embeddings

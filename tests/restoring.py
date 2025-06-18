@@ -3,7 +3,7 @@ os.chdir("../")
 
 from time import time
 from datetime import datetime
-from tests.core.pipelines import restore
+from tests.core import restore
 
 def runtime(A=1000, verbose=True):
     demo_paths = ['notebooks/example_more.ipynb', 'notebooks/pygrank_snippets.ipynb']

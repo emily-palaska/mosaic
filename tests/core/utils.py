@@ -1,6 +1,5 @@
 from llm_blockmerger.load import BlockManager
-from textwrap import fill, indent
-from json import dumps
+from textwrap import fill
 
 def synthesis_dumb(synthesis: BlockManager, query:str, method: str, path: str):
     assert method in ['String', 'Embedding'], 'Invalid method'

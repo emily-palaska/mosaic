@@ -1,6 +1,7 @@
 import os
+from torch import stack
 
-from llm_blockmerger.core import LLM, plot_sim, norm_cos_sim, print_synthesis
+from llm_blockmerger.core import LLM, plot_sim, norm_cos_sim, print_synthesis, encoded_json
 from llm_blockmerger.load import init_managers, nb_variables, flatten_labels, create_blockdata
 from llm_blockmerger.merge import string_synthesis, embedding_synthesis
 from llm_blockmerger.store import BlockDB
@@ -39,7 +40,8 @@ def merge(queries: list, path='./results/synthesis/', save=True, verbose=True):
     for i, query in enumerate(queries):
         synthesis.append((string_synthesis(model, db, query), embedding_synthesis(model, db, query)))
 
-    for i, ss, se in enumerate(synthesis):
+    for i, s in enumerate(synthesis):
+        ss, se = s
         if save:
             qpath = os.path.join(path, f'query{i}')
             synthesis_dumb(ss, queries[i], 'String', qpath + 's.md')
@@ -49,5 +51,14 @@ def merge(queries: list, path='./results/synthesis/', save=True, verbose=True):
             print_synthesis(se, queries[i], title='EMBEDDING')
     if save and verbose: print(f'Results saved in {path}')
 
+def deploy_mlp(model, embeddings, blockdata):
+    new_embeddings = stack([model(embedding.to(model.device)) for embedding in embeddings]).tolist()
+    new_blockdata = []
+    for datadict, new_emb in zip(blockdata, new_embeddings):
+        new_datadict = encoded_json(datadict)
+        new_datadict['embedding'] = new_emb
+        new_blockdata.append(new_datadict)
+    db = BlockDB(features=len(new_embeddings[0]), empty=True)
+    db.create(embeddings=new_embeddings, blockdata=new_blockdata)
 
 

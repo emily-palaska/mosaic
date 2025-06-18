@@ -1,7 +1,7 @@
 import os
 os.chdir("../")
 
-from tests.core.pipelines import merge
+from tests.core import merge
 
 def runtime():
     """test the times of retrieving something with the exact and approximate nearest neighbor"""
