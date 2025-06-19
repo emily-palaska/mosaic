@@ -24,15 +24,16 @@ def validation():
     db = BlockDB(empty=False)
     embeddings, blockdata, features = db.embeddings(), db.blockdata(), db.features
 
-    model = MLP(input_dim=db.features).load(path='./results/models/ce_default')
+    model = MLP(input_dim=db.features).load(path='./results/models/ce_default', device='cpu')
+    assert model.device == 'cpu', 'Model initialized in gpu'
     deploy_mlp(model, embeddings, blockdata)
 
     demo = ['Initialize a logistic regression model. Use standardization on training inputs. Train the model.']
-    merge(demo, save=False)
+    merge(demo, save=False, mlp=model)
 
     db = BlockDB(features=features,empty=True)
     db.create(embeddings, blockdata)
     print('Restored old embeddings')
 
 if __name__ == '__main__':
-    validation()
+    integration()

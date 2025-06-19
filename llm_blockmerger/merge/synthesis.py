@@ -6,13 +6,14 @@ from llm_blockmerger.store import BlockDB
 from torch import norm, tensor
 
 
-def string_synthesis(model: LLM, db: BlockDB, spec: str, max_rep=2, max_it=10, repl='[UNK]', var=True):
+def string_synthesis(model: LLM, db: BlockDB, spec: str, max_rep=2, max_it=10, repl='[UNK]', var=True, mlp=None):
     synthesis, ids = BlockManager(), []
 
     for _ in range(max_it):
         if spec in ['', ' ']: return synthesis # Break condition: Empty specification
 
-        s = model.encode(spec)
+        s = tensor(model.encode(spec))
+        if mlp: s = mlp(s)
         nn = check_repetitions(max_rep, ids, db.read(s, limit=3))
         if nn is None: break  # Break condition: No valid neighbors
 
@@ -28,11 +29,11 @@ def string_synthesis(model: LLM, db: BlockDB, spec: str, max_rep=2, max_it=10, r
     return merge_variables(model, synthesis) if var else synthesis
 
 
-def embedding_synthesis(model: LLM, db: BlockDB, spec: str, k=0.9, l=1.4, max_it=10, t=0.05, var=True):
+def embedding_synthesis(model: LLM, db: BlockDB, spec: str, k=0.9, l=1.4, max_it=10, t=0.05, var=True, mlp=None):
     synthesis = BlockManager()
-    s = tensor(model.encode(spec)[0])
-    spec_emb = tensor(model.encode(spec)[0])
-    i = spec_emb.norm().item()
+    spec_emb = s = tensor(model.encode(spec)[0])
+    if mlp: spec_emb = s = mlp(s)
+    i = s.norm().item()
 
     for _ in range(max_it):
         if i < t: break # Break condition: Embedding norm below the norm threshold
@@ -41,7 +42,6 @@ def embedding_synthesis(model: LLM, db: BlockDB, spec: str, k=0.9, l=1.4, max_it
         if nn is None: break  # Break condition: No neighbors
 
         n = nn.embedding
-        print(n.shape)
         n_proj = projection(n, s)
         i_proj = projection(spec_emb, n)
         if norm(n_proj) < t: break  # Break condition: Perpendicular embeddings

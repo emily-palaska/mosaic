@@ -31,14 +31,15 @@ def restore():
     return model, db
 
 
-def merge(queries: list, path='./results/synthesis/', save=True, verbose=True):
+def merge(queries: list, path='./results/synthesis/', mlp=None, save=True, verbose=True):
     model = LLM(task='embedding')
     db = BlockDB(empty=False)
     if verbose: print(f'Initialized BlockDB with {db.num_docs()} docs')
 
     synthesis = []
     for i, query in enumerate(queries):
-        synthesis.append((string_synthesis(model, db, query), embedding_synthesis(model, db, query)))
+        synthesis.append((string_synthesis(model, db, query, mlp=mlp),
+                          embedding_synthesis(model, db, query, mlp=mlp)))
 
     for i, s in enumerate(synthesis):
         ss, se = s

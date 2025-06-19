@@ -26,4 +26,7 @@ def runtime(A=1000, verbose=True):
 
 def integration():
     model, db = restore()
-    print(f'Loaded {model.name} model and BlockDB with {db.num_docs()} docs')
+    print(f'Loaded {model.name} model and BlockDB with {db.num_docs()} docs and {db.features} features')
+
+if __name__ == '__main__':
+    integration()

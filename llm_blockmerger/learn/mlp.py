@@ -6,8 +6,8 @@ from torch.utils.data import DataLoader, random_split
 from time import time
 
 class MLP(Module):
-    def __init__(self, input_dim, layer_dims=None):
-        self.device = torch.device('cuda' if torch.cuda.is_available() else 'cpu')
+    def __init__(self, input_dim, layer_dims=None, device=None):
+        self.device = device or (torch.device('cuda' if torch.cuda.is_available() else 'cpu'))
         self.input_dim = input_dim
         self.layer_dims = layer_dims if layer_dims else [64, 32]
         self.metadata = {
@@ -40,9 +40,10 @@ class MLP(Module):
 
     @classmethod
     def load(cls, path, device=None):
-        checkpoint = torch.load(path, map_location=device or ('cuda' if torch.cuda.is_available() else 'cpu'))
+        dev = device or ('cuda' if torch.cuda.is_available() else 'cpu')
+        checkpoint = torch.load(path, map_location=dev)
         metadata = checkpoint['metadata']
-        model = cls(input_dim=metadata['input_dim'], layer_dims=eval(metadata['layer_dims']))
+        model = cls(input_dim=metadata['input_dim'], layer_dims=eval(metadata['layer_dims']), device=dev)
         model.load_state_dict(checkpoint['model_state_dict'])
         model.to(model.device)
         return model

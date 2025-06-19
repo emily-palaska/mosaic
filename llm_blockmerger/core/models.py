@@ -10,17 +10,17 @@ class LLM:
         self.device = torch.device("cuda" if torch.cuda.is_available() else "cpu")
 
         if task == 'question':
-            self.model_name = name if name else 'meta-llama/Llama-3.2-3B'
-            self.tokenizer = AutoTokenizer.from_pretrained(self.model_name)
+            self.name = name if name else 'meta-llama/Llama-3.2-3B'
+            self.tokenizer = AutoTokenizer.from_pretrained(self.name)
             if self.tokenizer.pad_token is None:
                 self.tokenizer.pad_token = self.tokenizer.eos_token
             self.model = AutoModelForCausalLM.from_pretrained(
-                self.model_name,
+                self.name,
                 torch_dtype=torch.float16
             ).to(self.device)
         elif task == 'embedding':
-            self.model_name = name if name else 'sentence-transformers/all-MiniLM-L6-v2'
-            self.model = SentenceTransformer(self.model_name)
+            self.name = name if name else 'sentence-transformers/all-MiniLM-L6-v2'
+            self.model = SentenceTransformer(self.name)
         else:
             raise TypeError("Task must be either 'question' or 'embedding'")
 
