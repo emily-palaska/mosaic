@@ -3,9 +3,10 @@ from torch import stack
 
 from llm_blockmerger.core import LLM, plot_sim, norm_cos_sim, print_synthesis, encoded_json
 from llm_blockmerger.load import init_managers, nb_variables, flatten_labels, create_blockdata
-from llm_blockmerger.merge import string_synthesis, embedding_synthesis
+from llm_blockmerger.merge import string_synthesis, embedding_synthesis, exhaustive_synthesis
 from llm_blockmerger.store import BlockDB
-from tests.core.utils import synthesis_dumb
+from llm_blockmerger.learn import MLP
+from tests.core.utils import md_dumb_synthesis
 
 
 def preprocess(paths: list, plot=False, db=False):
@@ -31,25 +32,26 @@ def restore():
     return model, db
 
 
-def merge(queries: list, path='./results/synthesis/', mlp=None, save=True, verbose=True):
+def merge(queries: list, path='./results/synthesis/', mlp:MLP|None=None, save=True, verbose=True):
+    methods = {'s': 'String', 'e': 'Embedding', 'x': 'Exhaustive'}
     model = LLM(task='embedding')
     db = BlockDB(empty=False)
     if verbose: print(f'Initialized BlockDB with {db.num_docs()} docs')
 
-    synthesis = []
-    for i, query in enumerate(queries):
-        synthesis.append((string_synthesis(model, db, query, mlp=mlp),
-                          embedding_synthesis(model, db, query, mlp=mlp)))
+    query_synthesis = []
+    for query in queries:
+        query_synthesis.append((
+            string_synthesis(model, db, query, mlp=mlp),
+            embedding_synthesis(model, db, query, mlp=mlp),
+            exhaustive_synthesis(model, db, query, mlp=mlp)
+        ))
 
-    for i, s in enumerate(synthesis):
-        ss, se = s
-        if save:
-            qpath = os.path.join(path, f'query{i}')
-            synthesis_dumb(ss, queries[i], 'String', qpath + 's.md')
-            synthesis_dumb(se, queries[i], 'Embedding', qpath + 'e.md')
-        else:
-            print_synthesis(ss, queries[i], title='STRING')
-            print_synthesis(se, queries[i], title='EMBEDDING')
+    for i, synthesis in enumerate(query_synthesis):
+        qpath = os.path.join(path, f'query{i}')
+        for m, s in zip(methods, synthesis):
+            if save:
+                md_dumb_synthesis(s, queries[i], methods[m], qpath + f'{m}.md')
+            else: print_synthesis(s, queries[i], title=methods[m].upper())
     if save and verbose: print(f'Results saved in {path}')
 
 def deploy_mlp(model, embeddings, blockdata):
