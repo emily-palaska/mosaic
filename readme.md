@@ -33,6 +33,7 @@ db = BlockDB(empty=True)
 db.create(embeddings=embeddings, blockdata=create_blockdata(managers, embeddings))
 ```
 ### Example of merging scenario
+
 ```python
 from llm_blockmerger.store import BlockDB
 from llm_blockmerger.core import LLM, print_synthesis

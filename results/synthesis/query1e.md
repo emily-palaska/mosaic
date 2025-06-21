@@ -1,6 +1,6 @@
 # Embedding Code Synthesis
-Query: `Create a regression model.`
-## Variables:
+Query `Create a regression model.`
+## Script Variables
 - model:<br>
 >The model is a machine learning model that is used to train a model on the given data. The model takes in the input data and the target data and uses this information to learn a function that maps the input data to the target data. The model is then used to make predictions on new data.
 - LogisticRegression:<br>
@@ -13,7 +13,7 @@ Query: `Create a regression model.`
 >It is a numpy array of shape (1000, 784) containing the test images.
 - y_hat:<br>
 >It is a variable that is used to store the predicted values of the model. It is a numpy array with the same shape as the input data (x_test). The variable is created using the predict() method of the model object, which takes the input data as an argument and returns the predicted values. The variable is created with the keyword argument probs=True, which indicates that the model should return the predicted probabilities instead of the predicted classes. This is useful when the model is trained with a classification task, but the predicted values are needed for other purposes, such as calculating the
-## Synthesis:
+## Synthesis Blocks
 ### notebooks/example_more.ipynb
 CONTEXT: def train_lr(x_train, y_train, preprocessing="normalize"): COMMENT: create a logistic regression model
 ```python
@@ -52,3 +52,14 @@ model = LogisticRegression()
 model.train(x_train, y_train)
 ```
 
+## Code Concatenation
+```python
+model = LogisticRegression()
+y_hat = model.predict(x_test, probs=True)
+model = LogisticRegression()
+model.train(x_train, y_train)
+model = LogisticRegression()
+model.train(x_train, y_train)
+model = LogisticRegression()
+model.train(x_train, y_train)
+```

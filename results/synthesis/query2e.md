@@ -1,6 +1,6 @@
 # Embedding Code Synthesis
-Query: `Graph operations`
-## Variables:
+Query `Graph operations`
+## Script Variables
 - pg:<br>
 >The variable pg is used to store the PageRank values of each node in the graph. It is a dictionary where the keys are the nodes and the values are the PageRank values. The PageRank algorithm is used to calculate the importance of each node in the graph based on the links between them. The alpha parameter is used to control the damping factor of the algorithm, which determines how much weight is given to the links between nodes. The PageRank values are then used to rank the nodes in the graph based on their importance.
 - signal:<br>
@@ -37,7 +37,7 @@ Query: `Graph operations`
 >The variable path is a string that represents the path to a file on the file system. It is used to load or save data to or from a file. The variable path is a string that represents the path to a file on the file system. It is used to load or save data to or from a file.
 - pickle:<br>
 >pickle is a module in python which is used to serialize or de-serialize python objects. It is used to save the state of an object in a file. It is a binary format which can be used to save the state of an object in a file. It is a binary format which can be used to save the state of an object in a file. It is a binary format which can be used to save the state of an object in a file. It is a binary format which can be used to save the state of an object in a file. It is
-## Synthesis:
+## Synthesis Blocks
 ### notebooks/pygrank_snippets.ipynb
 CONTEXT: def algorithm_comparison(): COMMENT: split signal to training and test subsets
 ```python
@@ -65,3 +65,13 @@ degv = {v : float(len(list(G.neighbors(v))))**0.5 for v in G.nodes()}
 degu = {u : float(len(list(G.neighbors(u))))**0.5 for u in G.nodes()}
 ```
 
+## Code Concatenation
+```python
+split = pg.split(signal)
+train = split[0]
+test = split[1]
+signal = pg.to_signal(graph, group)
+pickle.dump(custom, path)
+degv = {v : float(len(list(G.neighbors(v))))**0.5 for v in G.nodes()}
+degu = {u : float(len(list(G.neighbors(u))))**0.5 for u in G.nodes()}
+```
