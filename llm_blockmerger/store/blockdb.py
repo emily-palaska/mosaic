@@ -1,5 +1,6 @@
 from docarray import DocList
-from vectordb import InMemoryExactNNVectorDB, HNSWVectorDB
+from vectordb import InMemoryExactNNVectorDB as ExactNN
+from vectordb import HNSWVectorDB as ApproxNN
 from torch.utils.data import Dataset
 from torch import tensor, stack, float32
 from json import dumps
@@ -9,25 +10,27 @@ from llm_blockmerger.store.docs import doc_class, get_docs, empty_docs, separate
 
 class BlockDB(Dataset):
     def __init__(self,
-                 dbtype=HNSWVectorDB,
+                 dbtype=ApproxNN,
                  workspace='./databases/',
                  features=384,
                  precision=float32,
                  empty=False):
-        assert dbtype in [HNSWVectorDB, InMemoryExactNNVectorDB], "Invalid dbtype"
+        assert dbtype in [ApproxNN, ExactNN], "Invalid dbtype"
 
         self.dbtype = dbtype
+        self.ext = '.db' if self.dbtype == ApproxNN else '.bin'
         self.workspace = workspace
         self.features = features
         self.precision = precision
         self.BlockDoc = doc_class(features)
 
         if empty: self._init_empty()
-        else: self._restore()
+        elif dbtype==ApproxNN: self._restore_approx()
+        else: self._restore_exact()
         self.triplets = triplets(self.num_docs())
 
     def _init_empty(self):
-        empty_docs(workspace=self.workspace)
+        empty_docs(self.workspace, self.ext)
         self.db = self.dbtype[self.BlockDoc](
             workspace=self.workspace,
             index=True,
@@ -35,8 +38,8 @@ class BlockDB(Dataset):
         )
         assert self.num_docs() == 0, f"BlockDB didn't initialize empty, got {self.num_docs()} entries"
 
-    def _restore(self):
-        files = find_docs(self.workspace)
+    def _restore_approx(self):
+        files = find_docs(self.workspace, self.ext)
         assert len(files) == 1, f"Multiple db files found in workspace {self.workspace}: {files}"
         embeddings, blockdata = separate_docs(get_docs(files[0]))
         if (features := len(embeddings[0])) != self.features:
@@ -44,6 +47,13 @@ class BlockDB(Dataset):
             self.BlockDoc = doc_class(features)
         self._init_empty()
         self.create(embeddings, blockdata)
+        assert self.db.num_docs() != 0, f"BlockDB wasn't restored successfully, got {self.db.num_docs()} entries"
+
+    def _restore_exact(self):
+        self.db = self.dbtype[self.BlockDoc](
+            workspace=self.workspace,
+            index=True
+        )
         assert self.db.num_docs() != 0, f"BlockDB wasn't restored successfully, got {self.db.num_docs()} entries"
 
     def create(self, embeddings, blockdata):
@@ -78,6 +88,9 @@ class BlockDB(Dataset):
 
     def blockdata(self):
         return [self.db.get_by_id(str(i)).blockdata for i in range(self.num_docs())]
+
+    def get_doc(self, i):
+        return self.db.get_by_id(str(i))
 
     def __len__(self):
         return len(self.triplets)

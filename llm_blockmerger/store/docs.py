@@ -19,21 +19,25 @@ def get_docs(path:str, table='docs'):
     cursor.execute(f"SELECT * FROM {table};")
     return cursor.fetchall()
 
-def empty_docs(workspace='./databases/'):
-    files = find_docs(workspace)
+def empty_docs(workspace='./databases/', ext='.db'):
+    files = find_docs(workspace, ext)
 
-    for file in files:
-        conn = connect(file)
-        cursor = conn.cursor()
-        cursor.execute("SELECT name FROM sqlite_master WHERE type='table';")
-        tables = cursor.fetchall()
+    if ext == '.db':
+        for file in files:
+            conn = connect(file)
+            cursor = conn.cursor()
+            cursor.execute("SELECT name FROM sqlite_master WHERE type='table';")
+            tables = cursor.fetchall()
 
-        for table in tables:
-            table_name = table[0]
-            cursor.execute(f"DROP TABLE IF EXISTS `{table_name}`;")
-            conn.commit()
-        conn.close()
-
+            for table in tables:
+                table_name = table[0]
+                cursor.execute(f"DROP TABLE IF EXISTS `{table_name}`;")
+                conn.commit()
+            conn.close()
+    elif ext == '.bin':
+        for file in files:
+            with open(file, "w") as f:
+                f.write('')
 
 def separate_docs(rows):
     embeddings, blockdata = [], []
@@ -44,10 +48,10 @@ def separate_docs(rows):
     return embeddings, blockdata
 
 
-def find_docs(path):
+def find_docs(path, ext='.db'):
     docs = []
     for root, dirs, files in os.walk(path):
         for file in files:
-            if file.endswith('.db'):
+            if file.endswith(ext):
                 docs.append(os.path.join(root, file))
     return docs
