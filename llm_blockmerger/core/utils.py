@@ -2,6 +2,9 @@ from json import load, loads
 from re import match
 from textwrap import indent, fill
 
+from torch import Tensor, combinations, arange
+
+
 def concat_block(block):
     return '\n'.join(block) + '\n'
 
@@ -84,3 +87,17 @@ def remove_symbols(script):
     for symbol in symbols:
         script = script.replace(symbol, ' ')
     return script
+
+
+def best_combination(n: int, r: int, target: float, components: Tensor):
+    device = components.device
+    comb = combinations(arange(n, device=device), r=r)
+    selected = components[comb]
+    sums = selected.sum(dim=1)
+
+    valid = (sums <= target)
+    if valid.any():
+        sums = sums[valid]
+        max_sum, max_idx = sums.max(0)
+        return max_sum, comb[valid][max_idx]
+    return None, None

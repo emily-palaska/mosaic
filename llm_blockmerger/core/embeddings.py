@@ -1,5 +1,7 @@
 import matplotlib.pyplot as plt
 import torch
+from torch import Tensor, rand, norm
+
 
 def projection(a, b):
     if not isinstance(a, torch.Tensor): a = torch.tensor(a)
@@ -53,3 +55,15 @@ def plot_sim(sim_mat, path='../plots/similarity_matrix.png'):
 
 def norm_batch(batch: torch.Tensor):
     return batch / batch.norm(dim=-1, keepdim=True)
+
+
+def pivot_rotation(q: Tensor, n: Tensor, s: Tensor, i: Tensor, k: float, l: float, method:str|None=None):
+    n_proj = projection(n, s)
+    i_proj = projection(q, n)
+
+    if method == 'rnd': rand(s.shape)
+    elif method == 'rev': s = s - l * n_proj
+    else: s = l * n_proj - s
+    s /= s.norm()
+    i -= k * i_proj.norm().item()
+    return s, i, norm(n_proj).item()
