@@ -1,4 +1,4 @@
-# String Code Synthesis
+# Reverse Embedding Code Synthesis
 Query `Create a regression model.`
 ## Script Variables
 - model:<br>

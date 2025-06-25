@@ -1,5 +1,5 @@
-# String Code Synthesis
-Query `Create a regression model.`
+# Reverse Embedding Code Synthesis
+Query `Initialize a logistic regression model. Use standardization on training inputs. Train the model.`
 ## Script Variables
 - model:<br>
 >The variable model is a logistic regression model that is trained on the training data. The model is used to predict the probability of a given observation being a member of a particular class. The model is trained using the training data and the training labels. The model is then used to predict the probability of a given observation being a member of a particular class. The model is used to make predictions on the test data and the test labels. The model is evaluated using the test labels and the test accuracy is calculated. The model is then used to make predictions on the test data and the test labels

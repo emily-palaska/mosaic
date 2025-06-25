@@ -2,9 +2,9 @@
 Query `Initialize a logistic regression model. Use standardization on training inputs. Train the model.`
 ## Script Variables
 - model:<br>
->The model is a machine learning model that is used to train a model on the given data. The model takes in the input data and the target data and uses this information to learn a function that maps the input data to the target data. The model is then used to make predictions on new data.
+>The variable model is a logistic regression model that is trained on the training data. The model is used to predict the probability of a given observation being a member of a particular class. The model is trained using the training data and the training labels. The model is then used to predict the probability of a given observation being a member of a particular class. The model is used to make predictions on the test data and the test labels. The model is evaluated using the test labels and the test accuracy is calculated. The model is then used to make predictions on the test data and the test labels
 - LogisticRegression:<br>
->LogisticRegression is a classification algorithm that is used to predict the probability of a given data point belonging to a particular class. It is based on the logistic function, which is a sigmoid function that maps the input data to a probability value between 0 and 1. The output of the logistic function is then used to predict the class of the data point.
+>LogisticRegression is a machine learning algorithm that is used for classification problems. It is a supervised learning algorithm that uses a logistic function to map the input data to the output data. The logistic function is a sigmoid function that maps the input data to the probability of the output data. The output data is a binary value (0 or 1) that indicates whether the input data belongs to the positive or negative class. The logistic regression algorithm uses a set of weights and biases to map the input data to the output data. The weights and biases are learned from the training data using
 ## Synthesis Blocks
 ### notebooks/example_more.ipynb
 CONTEXT: def train_lr(x_train, y_train, preprocessing="normalize"): COMMENT: create a logistic regression model

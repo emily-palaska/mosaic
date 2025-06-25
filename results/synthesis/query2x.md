@@ -1,46 +1,46 @@
 # Exhaustive Code Synthesis
 Query `Graph operations`
 ## Script Variables
-- u:<br>
->u is a key in the dictionary p. It is the name of the user.
-- node1:<br>
->It is a variable which is used to store the id of the node in the graph. It is used to store the id of the node in the graph. It is used to store the id of the node in the graph. It is used to store the id of the node in the graph. It is used to store the id of the node
-- os:<br>
->The os module provides a portable way of using operating system dependent functionality. It is a standard module that is available in all Python installations. The os module provides a portable way of using operating system dependent functionality. It is a standard module that is available in all Python installations. The os module provides a portable way of using operating system dependent functionality. It is a standard module that is available in all Python installations. The os module provides a portable way of using operating system dependent functionality. It is a standard module that is available in all Python installations. The os module provides a portable
-- json:<br>
->The variable json is a dictionary that contains two keys, 'nodes' and 'links'. The 'nodes' key contains a list of dictionaries, where each dictionary represents a node in the graph. Each node dictionary has an 'id' key that corresponds to the node's unique identifier, and a 'color_intensity' key that represents the node's color intensity.
-- outfile:<br>
->outfile is a variable that is used to store the data in a json file. The data is stored in a dictionary called data. The data dictionary has two keys, nodes and links. The nodes key contains a list of dictionaries, where each dictionary represents a node in the graph. Each dictionary has an id key, which is the unique identifier for the node,
-- node2:<br>
->Node2 is a variable that is used to represent the nodes in the graph. It is a dictionary that contains the id of each node and its color intensity. The color intensity is calculated based on the normalized prior ranks of each node. This variable is used to visualize the graph using d3.js library.
 - G:<br>
->G is a graph object that represents a social network. It is used to visualize the network using d3.js library. The nodes of the graph are represented by the vertices and the edges are represented by the edges. The nodes are colored based on their color intensity which is calculated using the normalized prior ranks. The links between the nodes are represented by the edges.
+>The variable G is a graph object that represents the network of interactions between the nodes in the system. It contains information about the edges between the nodes, such as the weight of each edge, the direction of the edge, and any additional properties associated with the edge. The variable G is used to calculate the rank of each node in the network, which is a measure of the importance of each
+- node1:<br>
+>Node1 is a variable that is used to store the id of the node in the graph. It is used to identify the node in the graph and is used to create the links between the nodes. The value of node1 is the id of the node in the graph.
+- u:<br>
+>u is a variable that stores the degree of each node in the graph G. It is calculated by taking the square root of the number of neighbors for each node in the graph. This is done to make the values more manageable and easier to work with in the script. The script uses the built-in function len() to count the number of neighbors for each node and then takes the square root of the result to get the degree of each node. This is done for both the original graph G and the graph G with the degree of each node
 - print:<br>
->It is a function in Python that is used to print the output of a statement or expression to the screen. It is a built-in function in Python and does not require any imports. The print function takes an optional argument, which is a string that is printed to the screen. The print function can also be used to print multiple lines of output by separating them
-- normalized_prior_ranks:<br>
->The variable normalized_prior_ranks is a dictionary that contains the normalized prior ranks of each node in the graph. The normalized prior ranks are calculated by dividing the prior rank of each node by the sum of all prior ranks in the graph. This normalization is done to ensure that the prior ranks of all nodes are comparable and that the visualization
-- open:<br>
->open is a built-in function in Python. It opens a file and returns a file object. It takes two arguments, the name of the file to be opened and the mode in which the file is to be opened. The mode can be either 'r' for reading, 'w' for writing, 'a' for appending, 'r+' for reading
-- str:<br>
->The variable str is a string which is used to store the value of the variable u in the for loop. The variable u is used to iterate through the nodes in the graph and the variable str is used to store the value of the variable u. The variable str is used to create a dictionary entry for each node in the graph. The variable str is also
+>The print function is used to display the output of an expression in the Python interpreter. It is a built-in function in Python that takes an expression as an argument and displays the result of the expression on the console. The print function is often used to display the output of a program or a function.
 - data:<br>
->The variable data is a dictionary which contains two keys, one for nodes and other for links. The nodes key contains a list of dictionaries, each of which has an id and color_intensity key. The color_intensity key contains a normalized version of the prior ranks of the nodes. The links key contains a list of dictionaries, each of which has a source and target
-- v:<br>
->The variable v is a dictionary that contains the degree of each node in the graph G. The degree of a node is the number of edges connected to it. The value of each key in the dictionary is the square root of the degree of the corresponding node. This is done to make the values of the dictionary more manageable and easier to work with. The role of this variable is to provide a measure of the connectivity of each node in the graph, which can be used to identify nodes that are more central in the network.
-- len:<br>
->len is a built-in function in python which returns the length of an object. In this case, it is used to calculate the number of neighbors of each node in the graph. The result is then used to calculate the degree of each node in the graph.
-- float:<br>
->float is a data type that represents floating-point numbers. It is used to represent numbers that have a fractional part. For example, 3.14 is a float value.
-- degv:<br>
->degv is a dictionary that contains the degree of each node in the graph G. The degree of a node is the number of edges that are incident to that node. The value of each key in the dictionary is the square root of the degree of the corresponding node. This is done to ensure that the values in the dictionary are non-negative. The square root is used because it is easier to work with than the actual degree. The square root of a number is always positive, so it is a good choice for a value in
-- degu:<br>
->degu is a dictionary that contains the degree of each node in the graph. The degree of a node is the number of edges that are incident on that node. The degree of a node is a measure of the connectivity of the node in the graph. The degree of a node is also a measure of the importance of the node in the graph. The degree of a node is used to calculate the centrality of the node in the graph. The degree of a node is also used to calculate the betweenness centrality of the
-- list:<br>
->degv is a dictionary that contains the degree of each vertex in the graph.
+>The variable data is a dictionary containing two keys, 'nodes' and 'links'. The 'nodes' key contains a list of dictionaries, where each dictionary represents a node in the graph. Each node dictionary has an 'id' key, which is a unique identifier for the node, and a 'color_intensity' key, which is a value between 0
+- open:<br>
+>The variable open is used to open the file 'visualize/data.json' in the current directory. The file is then written to the file 'visualize/data.json' in the current directory. The file is then opened in a web browser using the'start firefox.exe' command.
+- os:<br>
+>The os module is a built-in module in Python that provides a portable way of using operating system dependent functionality. It provides a portable way of using operating system dependent functionality. It provides a portable way of using operating system dependent functionality. It provides a portable way of using operating system dependent functionality. It provides a portable way of using operating system dependent functionality. It provides
+- outfile:<br>
+>The variable outfile is a file object that is used to write data to a file. The file is opened in write mode and the data is written to the file using the json.dump() function. The file is then closed using the close() method. The variable outfile is used to write the data to a file so that it can be used later in the script
+- str:<br>
+>str is a built-in function in python which returns the string representation of the object. It is used to convert the object into a string. It is used to convert the object into a string. It is used to convert the object into a string. It is used to convert the object into a string. It is used to convert the object into a string.
+- json:<br>
+>json is a python module that is used to convert python objects into json format. It is used to convert python objects into a json format that can be used by other programming languages such as javascript. It is also used to convert json format into python objects. It is a built-in module in python and is used to convert python objects into json format. It is
+- normalized_prior_ranks:<br>
+>Normalized prior ranks are the normalized version of the prior ranks. They are used to visualize the prior ranks in the network. The prior ranks are used to determine the importance of each node in the network. The normalized prior ranks are used to determine the relative importance of each node in the network. The normalized prior ranks are used to determine
+- node2:<br>
+>The node2 variable is a dictionary that contains information about the nodes in the graph. It is used to create the visualization of the graph using d3.js. The nodes in the graph are represented as dictionaries, where each dictionary contains the node id and a color intensity value. The color intensity value is calculated based on the normalized prior ranks of the nodes
 - pg:<br>
->The variable pg is used to store the PageRank values of each node in the graph. It is a dictionary where the keys are the nodes and the values are the PageRank values. The PageRank algorithm is used to calculate the importance of each node in the graph based on the links between them. The alpha parameter is used to control the damping factor of the algorithm, which determines how much weight is given to the links between nodes. The PageRank values are then used to rank the nodes in the graph based on their importance.
+>pg is a variable that is used to split the dataset into training and testing sets. The dataset is split into two sets, one for training and one for testing. The training set is used to train the model, and the testing set is used to evaluate the model's performance. The split() function is used to split the dataset into two sets, and the pg variable is used to store the result of the split() function.
 - ppr:<br>
->ppr is a function that takes a training set as input and returns a list of the top 10 most important features in the training set. The function uses a ranking algorithm called "PageRank" to determine the importance of each feature.
+>ppr is a variable that is used to rank the data points in the training set. It is a measure of the proximity of a point to the nearest point in the training set. The rank of a point is the number of points in the training set that are closer to it than the point itself. The rank of a point is used to determine the distance between the point and the nearest point in the training set. The rank of a point is also used to determine the distance between the point and the nearest point in the training set. The rank of a
+- degu:<br>
+>degu is a dictionary that contains the degree of each node in the graph G. The degree of a node is the number of edges that are incident to that node. The value of each key in the dictionary is the square root of the degree of the corresponding node. This is done to ensure that the values in the dictionary are non-negative.
+- len:<br>
+>len is a function that returns the length of a sequence. In this case, it is the number of nodes in the graph G. It is used to calculate the mean square error (msq) which is used to determine when the algorithm has converged.
+- float:<br>
+>float is a data type that represents a floating-point number. It is a decimal number that can be represented with a fixed number of digits after the decimal point. The variable float is used to store a floating-point number in the script. It is used to calculate the degree of each node in the graph and to calculate the degree of each node in the graph with the symmetric degree. The variable float is used to store the result of the calculation and is used to calculate the degree of each node in the graph with the symmetric degree. The variable
+- degv:<br>
+>degv is a dictionary that contains the degree of each node in the graph G. The degree of a node is the number of edges incident to that node. The value of each key in the dictionary is the square root of the degree of the corresponding node. This is done to ensure that the values in the dictionary are non-negative.
+- v:<br>
+>v is a variable that is used to store the degree of a node in the graph.
+- list:<br>
+>degv
 ## Synthesis Blocks
 ### notebooks/pygrank_snippets.ipynb
 CONTEXT: def algorithm_comparison(): COMMENT: create default pagerank

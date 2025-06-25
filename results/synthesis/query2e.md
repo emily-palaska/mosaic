@@ -2,76 +2,68 @@
 Query `Graph operations`
 ## Script Variables
 - pg:<br>
->The variable pg is used to store the PageRank values of each node in the graph. It is a dictionary where the keys are the nodes and the values are the PageRank values. The PageRank algorithm is used to calculate the importance of each node in the graph based on the links between them. The alpha parameter is used to control the damping factor of the algorithm, which determines how much weight is given to the links between nodes. The PageRank values are then used to rank the nodes in the graph based on their importance.
-- signal:<br>
->The variable signal is a list of integers that represent the signal values.
-- group:<br>
->loaded is a variable that stores the loaded dataset.
+>pg is a variable that is used to split the dataset into training and testing sets. The dataset is split into two sets, one for training and one for testing. The training set is used to train the model, and the testing set is used to evaluate the model's performance. The split() function is used to split the dataset into two sets, and the pg variable is used to store the result of the split() function.
 - graph:<br>
->The graph variable is a networkx graph object. It is used to represent the network of nodes and edges in the dataset. The nodes represent the individuals in the dataset, and the edges represent the connections between them. The graph is used to perform various network analysis tasks, such as finding the shortest path between two nodes, or identifying the most important nodes in the network.
-- split:<br>
->The variable split is a tuple that is created by the split() method of the pg module. The split() method takes a string as an argument and returns a tuple containing all the substrings in the string that are separated by the given separator. In this case, the separator is a space, so the split() method returns a tuple containing all the words in the signal string.
-- test:<br>
->The variable test is a string that is used to split the signal into two parts, train and test. The variable test is used to store the test set, which is the part of the signal that is used to test the model's performance. The variable test is used to store the test set, which is the part of the signal that is used to test the model's performance. The variable test is used to store the test set, which is the part of the signal that is used to test the model's performance. The variable test is used to store the test set, which is
+>The variable graph is a list of dictionaries. Each dictionary represents a node in the graph and contains the node's ID and its neighbors. The neighbors are represented as a list of tuples, where each tuple contains the ID of the neighbor and the weight of the edge connecting the two nodes.
+- signal:<br>
+>It is a function that takes a graph and a group as input and returns a signal object. The signal object contains the signal values for each node in the group, as well as the signal values for each edge in the graph. The signal values are calculated using the pg.to_signal function, which takes the graph and group as input and returns a signal object. The signal object contains the signal values for each node in the group, as well as the signal values for each edge in the graph. The signal values are calculated using the pg.to_signal function, which takes the graph and group as input
+- group:<br>
+>The variable group is a list of two variables, the first one is a list of nodes and the second one is a list of edges. The nodes are represented as strings and the edges are represented as tuples of two strings. The variable group is used to represent the graph structure of the dataset.
 - train:<br>
->It is a variable that is used to calculate the area under the curve of the ROC curve. The ROC curve is a plot of the true positive rate (TPR) against the false positive rate (FPR) at different thresholds for the classifier. The AUC is a measure of the area under the ROC curve, and it is used to evaluate the performance of a classifier. The train variable is used to calculate the AUC for the test data, which is the data that is used to evaluate the performance of the classifier. The AUC is a measure of the classifier's ability to
-- u:<br>
->u is a key in the dictionary p. It is the name of the user.
-- v:<br>
->The variable v is a dictionary that contains the degree of each node in the graph G. The degree of a node is the number of edges connected to it. The value of each key in the dictionary is the square root of the degree of the corresponding node. This is done to make the values of the dictionary more manageable and easier to work with. The role of this variable is to provide a measure of the connectivity of each node in the graph, which can be used to identify nodes that are more central in the network.
-- len:<br>
->len is a built-in function in python which returns the length of an object. In this case, it is used to calculate the number of neighbors of each node in the graph. The result is then used to calculate the degree of each node in the graph.
-- float:<br>
->float is a data type that represents floating-point numbers. It is used to represent numbers that have a fractional part. For example, 3.14 is a float value.
-- degv:<br>
->degv is a dictionary that contains the degree of each node in the graph G. The degree of a node is the number of edges that are incident to that node. The value of each key in the dictionary is the square root of the degree of the corresponding node. This is done to ensure that the values in the dictionary are non-negative. The square root is used because it is easier to work with than the actual degree. The square root of a number is always positive, so it is a good choice for a value in
-- G:<br>
->G is a graph object that represents a social network. It is used to visualize the network using d3.js library. The nodes of the graph are represented by the vertices and the edges are represented by the edges. The nodes are colored based on their color intensity which is calculated using the normalized prior ranks. The links between the nodes are represented by the edges.
+>It is a list of tuples, each tuple contains a pair of (word, score) where score is the probability of the word being a positive review.
+- test:<br>
+>It is a variable that contains the test data. It is used to calculate the AUC score. The AUC score is a measure of the accuracy of a model in predicting whether a given data point belongs to the positive class or not. The test data is used to evaluate the performance of the model on unseen data.
+- split:<br>
+>Split is a variable that is used to separate the dataset into two parts, train and test. The train part is used to train the model and the test part is used to evaluate the model's performance. The split variable is used to split the dataset into two parts, where the first part is used for training and the second part is used for testing. The split variable is used to split the dataset into two parts, where the first part is used for training and the second part is used for testing. The split variable is used to split the dataset into two parts, where the first part
 - degu:<br>
->degu is a dictionary that contains the degree of each node in the graph. The degree of a node is the number of edges that are incident on that node. The degree of a node is a measure of the connectivity of the node in the graph. The degree of a node is also a measure of the importance of the node in the graph. The degree of a node is used to calculate the centrality of the node in the graph. The degree of a node is also used to calculate the betweenness centrality of the
+>degu is a dictionary that contains the degree of each node in the graph G. The degree of a node is the number of edges that are incident to that node. The value of each key in the dictionary is the square root of the degree of the corresponding node. This is done to ensure that the values in the dictionary are non-negative.
+- G:<br>
+>The variable G is a graph object that represents the network of interactions between the nodes in the system. It contains information about the edges between the nodes, such as the weight of each edge, the direction of the edge, and any additional properties associated with the edge. The variable G is used to calculate the rank of each node in the network, which is a measure of the importance of each
+- len:<br>
+>len is a function that returns the length of a sequence. In this case, it is the number of nodes in the graph G. It is used to calculate the mean square error (msq) which is used to determine when the algorithm has converged.
+- float:<br>
+>float is a data type that represents a floating-point number. It is a decimal number that can be represented with a fixed number of digits after the decimal point. The variable float is used to store a floating-point number in the script. It is used to calculate the degree of each node in the graph and to calculate the degree of each node in the graph with the symmetric degree. The variable float is used to store the result of the calculation and is used to calculate the degree of each node in the graph with the symmetric degree. The variable
+- u:<br>
+>u is a variable that stores the degree of each node in the graph G. It is calculated by taking the square root of the number of neighbors for each node in the graph. This is done to make the values more manageable and easier to work with in the script. The script uses the built-in function len() to count the number of neighbors for each node and then takes the square root of the result to get the degree of each node. This is done for both the original graph G and the graph G with the degree of each node
+- v:<br>
+>v is a variable that is used to store the degree of a node in the graph.
 - list:<br>
->degv is a dictionary that contains the degree of each vertex in the graph.
-- custom:<br>
->The variable custom is a CustomClassifier object. It is used to store the trained model of the custom classifier. If the file path specified in the if statement is a file, then the custom classifier is loaded from the file. Otherwise, a new custom classifier is created and trained using the given training data. The custom classifier is then stored in the file specified by the path variable.
-- path:<br>
->The variable path is a string that represents the path to a file on the file system. It is used to load or save data to or from a file. The variable path is a string that represents the path to a file on the file system. It is used to load or save data to or from a file.
+>degv
 - pickle:<br>
->pickle is a module in python which is used to serialize or de-serialize python objects. It is used to save the state of an object in a file. It is a binary format which can be used to save the state of an object in a file. It is a binary format which can be used to save the state of an object in a file. It is a binary format which can be used to save the state of an object in a file. It is a binary format which can be used to save the state of an object in a file. It is
+>It is a module that is used to serialize and deserialize Python objects. It is used to store the data in a binary format. It is used to store the data in a binary format. It is used to store the data in a binary format. It is used to store the data in a binary format. It is used to store the data in a binary format. It is used to store the data in a binary format. It is used to store the data in a binary format. It is used to store the data in a binary format. It is used to store the data
+- custom:<br>
+>The variable custom is used to store the trained machine learning model. It is created as an instance of the CustomClassifier class, which is a custom machine learning model that is trained on the given data. If the file path provided exists, the model is loaded from the file. Otherwise, the model is trained and saved to the file. This allows the model to be loaded and used later in the script.
+- path:<br>
+>path is a string variable that is used to store the path of the file where the pickle file is to be saved.
 ## Synthesis Blocks
 ### notebooks/pygrank_snippets.ipynb
 CONTEXT: def algorithm_comparison(): COMMENT: split signal to training and test subsets
 ```python
-split = pg.split(signal)
-train = split[0]
-test = split[1]
+['s', 'p', 'l', 'i', 't', ' ', '=', ' ', 'p', 'g', '.', 's', 'p', 'l', 'i', 't', '(', 's', 'i', 'g', 'n', 'a', 'l', ')', '\n', 't', 'r', 'a', 'i', 'n', ' ', '=', ' ', 's', 'p', 'l', 'i', 't', '[', '0', ']', '\n', 't', 'e', 's', 't', ' ', '=', ' ', 's', 'p', 'l', 'i', 't', '[', '1', ']']
 ```
 
 ### notebooks/pygrank_snippets.ipynb
 CONTEXT: def algorithm_comparison(): COMMENT: convert group to graph signal
 ```python
-signal = pg.to_signal(graph, group)
+['s', 'i', 'g', 'n', 'a', 'l', ' ', '=', ' ', 'p', 'g', '.', 't', 'o', '_', 's', 'i', 'g', 'n', 'a', 'l', '(', 'g', 'r', 'a', 'p', 'h', ',', ' ', 'g', 'r', 'o', 'u', 'p', ')']
 ```
 
 ### notebooks/example_more.ipynb
 CONTEXT: def load_custom_model(path, CustomClassifier, x, y): COMMENT: save
 ```python
-pickle.dump(custom, path)
+['p', 'i', 'c', 'k', 'l', 'e', '.', 'd', 'u', 'm', 'p', '(', 'c', 'u', 's', 't', 'o', 'm', ',', ' ', 'p', 'a', 't', 'h', ')']
 ```
 
 ### notebooks/example_more.ipynb
 CONTEXT: def pagerank_fast(G, prior_ranks, a, msq_error, order): COMMENT: calculate normalization parameters of symmetric Laplacian
 ```python
-degv = {v : float(len(list(G.neighbors(v))))**0.5 for v in G.nodes()}
-degu = {u : float(len(list(G.neighbors(u))))**0.5 for u in G.nodes()}
+['d', 'e', 'g', 'v', ' ', '=', ' ', '{', 'v', ' ', ':', ' ', 'f', 'l', 'o', 'a', 't', '(', 'l', 'e', 'n', '(', 'l', 'i', 's', 't', '(', 'G', '.', 'n', 'e', 'i', 'g', 'h', 'b', 'o', 'r', 's', '(', 'v', ')', ')', ')', ')', '*', '*', '0', '.', '5', ' ', 'f', 'o', 'r', ' ', 'v', ' ', 'i', 'n', ' ', 'G', '.', 'n', 'o', 'd', 'e', 's', '(', ')', '}', '\n', 'd', 'e', 'g', 'u', ' ', '=', ' ', '{', 'u', ' ', ':', ' ', 'f', 'l', 'o', 'a', 't', '(', 'l', 'e', 'n', '(', 'l', 'i', 's', 't', '(', 'G', '.', 'n', 'e', 'i', 'g', 'h', 'b', 'o', 'r', 's', '(', 'u', ')', ')', ')', ')', '*', '*', '0', '.', '5', ' ', 'f', 'o', 'r', ' ', 'u', ' ', 'i', 'n', ' ', 'G', '.', 'n', 'o', 'd', 'e', 's', '(', ')', '}']
 ```
 
 ## Code Concatenation
 ```python
-split = pg.split(signal)
-train = split[0]
-test = split[1]
-signal = pg.to_signal(graph, group)
-pickle.dump(custom, path)
-degv = {v : float(len(list(G.neighbors(v))))**0.5 for v in G.nodes()}
-degu = {u : float(len(list(G.neighbors(u))))**0.5 for u in G.nodes()}
+['s', 'p', 'l', 'i', 't', ' ', '=', ' ', 'p', 'g', '.', 's', 'p', 'l', 'i', 't', '(', 's', 'i', 'g', 'n', 'a', 'l', ')', '\n', 't', 'r', 'a', 'i', 'n', ' ', '=', ' ', 's', 'p', 'l', 'i', 't', '[', '0', ']', '\n', 't', 'e', 's', 't', ' ', '=', ' ', 's', 'p', 'l', 'i', 't', '[', '1', ']']
+['s', 'i', 'g', 'n', 'a', 'l', ' ', '=', ' ', 'p', 'g', '.', 't', 'o', '_', 's', 'i', 'g', 'n', 'a', 'l', '(', 'g', 'r', 'a', 'p', 'h', ',', ' ', 'g', 'r', 'o', 'u', 'p', ')']
+['p', 'i', 'c', 'k', 'l', 'e', '.', 'd', 'u', 'm', 'p', '(', 'c', 'u', 's', 't', 'o', 'm', ',', ' ', 'p', 'a', 't', 'h', ')']
+['d', 'e', 'g', 'v', ' ', '=', ' ', '{', 'v', ' ', ':', ' ', 'f', 'l', 'o', 'a', 't', '(', 'l', 'e', 'n', '(', 'l', 'i', 's', 't', '(', 'G', '.', 'n', 'e', 'i', 'g', 'h', 'b', 'o', 'r', 's', '(', 'v', ')', ')', ')', ')', '*', '*', '0', '.', '5', ' ', 'f', 'o', 'r', ' ', 'v', ' ', 'i', 'n', ' ', 'G', '.', 'n', 'o', 'd', 'e', 's', '(', ')', '}', '\n', 'd', 'e', 'g', 'u', ' ', '=', ' ', '{', 'u', ' ', ':', ' ', 'f', 'l', 'o', 'a', 't', '(', 'l', 'e', 'n', '(', 'l', 'i', 's', 't', '(', 'G', '.', 'n', 'e', 'i', 'g', 'h', 'b', 'o', 'r', 's', '(', 'u', ')', ')', ')', ')', '*', '*', '0', '.', '5', ' ', 'f', 'o', 'r', ' ', 'u', ' ', 'i', 'n', ' ', 'G', '.', 'n', 'o', 'd', 'e', 's', '(', ')', '}']
 ```

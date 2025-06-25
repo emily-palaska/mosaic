@@ -1,4 +1,4 @@
-# String Code Synthesis
+# Random Code Synthesis
 Query `Create a regression model.`
 ## Script Variables
 - model:<br>
@@ -12,7 +12,28 @@ CONTEXT: def train_lr(x_train, y_train, preprocessing="normalize"): COMMENT: cre
 model = LogisticRegression()
 ```
 
+### notebooks/example_more.ipynb
+CONTEXT: def train_lr(x_train, y_train, preprocessing="normalize"): COMMENT: create a logistic regression model
+```python
+model = LogisticRegression()
+```
+
+### notebooks/example_more.ipynb
+CONTEXT: def train_lr(x_train, y_train, preprocessing="normalize"): COMMENT: create a logistic regression model
+```python
+model = LogisticRegression()
+```
+
+### notebooks/example_more.ipynb
+CONTEXT: def train_lr(x_train, y_train, preprocessing="normalize"): COMMENT: create a logistic regression model
+```python
+model = LogisticRegression()
+```
+
 ## Code Concatenation
 ```python
+model = LogisticRegression()
+model = LogisticRegression()
+model = LogisticRegression()
 model = LogisticRegression()
 ```

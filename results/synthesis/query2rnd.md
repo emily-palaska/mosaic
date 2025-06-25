@@ -1,4 +1,4 @@
-# String Code Synthesis
+# Random Code Synthesis
 Query `Graph operations`
 ## Script Variables
 - pg:<br>
@@ -16,7 +16,21 @@ CONTEXT: def algorithm_comparison(): COMMENT: convert group to graph signal
 signal = pg.to_signal(graph, group)
 ```
 
+### notebooks/pygrank_snippets.ipynb
+CONTEXT: def algorithm_comparison(): COMMENT: convert group to graph signal
+```python
+signal = pg.to_signal(graph, group)
+```
+
+### notebooks/pygrank_snippets.ipynb
+CONTEXT: def algorithm_comparison(): COMMENT: convert group to graph signal
+```python
+signal = pg.to_signal(graph, group)
+```
+
 ## Code Concatenation
 ```python
+signal = pg.to_signal(graph, group)
+signal = pg.to_signal(graph, group)
 signal = pg.to_signal(graph, group)
 ```
