@@ -43,8 +43,7 @@ class LLM:
         inputs = self.tokenizer(prompt, return_tensors="pt").to(self.device)
         outputs = self.model.generate(
             inputs["input_ids"],
-            min_length=len(prompt.split()) * 2,
-            max_length=len(prompt.split()) * 2 + 100,
+            max_new_tokens=20,
             temperature=0.3,
             top_p=0.9,
             attention_mask=inputs["attention_mask"],

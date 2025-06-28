@@ -1,40 +1,147 @@
 # Embedding Code Synthesis
-Query `Initialize a logistic regression model. Use standardization on training inputs. Train the model.`
+Query `Create classifiers with different types and names. Compare the classifiers and plot them.`
 ## Script Variables
-- model:<br>
->The variable model is a logistic regression model that is trained on the training data. The model is used to predict the probability of a given observation being a member of a particular class. The model is trained using the training data and the training labels. The model is then used to predict the probability of a given observation being a member of a particular class. The model is used to make predictions on the test data and the test labels. The model is evaluated using the test labels and the test accuracy is calculated. The model is then used to make predictions on the test data and the test labels
-- LogisticRegression:<br>
->LogisticRegression is a machine learning algorithm that is used for classification problems. It is a supervised learning algorithm that uses a logistic function to map the input data to the output data. The logistic function is a sigmoid function that maps the input data to the probability of the output data. The output data is a binary value (0 or 1) that indicates whether the input data belongs to the positive or negative class. The logistic regression algorithm uses a set of weights and biases to map the input data to the output data. The weights and biases are learned from the training data using
-- x_train:<br>
->x_train is a numpy array of size (n_samples, n_features) containing the training data. The values of x_train are the features of the training data. The values of y_train are the labels of the training data.
+- axes:<br>
+>The axes variable is used to create a grid of axes in a figure. It is a list of
+- name:<br>
+>max_class_disp
+- classifier_idx:<br>
+>It is a variable that represents the classifier used to generate the decision boundary display. In this case,
+- classifier:<br>
+>The variable classifier is a machine learning algorithm that is used to classify data into different categories. It is
+- fig:<br>
+>fig is a variable that is used to store the figure object that is created by the script. It
+- classifiers:<br>
+>The variable classifiers are used to determine the number of classifiers to be used in the script. They are
+- y_unique:<br>
+>y_unique is a list of unique values in the y_test variable. It is used to create a
+- plt:<br>
+>plt is a Python library that provides a wide range of plotting functions and tools for creating and customizing
+- X_train:<br>
+>X_train is a numpy array of shape (n_samples, n_features) containing the training data.
+- y_test:<br>
+>y_test is the test set of Iris flower data. It contains the target values of the test set
+- levels:<br>
+>levels
+- X_test:<br>
+>The variable X_test is a test dataset that is used to evaluate the performance of the model. It
 - y_train:<br>
->It is a list of integers that represents the labels of the training data.
-- preprocessing:<br>
->The preprocessing variable is used to normalize the data. It is used to remove the outliers and to make the data more robust. The data is normalized by subtracting the mean and dividing by the standard deviation. This helps to reduce the impact of outliers and to make the data more robust. The normalization process is done before the data is used for training the model.
+>It is a target variable that contains the species of the iris flower. It is used to split the
+- iris:<br>
+>It is a dataset that contains information about the iris flowers. It has 3 classes of iris flowers
+- len:<br>
+>len is a variable that is used to count the number of elements in a list or tuple. It
+- y_pred:<br>
+>The variable y_pred is a prediction of the output of the model. It is used to determine the
+- n_classifiers:<br>
+>n_classifiers is the number of classifiers used in the script. It is used to determine the number
+- evaluation_results:<br>
+>It is a pandas DataFrame object that contains the evaluation results of the model. The columns of the DataFrame
 ## Synthesis Blocks
-### notebooks/example_more.ipynb
-CONTEXT: def train_lr(x_train, y_train, preprocessing="normalize"): COMMENT: create a logistic regression model
+### notebooks/plot_classification_probability.ipynb
+CONTEXT:  Plotting the decision boundaries  For each classifier, we plot the per-class probabilities on the first three columns and the probabilities
+of the most likely class on the last column.   COMMENT: Ensure legend not cut off
 ```python
-model = LogisticRegression()
+mpl.rcParams["savefig.bbox"] = "tight"
+fig, axes = plt.subplots(
+    nrows=n_classifiers,
+    ncols=len(iris.target_names) + 1,
+    figsize=(4 * 2.2, n_classifiers * 2.2),
+)
+evaluation_results = []
+levels = 100
+for classifier_idx, (name, classifier) in enumerate(classifiers.items()):
+    y_pred = classifier.fit(X_train, y_train).predict(X_test)
+    y_pred_proba = classifier.predict_proba(X_test)
+    accuracy_test = accuracy_score(y_test, y_pred)
+    roc_auc_test = roc_auc_score(y_test, y_pred_proba, multi_class="ovr")
+    log_loss_test = log_loss(y_test, y_pred_proba)
+    evaluation_results.append(
+        {
+            "name": name.replace("\n", " "),
+            "accuracy": accuracy_test,
+            "roc_auc": roc_auc_test,
+            "log_loss": log_loss_test,
+        }
+    )
+    for name in y_unique:
 ```
 
-### notebooks/example_more.ipynb
-CONTEXT: def train_lr(x_train, y_train, preprocessing="normalize"): COMMENT: Standardize training data
+### notebooks/plot_classification_probability.ipynb
+CONTEXT:  Plotting the decision boundaries  For each classifier, we plot the per-class probabilities on the first three columns and the probabilities
+of the most likely class on the last column.   COMMENT: Ensure legend not cut off
 ```python
-if preprocessing == "standardize":
-    x_train = (x_train - x_train.mean(axis=0)) / (x_train.std(axis=0))
-```
-
-### notebooks/example_more.ipynb
-CONTEXT: def train_lr(x_train, y_train, preprocessing="normalize"): COMMENT: train
-```python
-model.train(x_train, y_train)
+mpl.rcParams["savefig.bbox"] = "tight"
+fig, axes = plt.subplots(
+    nrows=n_classifiers,
+    ncols=len(iris.target_names) + 1,
+    figsize=(4 * 2.2, n_classifiers * 2.2),
+)
+evaluation_results = []
+levels = 100
+for classifier_idx, (name, classifier) in enumerate(classifiers.items()):
+    y_pred = classifier.fit(X_train, y_train).predict(X_test)
+    y_pred_proba = classifier.predict_proba(X_test)
+    accuracy_test = accuracy_score(y_test, y_pred)
+    roc_auc_test = roc_auc_score(y_test, y_pred_proba, multi_class="ovr")
+    log_loss_test = log_loss(y_test, y_pred_proba)
+    evaluation_results.append(
+        {
+            "name": name.replace("\n", " "),
+            "accuracy": accuracy_test,
+            "roc_auc": roc_auc_test,
+            "log_loss": log_loss_test,
+        }
+    )
+    for name in y_unique:
 ```
 
 ## Code Concatenation
 ```python
-model = LogisticRegression()
-if preprocessing == "standardize":
-    x_train = (x_train - x_train.mean(axis=0)) / (x_train.std(axis=0))
-model.train(x_train, y_train)
+mpl.rcParams["savefig.bbox"] = "tight"
+fig, axes = plt.subplots(
+    nrows=n_classifiers,
+    ncols=len(iris.target_names) + 1,
+    figsize=(4 * 2.2, n_classifiers * 2.2),
+)
+evaluation_results = []
+levels = 100
+for classifier_idx, (name, classifier) in enumerate(classifiers.items()):
+    y_pred = classifier.fit(X_train, y_train).predict(X_test)
+    y_pred_proba = classifier.predict_proba(X_test)
+    accuracy_test = accuracy_score(y_test, y_pred)
+    roc_auc_test = roc_auc_score(y_test, y_pred_proba, multi_class="ovr")
+    log_loss_test = log_loss(y_test, y_pred_proba)
+    evaluation_results.append(
+        {
+            "name": name.replace("\n", " "),
+            "accuracy": accuracy_test,
+            "roc_auc": roc_auc_test,
+            "log_loss": log_loss_test,
+        }
+    )
+    for name in y_unique:
+mpl.rcParams["savefig.bbox"] = "tight"
+fig, axes = plt.subplots(
+    nrows=n_classifiers,
+    ncols=len(iris.target_names) + 1,
+    figsize=(4 * 2.2, n_classifiers * 2.2),
+)
+evaluation_results = []
+levels = 100
+for classifier_idx, (name, classifier) in enumerate(classifiers.items()):
+    y_pred = classifier.fit(X_train, y_train).predict(X_test)
+    y_pred_proba = classifier.predict_proba(X_test)
+    accuracy_test = accuracy_score(y_test, y_pred)
+    roc_auc_test = roc_auc_score(y_test, y_pred_proba, multi_class="ovr")
+    log_loss_test = log_loss(y_test, y_pred_proba)
+    evaluation_results.append(
+        {
+            "name": name.replace("\n", " "),
+            "accuracy": accuracy_test,
+            "roc_auc": roc_auc_test,
+            "log_loss": log_loss_test,
+        }
+    )
+    for name in y_unique:
 ```

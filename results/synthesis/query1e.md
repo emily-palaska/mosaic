@@ -1,67 +1,318 @@
 # Embedding Code Synthesis
-Query `Create a regression model.`
+Query `Initialize a logistic regression model. Use standardization on training inputs. Train the model.`
 ## Script Variables
-- model:<br>
->The variable model is a logistic regression model that is trained on the training data. The model is used to predict the probability of a given observation being a member of a particular class. The model is trained using the training data and the training labels. The model is then used to predict the probability of a given observation being a member of a particular class. The model is used to make predictions on the test data and the test labels. The model is evaluated using the test labels and the test accuracy is calculated. The model is then used to make predictions on the test data and the test labels
+- RBF:<br>
+>RBF stands for Radial Basis Function. It is a kernel function used in Gaussian Process Classifier.
+- PolynomialFeatures:<br>
+>PolynomialFeatures is a class that takes in a dataset and transforms it into a new dataset with polynomial
+- Nystroem:<br>
+>Nystroem is a kernel-based method that is used to transform the input data into a high
+- classifiers:<br>
+>The variable classifiers are used to determine the best fit for the data. They are used to create a
+- GaussianProcessClassifier:<br>
+>GaussianProcessClassifier is a classifier that uses Gaussian processes to model the probability distribution of the data.
 - LogisticRegression:<br>
->LogisticRegression is a machine learning algorithm that is used for classification problems. It is a supervised learning algorithm that uses a logistic function to map the input data to the output data. The logistic function is a sigmoid function that maps the input data to the probability of the output data. The output data is a binary value (0 or 1) that indicates whether the input data belongs to the positive or negative class. The logistic regression algorithm uses a set of weights and biases to map the input data to the output data. The weights and biases are learned from the training data using
-- preprocessing:<br>
->The preprocessing variable is used to normalize the data. It is used to remove the outliers and to make the data more robust. The data is normalized by subtracting the mean and dividing by the standard deviation. This helps to reduce the impact of outliers and to make the data more robust. The normalization process is done before the data is used for training the model.
-- x_test:<br>
->x_test is a numpy array of shape (10000, 784) containing the test data.
-- y_hat:<br>
->The variable y_hat is the predicted probability of the target variable (y) given the input features (x). It is a 2D array with the same shape as the input data (x_test). The first dimension represents the number of samples and the second dimension represents the number of classes. The value of each element in the array is a probability between 0 and 1, which represents the likelihood that the corresponding sample belongs to the corresponding class. The model uses the input data (x_test) to calculate the predicted probabilities (y_hat) and then returns them as
-- x_train:<br>
->x_train is a numpy array of size (n_samples, n_features) containing the training data. The values of x_train are the features of the training data. The values of y_train are the labels of the training data.
-- y_train:<br>
->It is a list of integers that represents the labels of the training data.
+>Logistic regression is a supervised machine learning algorithm that is used for classification problems. It is a type
+- HistGradientBoostingClassifier:<br>
+>HistGradientBoostingClassifier is a machine learning algorithm that uses a gradient boosting technique to fit a history
+- KBinsDiscretizer:<br>
+>KBinsDiscretizer is a class that is used to discretize continuous features into a fixed number
+- make_pipeline:<br>
+>The variable make_pipeline is a function that takes in a list of classifiers and returns a pipeline object that
+- SplineTransformer:<br>
+>SplineTransformer is a class that transforms the input data into a new representation using splines. It
+- ListedColormap:<br>
+>ListedColormap is a class that defines a colormap with a list of colors. It is used
+- GaussianNB:<br>
+>GaussianNB is a naive Bayes classifier that assumes that the presence of a feature in a class
+- make_circles:<br>
+>The make_circles function is used to generate a dataset with two features and two classes. The dataset
+- i:<br>
+>It is a variable that is used to iterate over the different datasets and classifiers. It is used to
+- DecisionTreeClassifier:<br>
+>DecisionTreeClassifier is a supervised learning algorithm that uses a decision tree to predict the output of a dataset
+- StandardScaler:<br>
+>StandardScaler is a class that is used to scale the features of a dataset. It is a pipeline
+- plt:<br>
+>plt is a Python library that provides a wide range of plotting functions and tools for creating and customizing
+- train_test_split:<br>
+>It is a function that splits the dataset into training and testing sets. The test_size parameter specifies the
+- make_moons:<br>
+>The make_moons function is used to create a dataset of two-dimensional data points that are generated by
+- RandomForestClassifier:<br>
+>RandomForestClassifier is a supervised learning algorithm that uses a decision tree ensemble to predict the class of an
+- y:<br>
+>The variable y is a numpy array containing the labels of the samples in the dataset. It is used
+- names:<br>
+>names
+- X:<br>
+>X is a matrix of 2 columns and 100 rows. The first column is the x-axis
+- datasets:<br>
+>The variable datasets are the input data that is used to train the machine learning models. They are used
+- rng:<br>
+>The variable rng is a random number generator that is used to generate random numbers for the script. It
+- DecisionBoundaryDisplay:<br>
+>DecisionBoundaryDisplay is a class that displays the decision boundary of a classifier. It is used to visualize
+- np:<br>
+>It is a python library that provides a wide range of mathematical functions and tools for scientific computing. It
+- figure:<br>
+>The variable figure is a matplotlib.pyplot object that is used to create a figure with a specific size.
+- make_classification:<br>
+>The make_classification function is a function in the sklearn.datasets module that generates a classification dataset. It takes
+- QuadraticDiscriminantAnalysis:<br>
+>QuadraticDiscriminantAnalysis is a classification algorithm that uses quadratic discriminant analysis to classify data points
+- MLPClassifier:<br>
+>The MLPClassifier is a classifier that uses a multilayer perceptron (MLP) for classification
+- AdaBoostClassifier:<br>
+>The AdaBoostClassifier is a machine learning algorithm that is used for classification problems. It is a combination
+- SVC:<br>
+>SVC is a classifier that uses a support vector machine to solve the classification problem. The SVC classifier
+- KNeighborsClassifier:<br>
+>KNeighborsClassifier is a classifier that uses a k-Nearest Neighbors algorithm to classify new data
+- linearly_separable:<br>
+>It is a tuple containing two numpy arrays, X and y. X is a 2D array
+- X_test:<br>
+>X_test is a test dataset that is used to evaluate the performance of the model on unseen data.
+- predicted:<br>
+>The variable predicted is a variable that is used to predict the output of the model. It is a
+- clf:<br>
+>clf is a classifier object which is used to predict the class of the test data.
+- disp:<br>
+>disp is a scalar map object that is used to create a colorbar for the surface plot. It
+- ax_single:<br>
+>It is a matplotlib Axes object that is used to create a colorbar for the figure. The color
+- fig:<br>
+>fig is a variable that is used to store the figure object that is created by the script. It
+- cm:<br>
+>cm is a scalar map that is used to represent the colorbar. It is used to represent the
+- _:<br>
+>The variable _ is used to store the color map for the probability class. It is used to create
+- n_train:<br>
+>n_train is the number of training samples used in the script. It is used to generate the training
+- n:<br>
+>n is the number of samples in the dataset.
 ## Synthesis Blocks
-### notebooks/example_more.ipynb
-CONTEXT: def train_lr(x_train, y_train, preprocessing="normalize"): COMMENT:
+### notebooks/plot_lda.ipynb
+CONTEXT:   Normal, Ledoit-Wolf and OAS Linear Discriminant Analysis for classification  This example illustrates how the Ledoit-Wolf and Oracle
+Approximating Shrinkage (OAS) estimators of covariance can improve classification.  COMMENT: samples for training
 ```python
-preprocessing = "normalize"
+n_train = 20
 ```
 
-### notebooks/example_more.ipynb
-CONTEXT: def train_lr(x_train, y_train, preprocessing="normalize"): COMMENT: create a logistic regression model
+### notebooks/dataset2/cross_decomposition/plot_compare_cross_decomposition.ipynb
+CONTEXT:   Compare cross decomposition methods  Simple usage of various cross decomposition algorithms:  - PLSCanonical - PLSRegression, with
+multivariate response, a.k.a. PLS2 - PLSRegression, with univariate response, a.k.a. PLS1 - CCA  Given 2 multivariate covarying two-dimensional
+datasets, X, and Y, PLS extracts the 'directions of covariance', i.e. the components of each datasets that explain the most shared variance between
+both datasets. This is apparent on the **scatterplot matrix** display: components 1 in dataset X and dataset Y are maximally correlated (points lie
+around the first diagonal). This is also true for components 2 in both dataset, however, the correlation across datasets for different components is
+weak: the point cloud is very spherical.  COMMENT: Authors: The scikit-learn developers SPDX-License-Identifier: BSD-3-Clause
 ```python
-model = LogisticRegression()
+import numpy as np
+n = 500
 ```
 
-### notebooks/example_more.ipynb
-CONTEXT: def test(x_train, y_train, x_test, y_test): COMMENT: Evaluate using test data
+### notebooks/plot_digits_classification.ipynb
+CONTEXT:  Classification  To apply a classifier on this data, we need to flatten the images, turning each 2-D array of grayscale values from shape
+``(8, 8)`` into shape ``(64,)``. Subsequently, the entire dataset will be of shape ``(n_samples, n_features)``, where ``n_samples`` is the number of
+images and ``n_features`` is the total number of pixels in each image.  We can then split the data into train and test subsets and fit a support
+vector classifier on the train samples. The fitted classifier can subsequently be used to predict the value of the digit for the samples in the test
+subset.   COMMENT: Predict the value of the digit on the test subset
 ```python
-y_hat = model.predict(x_test, probs=True)
+predicted = clf.predict(X_test)
 ```
 
-### notebooks/example_more.ipynb
-CONTEXT: def train_lr(x_train, y_train, preprocessing="normalize"): COMMENT: create a logistic regression model
+### notebooks/plot_classification_probability.ipynb
+CONTEXT:  Plotting the decision boundaries  For each classifier, we plot the per-class probabilities on the first three columns and the probabilities
+of the most likely class on the last column.   COMMENT: colorbar for single class plots
 ```python
-model = LogisticRegression()
+ax_single = fig.add_axes([0.15, 0.01, 0.5, 0.02])
+plt.title("Probability")
+_ = plt.colorbar(
+    cm.ScalarMappable(norm=None, cmap=disp.surface_.cmap),
+    cax=ax_single,
+    orientation="horizontal",
+)
 ```
 
-### notebooks/example_more.ipynb
-CONTEXT: def test(x_train, y_train, x_test, y_test): COMMENT:
+### notebooks/plot_classification_probability.ipynb
+CONTEXT:  Probabilistic classifiers  We will plot the decision boundaries of several classifiers that have a `predict_proba` method. This will allow
+us to visualize the uncertainty of the classifier in regions where it is not certain of its prediction.   COMMENT:
 ```python
-model = LogisticRegression()
-model.train(x_train, y_train)
+classifiers = {
+    "Logistic regression\n(C=0.01)": LogisticRegression(C=0.1),
+    "Logistic regression\n(C=1)": LogisticRegression(C=100),
+    "Gaussian Process": GaussianProcessClassifier(kernel=1.0 * RBF([1.0, 1.0])),
+    "Logistic regression\n(RBF features)": make_pipeline(
+        Nystroem(kernel="rbf", gamma=5e-1, n_components=50, random_state=1),
+        LogisticRegression(C=10),
+    ),
+    "Gradient Boosting": HistGradientBoostingClassifier(),
+    "Logistic regression\n(binned features)": make_pipeline(
+        KBinsDiscretizer(n_bins=5, quantile_method="averaged_inverted_cdf"),
+        PolynomialFeatures(interaction_only=True),
+        LogisticRegression(C=10),
+    ),
+    "Logistic regression\n(spline features)": make_pipeline(
+        SplineTransformer(n_knots=5),
+        PolynomialFeatures(interaction_only=True),
+        LogisticRegression(C=10),
+    ),
+}
 ```
 
-### notebooks/example_more.ipynb
-CONTEXT: def test(x_train, y_train, x_test, y_test): COMMENT:
+### notebooks/plot_classifier_comparison.ipynb
+CONTEXT:   Classifier comparison  A comparison of several classifiers in scikit-learn on synthetic datasets. The point of this example is to
+illustrate the nature of decision boundaries of different classifiers. This should be taken with a grain of salt, as the intuition conveyed by these
+examples does not necessarily carry over to real datasets.  Particularly in high-dimensional spaces, data can more easily be separated linearly and
+the simplicity of classifiers such as naive Bayes and linear SVMs might lead to better generalization than is achieved by other classifiers.  The
+plots show training points in solid colors and testing points semi-transparent. The lower right shows the classification accuracy on the test set.
+COMMENT: Authors: The scikit-learn developers SPDX-License-Identifier: BSD-3-Clause
 ```python
-model = LogisticRegression()
-model.train(x_train, y_train)
+import matplotlib.pyplot as plt
+import numpy as np
+from matplotlib.colors import ListedColormap
+from sklearn.datasets import make_circles, make_classification, make_moons
+from sklearn.discriminant_analysis import QuadraticDiscriminantAnalysis
+from sklearn.ensemble import AdaBoostClassifier, RandomForestClassifier
+from sklearn.gaussian_process import GaussianProcessClassifier
+from sklearn.gaussian_process.kernels import RBF
+from sklearn.inspection import DecisionBoundaryDisplay
+from sklearn.model_selection import train_test_split
+from sklearn.naive_bayes import GaussianNB
+from sklearn.neighbors import KNeighborsClassifier
+from sklearn.neural_network import MLPClassifier
+from sklearn.pipeline import make_pipeline
+from sklearn.preprocessing import StandardScaler
+from sklearn.svm import SVC
+from sklearn.tree import DecisionTreeClassifier
+names = [
+    "Nearest Neighbors",
+    "Linear SVM",
+    "RBF SVM",
+    "Gaussian Process",
+    "Decision Tree",
+    "Random Forest",
+    "Neural Net",
+    "AdaBoost",
+    "Naive Bayes",
+    "QDA",
+]
+classifiers = [
+    KNeighborsClassifier(3),
+    SVC(kernel="linear", C=0.025, random_state=42),
+    SVC(gamma=2, C=1, random_state=42),
+    GaussianProcessClassifier(1.0 * RBF(1.0), random_state=42),
+    DecisionTreeClassifier(max_depth=5, random_state=42),
+    RandomForestClassifier(
+        max_depth=5, n_estimators=10, max_features=1, random_state=42
+    ),
+    MLPClassifier(alpha=1, max_iter=1000, random_state=42),
+    AdaBoostClassifier(random_state=42),
+    GaussianNB(),
+    QuadraticDiscriminantAnalysis(),
+]
+X, y = make_classification(
+    n_features=2, n_redundant=0, n_informative=2, random_state=1, n_clusters_per_class=1
+)
+rng = np.random.RandomState(2)
+X += 2 * rng.uniform(size=X.shape)
+linearly_separable = (X, y)
+datasets = [
+    make_moons(noise=0.3, random_state=0),
+    make_circles(noise=0.2, factor=0.5, random_state=1),
+    linearly_separable,
+]
+figure = plt.figure(figsize=(27, 9))
+i = 1
 ```
 
 ## Code Concatenation
 ```python
-preprocessing = "normalize"
-model = LogisticRegression()
-y_hat = model.predict(x_test, probs=True)
-model = LogisticRegression()
-model = LogisticRegression()
-model.train(x_train, y_train)
-model = LogisticRegression()
-model.train(x_train, y_train)
+n_train = 20
+import numpy as np
+n = 500
+predicted = clf.predict(X_test)
+ax_single = fig.add_axes([0.15, 0.01, 0.5, 0.02])
+plt.title("Probability")
+_ = plt.colorbar(
+    cm.ScalarMappable(norm=None, cmap=disp.surface_.cmap),
+    cax=ax_single,
+    orientation="horizontal",
+)
+classifiers = {
+    "Logistic regression\n(C=0.01)": LogisticRegression(C=0.1),
+    "Logistic regression\n(C=1)": LogisticRegression(C=100),
+    "Gaussian Process": GaussianProcessClassifier(kernel=1.0 * RBF([1.0, 1.0])),
+    "Logistic regression\n(RBF features)": make_pipeline(
+        Nystroem(kernel="rbf", gamma=5e-1, n_components=50, random_state=1),
+        LogisticRegression(C=10),
+    ),
+    "Gradient Boosting": HistGradientBoostingClassifier(),
+    "Logistic regression\n(binned features)": make_pipeline(
+        KBinsDiscretizer(n_bins=5, quantile_method="averaged_inverted_cdf"),
+        PolynomialFeatures(interaction_only=True),
+        LogisticRegression(C=10),
+    ),
+    "Logistic regression\n(spline features)": make_pipeline(
+        SplineTransformer(n_knots=5),
+        PolynomialFeatures(interaction_only=True),
+        LogisticRegression(C=10),
+    ),
+}
+import matplotlib.pyplot as plt
+import numpy as np
+from matplotlib.colors import ListedColormap
+from sklearn.datasets import make_circles, make_classification, make_moons
+from sklearn.discriminant_analysis import QuadraticDiscriminantAnalysis
+from sklearn.ensemble import AdaBoostClassifier, RandomForestClassifier
+from sklearn.gaussian_process import GaussianProcessClassifier
+from sklearn.gaussian_process.kernels import RBF
+from sklearn.inspection import DecisionBoundaryDisplay
+from sklearn.model_selection import train_test_split
+from sklearn.naive_bayes import GaussianNB
+from sklearn.neighbors import KNeighborsClassifier
+from sklearn.neural_network import MLPClassifier
+from sklearn.pipeline import make_pipeline
+from sklearn.preprocessing import StandardScaler
+from sklearn.svm import SVC
+from sklearn.tree import DecisionTreeClassifier
+names = [
+    "Nearest Neighbors",
+    "Linear SVM",
+    "RBF SVM",
+    "Gaussian Process",
+    "Decision Tree",
+    "Random Forest",
+    "Neural Net",
+    "AdaBoost",
+    "Naive Bayes",
+    "QDA",
+]
+classifiers = [
+    KNeighborsClassifier(3),
+    SVC(kernel="linear", C=0.025, random_state=42),
+    SVC(gamma=2, C=1, random_state=42),
+    GaussianProcessClassifier(1.0 * RBF(1.0), random_state=42),
+    DecisionTreeClassifier(max_depth=5, random_state=42),
+    RandomForestClassifier(
+        max_depth=5, n_estimators=10, max_features=1, random_state=42
+    ),
+    MLPClassifier(alpha=1, max_iter=1000, random_state=42),
+    AdaBoostClassifier(random_state=42),
+    GaussianNB(),
+    QuadraticDiscriminantAnalysis(),
+]
+X, y = make_classification(
+    n_features=2, n_redundant=0, n_informative=2, random_state=1, n_clusters_per_class=1
+)
+rng = np.random.RandomState(2)
+X += 2 * rng.uniform(size=X.shape)
+linearly_separable = (X, y)
+datasets = [
+    make_moons(noise=0.3, random_state=0),
+    make_circles(noise=0.2, factor=0.5, random_state=1),
+    linearly_separable,
+]
+figure = plt.figure(figsize=(27, 9))
+i = 1
 ```

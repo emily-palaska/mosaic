@@ -1,75 +1,185 @@
 # Exhaustive Code Synthesis
-Query `Create a regression model.`
+Query `Initialize a logistic regression model. Use standardization on training inputs. Train the model.`
 ## Script Variables
-- model:<br>
->The variable model is a logistic regression model that is trained on the training data. The model is used to predict the probability of a given observation being a member of a particular class. The model is trained using the training data and the training labels. The model is then used to predict the probability of a given observation being a member of a particular class. The model is used to make predictions on the test data and the test labels. The model is evaluated using the test labels and the test accuracy is calculated. The model is then used to make predictions on the test data and the test labels
-- x_test:<br>
->x_test is a numpy array of shape (10000, 784) containing the test data.
-- y_hat:<br>
->The variable y_hat is the predicted probability of the target variable (y) given the input features (x). It is a 2D array with the same shape as the input data (x_test). The first dimension represents the number of samples and the second dimension represents the number of classes. The value of each element in the array is a probability between 0 and 1, which represents the likelihood that the corresponding sample belongs to the corresponding class. The model uses the input data (x_test) to calculate the predicted probabilities (y_hat) and then returns them as
-- signal:<br>
->It is a function that takes a graph and a group as input and returns a signal object. The signal object contains the signal values for each node in the group, as well as the signal values for each edge in the graph. The signal values are calculated using the pg.to_signal function, which takes the graph and group as input and returns a signal object. The signal object contains the signal values for each node in the group, as well as the signal values for each edge in the graph. The signal values are calculated using the pg.to_signal function, which takes the graph and group as input
-- algorithm:<br>
->The variable algorithm is a Python script that calculates the heat kernel for a given kernel. The heat kernel is a mathematical function that describes the rate of change of a function with respect to time. In this case, the heat kernel is used to calculate the rate of change of the function with respect to the kernel. The variable algorithm is used to calculate the heat kernel for a given kernel, and is used in many applications such as image processing, signal processing, and machine learning.
-- hk:<br>
->It is a variable that stores the rank of the highest scoring model in the training data. This variable is used to determine the best model to use for prediction.
+- len:<br>
+>len is a built-in function in Python that returns the length of an object. In this case,
+- metrics:<br>
+>The variable metrics is a function that calculates the classification report for a given classifier. It takes two arguments
+- y_pred:<br>
+>y_pred is a list of predicted labels for each sample in the dataset.
+- gt:<br>
+>The variable gt is used to represent the ground truth labels. It is a list of integers that represent
+- cm:<br>
+>cm is a colormap which is used to color the decision boundary of the classifier. It is a
+- y_true:<br>
+>It is a list that contains the true values of the labels of the test set.
 - print:<br>
->The variable print is a function that prints the output of the measure function, which is the rank of the train data set. The measure function is used to calculate the rank of the data set based on the given criteria. The rank is then used to determine the best model for the data set.
-- measure:<br>
->Measure is a variable that is used to rank the importance of each feature in a dataset. It is a measure of the predictive power of each feature in a dataset. It is used to rank the features based on their importance in predicting the target variable. It is calculated by taking the ratio of the variance of the feature to the variance of the target variable. The higher the value of the measure, the more important the feature is in predicting the target variable. It is used in machine learning algorithms such as decision trees, random forests, and gradient boosting to select the best features
-- train:<br>
->It is a list of tuples, each tuple contains a pair of (word, score) where score is the probability of the word being a positive review.
-- x_train:<br>
->x_train is a numpy array of size (n_samples, n_features) containing the training data. The values of x_train are the features of the training data. The values of y_train are the labels of the training data.
-- LogisticRegression:<br>
->LogisticRegression is a machine learning algorithm that is used for classification problems. It is a supervised learning algorithm that uses a logistic function to map the input data to the output data. The logistic function is a sigmoid function that maps the input data to the probability of the output data. The output data is a binary value (0 or 1) that indicates whether the input data belongs to the positive or negative class. The logistic regression algorithm uses a set of weights and biases to map the input data to the output data. The weights and biases are learned from the training data using
+>print() is a function that prints a string to the console. In this case, it is used
+- pred:<br>
+>pred is a variable that is used to store the predicted values from the confusion matrix. It is used
+- range:<br>
+>The range of the variable gt is from 0 to 4, which represents the four classes of
 - y_train:<br>
->It is a list of integers that represents the labels of the training data.
+>It is a variable that contains the labels of the training data. It is used to train the model
+- X_test:<br>
+>X_test is a test dataset that is used to evaluate the performance of the model on unseen data.
+- ax:<br>
+>ax is a scatter plot object. It is used to visualize the relationship between two variables. The first
+- X_train:<br>
+>X_train is a matrix of 400 rows and 2 columns. Each row represents a data point
+- i:<br>
+>It is a variable that is used to iterate over the different datasets and classifiers. It is used to
+- StandardScaler:<br>
+>StandardScaler is a class that is used to scale the features of a dataset. It is a pipeline
+- plt:<br>
+>plt is a python library used for plotting and graphing data. It is a part of the matplotlib
+- score:<br>
+>The score variable is used to measure the accuracy of the classifier. It is a floating-point number between
+- classifiers:<br>
+>The variable classifiers are used to determine the number of classifiers to be used in the script. They are
+- y_test:<br>
+>The variable y_test is a test set that is used to evaluate the performance of the model. It
+- clf:<br>
+>clf is a classifier object which is used to predict the class of the test data.
+- names:<br>
+>names
+- X:<br>
+>X is a matrix of 2 columns and 100 rows. The first column is the x-axis
+- zip:<br>
+>The zip() function in Python is used to create an iterator that aggregates elements from each of the iter
+- datasets:<br>
+>The variable datasets are the input data that is used to train the machine learning models. They are used
+- DecisionBoundaryDisplay:<br>
+>DecisionBoundaryDisplay is a class that displays the decision boundary of a classifier. It is used to visualize
+- name:<br>
+>The variable name is "name". It is a string that represents the name of the dataset.
+- make_pipeline:<br>
+>It is a function that takes in a list of classifiers and returns a pipeline object. The pipeline object
+- RBF:<br>
+>RBF is an acronym for Radial Basis Function. It is a kernel function that is used in
+- PolynomialFeatures:<br>
+>PolynomialFeatures is a class that takes in a dataset and transforms it into a new dataset with polynomial
+- Nystroem:<br>
+>Nystroem is a kernel-based method that is used to transform the input data into a high
+- GaussianProcessClassifier:<br>
+>The GaussianProcessClassifier is a machine learning classifier that uses Gaussian processes to make predictions. It is a
+- LogisticRegression:<br>
+>Logistic regression is a supervised machine learning algorithm that is used for classification problems. It is a type
+- HistGradientBoostingClassifier:<br>
+>HistGradientBoostingClassifier is a machine learning algorithm that uses a gradient boosting technique to fit a history
+- KBinsDiscretizer:<br>
+>KBinsDiscretizer is a class that is used to discretize continuous features into a fixed number
+- SplineTransformer:<br>
+>SplineTransformer is a class that transforms the input data into a new representation using splines. It
+- predicted:<br>
+>The variable predicted is a variable that is used to predict the output of the model. It is a
 ## Synthesis Blocks
-### notebooks/example_more.ipynb
-CONTEXT: def train_lr(x_train, y_train, preprocessing="normalize"): COMMENT: create a logistic regression model
+### notebooks/plot_digits_classification.ipynb
+CONTEXT:  Classification  To apply a classifier on this data, we need to flatten the images, turning each 2-D array of grayscale values from shape
+``(8, 8)`` into shape ``(64,)``. Subsequently, the entire dataset will be of shape ``(n_samples, n_features)``, where ``n_samples`` is the number of
+images and ``n_features`` is the total number of pixels in each image.  We can then split the data into train and test subsets and fit a support
+vector classifier on the train samples. The fitted classifier can subsequently be used to predict the value of the digit for the samples in the test
+subset.   COMMENT: Predict the value of the digit on the test subset
 ```python
-model = LogisticRegression()
+predicted = clf.predict(X_test)
 ```
 
-### notebooks/example_more.ipynb
-CONTEXT: def test(x_train, y_train, x_test, y_test): COMMENT: Evaluate using test data
+### notebooks/plot_digits_classification.ipynb
+CONTEXT: If the results from evaluating a classifier are stored in the form of a `confusion matrix <confusion_matrix>` and not in terms of `y_true`
+and `y_pred`, one can still build a :func:`~sklearn.metrics.classification_report` as follows:   COMMENT: For each cell in the confusion matrix, add
+the corresponding ground truths and predictions to the lists
 ```python
-y_hat = model.predict(x_test, probs=True)
+for gt in range(len(cm)):
+    for pred in range(len(cm)):
+        y_true += [gt] * cm[gt][pred]
+        y_pred += [pred] * cm[gt][pred]
+print(
+    "Classification report rebuilt from confusion matrix:\n"
+    f"{metrics.classification_report(y_true, y_pred)}\n"
+)
 ```
 
-### notebooks/pygrank_snippets.ipynb
-CONTEXT: def test_personalized_heatkernel(k=3): COMMENT: run the personalized version of the algorithm
+### notebooks/plot_classification_probability.ipynb
+CONTEXT:  Probabilistic classifiers  We will plot the decision boundaries of several classifiers that have a `predict_proba` method. This will allow
+us to visualize the uncertainty of the classifier in regions where it is not certain of its prediction.   COMMENT:
 ```python
-algorithm.rank(signal)
+classifiers = {
+    "Logistic regression\n(C=0.01)": LogisticRegression(C=0.1),
+    "Logistic regression\n(C=1)": LogisticRegression(C=100),
+    "Gaussian Process": GaussianProcessClassifier(kernel=1.0 * RBF([1.0, 1.0])),
+    "Logistic regression\n(RBF features)": make_pipeline(
+        Nystroem(kernel="rbf", gamma=5e-1, n_components=50, random_state=1),
+        LogisticRegression(C=10),
+    ),
+    "Gradient Boosting": HistGradientBoostingClassifier(),
+    "Logistic regression\n(binned features)": make_pipeline(
+        KBinsDiscretizer(n_bins=5, quantile_method="averaged_inverted_cdf"),
+        PolynomialFeatures(interaction_only=True),
+        LogisticRegression(C=10),
+    ),
+    "Logistic regression\n(spline features)": make_pipeline(
+        SplineTransformer(n_knots=5),
+        PolynomialFeatures(interaction_only=True),
+        LogisticRegression(C=10),
+    ),
+}
 ```
 
-### notebooks/example_more.ipynb
-CONTEXT: def train_lr(x_train, y_train, preprocessing="normalize"): COMMENT: train
+### notebooks/plot_classifier_comparison.ipynb
+CONTEXT:   Classifier comparison  A comparison of several classifiers in scikit-learn on synthetic datasets. The point of this example is to
+illustrate the nature of decision boundaries of different classifiers. This should be taken with a grain of salt, as the intuition conveyed by these
+examples does not necessarily carry over to real datasets.  Particularly in high-dimensional spaces, data can more easily be separated linearly and
+the simplicity of classifiers such as naive Bayes and linear SVMs might lead to better generalization than is achieved by other classifiers.  The
+plots show training points in solid colors and testing points semi-transparent. The lower right shows the classification accuracy on the test set.
+COMMENT: iterate over classifiers
 ```python
-model.train(x_train, y_train)
-```
-
-### notebooks/example_more.ipynb
-CONTEXT: def test(x_train, y_train, x_test, y_test): COMMENT:
-```python
-model = LogisticRegression()
-model.train(x_train, y_train)
-```
-
-### notebooks/pygrank_snippets.ipynb
-CONTEXT: def algorithm_comparison(): COMMENT: assess hk
-```python
-print(measure(hk.rank(train)))
+for name, clf in zip(names, classifiers):
+    ax = plt.subplot(len(datasets), len(classifiers) + 1, i)
+    clf = make_pipeline(StandardScaler(), clf)
+    clf.fit(X_train, y_train)
+    score = clf.score(X_test, y_test)
+    DecisionBoundaryDisplay.from_estimator(
+        clf, X, cmap=cm, alpha=0.8, ax=ax, eps=0.5
+    )
 ```
 
 ## Code Concatenation
 ```python
-model = LogisticRegression()
-y_hat = model.predict(x_test, probs=True)
-algorithm.rank(signal)
-model.train(x_train, y_train)
-model = LogisticRegression()
-model.train(x_train, y_train)
-print(measure(hk.rank(train)))
+predicted = clf.predict(X_test)
+for gt in range(len(cm)):
+    for pred in range(len(cm)):
+        y_true += [gt] * cm[gt][pred]
+        y_pred += [pred] * cm[gt][pred]
+print(
+    "Classification report rebuilt from confusion matrix:\n"
+    f"{metrics.classification_report(y_true, y_pred)}\n"
+)
+classifiers = {
+    "Logistic regression\n(C=0.01)": LogisticRegression(C=0.1),
+    "Logistic regression\n(C=1)": LogisticRegression(C=100),
+    "Gaussian Process": GaussianProcessClassifier(kernel=1.0 * RBF([1.0, 1.0])),
+    "Logistic regression\n(RBF features)": make_pipeline(
+        Nystroem(kernel="rbf", gamma=5e-1, n_components=50, random_state=1),
+        LogisticRegression(C=10),
+    ),
+    "Gradient Boosting": HistGradientBoostingClassifier(),
+    "Logistic regression\n(binned features)": make_pipeline(
+        KBinsDiscretizer(n_bins=5, quantile_method="averaged_inverted_cdf"),
+        PolynomialFeatures(interaction_only=True),
+        LogisticRegression(C=10),
+    ),
+    "Logistic regression\n(spline features)": make_pipeline(
+        SplineTransformer(n_knots=5),
+        PolynomialFeatures(interaction_only=True),
+        LogisticRegression(C=10),
+    ),
+}
+for name, clf in zip(names, classifiers):
+    ax = plt.subplot(len(datasets), len(classifiers) + 1, i)
+    clf = make_pipeline(StandardScaler(), clf)
+    clf.fit(X_train, y_train)
+    score = clf.score(X_test, y_test)
+    DecisionBoundaryDisplay.from_estimator(
+        clf, X, cmap=cm, alpha=0.8, ax=ax, eps=0.5
+    )
 ```

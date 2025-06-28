@@ -28,12 +28,14 @@ def norm_cos_sim(batch1, batch2=None, dtype=torch.float):
     cos_sim = dot / denom
     return (cos_sim + 1) / 2
 
+
 def variance(batch):
     assert batch.shape[0] != 1, "Expected batch of vectors, not singular vector"
     mean = torch.mean(batch, dim=0)
     squared_diffs = (batch - mean) ** 2
     var_per_dim = torch.mean(squared_diffs, dim=0)
     return torch.mean(var_per_dim)
+
 
 def plot_sim(sim_mat, path='../plots/similarity_matrix.png'):
     plt.figure()

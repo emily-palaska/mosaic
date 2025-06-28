@@ -28,6 +28,22 @@ class BlockManager:
             string += fill(dumps(var_dict, indent=2), 80) + '\n'
         return divider + string + divider
 
+    def __getitem__(self, index):
+        if isinstance(index, slice):
+            return BlockManager(
+                blocks=self.blocks[index],
+                labels=self.labels[index],
+                var_dicts=self.var_dicts[index],
+                source=self.sources[index] if isinstance(self.sources, list) else self.sources
+            )
+        else:
+            return BlockManager(
+                blocks=[self.blocks[index]],
+                labels=[self.labels[index]],
+                var_dicts=[self.var_dicts[index]],
+                source=[self.sources[index]] if isinstance(self.sources, list) else self.sources
+            )
+
     def set(self, blocks=None, labels=None, source=None, var_dicts=None):
         if blocks is not None: self.blocks = blocks
         if labels is not None: self.labels = labels

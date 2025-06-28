@@ -1,47 +1,44 @@
-from llm_blockmerger.core import dedent_blocks
+from llm_blockmerger.core import dedent_blocks, separate_lines
+
 
 def cell_content(nb):
-    lines, acc_md = [], []
+    cells, acc_md = [], []
     curr_md = ''
     for cell in nb.get('cells', []):
         if cell['cell_type'] == 'markdown':
             curr_md += ''.join(cell['source'])
 
         elif cell['cell_type'] == 'code':
-            lines.append(cell['source'])
-
+            cells.append(separate_lines(cell.get('source', "")))
             if curr_md:  md = curr_md.replace('#', '')
             elif acc_md: md = acc_md[-1]
             else: md = ''
             acc_md.append(md)
             curr_md = ''
+    return cells, acc_md
 
-    return lines, acc_md
 
-
-def generate_blocks(lines, acc_md):
+def generate_blocks(cells, acc_md):
+    assert len(cells) == len(acc_md), f"Invalid lengths {len(cells)} != {len(acc_md)}"
     blocks, labels = [], []
 
-    for md, section in zip(acc_md, lines):
+    for md, cell in zip(acc_md, cells):
         md_prefix = f'CONTEXT: {md}\nCOMMENT: ' if md else 'COMMENT: '
-        sections = _split_sections(section)
+        sections = _split_sections(cell)
 
         for func, lines in sections:
             sec_blocks, sec_labels = func(lines, md_prefix)
             sec_blocks = dedent_blocks(sec_blocks)
-            blocks.extend(sec_blocks)
+            blocks.extend(sec_blocks if isinstance(sec_blocks, list) else [sec_blocks])
             labels.extend(sec_labels)
     return blocks, labels
 
 
-def _split_sections(section):
+def _split_sections(cell):
     sections, curr_sec, types_stack = [], [], []
-    types = {
-        'func': func_section,
-        'main': main_section
-    }
+    types = {'func': func_section, 'main': main_section}
 
-    for line in section:
+    for line in cell:
         stripped = line.strip()
         if not stripped: continue
         curr_ind = len(line) - len(line.lstrip())
@@ -67,7 +64,7 @@ def _split_sections(section):
     return sections
 
 
-def func_section(lines, md_prefix):
+def func_section(lines, prefix):
     block_lines, comment_lines = [], []
 
     for line in lines:
@@ -75,37 +72,43 @@ def func_section(lines, md_prefix):
         if stripped.startswith('#'): comment_lines.append(stripped[1:].strip())
         else: block_lines.append(line)
 
-    return [''.join(block_lines)], [md_prefix + ' '.join(comment_lines)]
+    return [''.join(block_lines)], [prefix + ' '.join(comment_lines)]
 
 
-def main_section(sec_lines, md_prefix):
+def main_section(lines, prefix):
     blocks, labels = [], []
     curr_block, curr_comments = [], []
 
-    for line in sec_lines:
+    for line in lines:
         stripped = line.strip()
 
         # Handle side comments
         if '#' in line and not stripped.startswith('#'):
-            code_part, comment_part = line.var_split('#')
-            if code_part.strip():
-                blocks.append(code_part.rstrip())
-                labels.append(md_prefix + comment_part.strip())
-            line = code_part.rstrip() + '\n'
+            code, comment = side_comment(line)
+            if code.strip() and comment:
+                blocks.append(code.rstrip())
+                labels.append(prefix + comment.strip())
+            line = code.rstrip() + '\n'
             stripped = line.strip()
 
         # Handle full-line comments
         if stripped.startswith('#'):
             if curr_block:
-                blocks.append(''.join(curr_block))
-                labels.append(md_prefix + '\n'.join(curr_comments))
+                blocks.append(curr_block)
+                labels.append(prefix + '\n'.join(curr_comments))
                 curr_block, curr_comments = [], []
             curr_comments.append(stripped[1:].strip())
         else:
             curr_block.append(line)
 
-    if curr_block:
-        blocks.append(''.join(curr_block))
-        labels.append(md_prefix + '\n'.join(curr_comments))
+    if curr_block or curr_comments:
+        blocks.append(curr_block)
+        labels.append(prefix + '\n'.join(curr_comments))
     return blocks, labels
 
+def side_comment(line):
+    # This regex splits on '#' only if it's not inside quotes
+    import re
+    parts = re.split(r'#(?=(?:[^"\']*["\'][^"\']*["\'])*[^"\']*$)', line, maxsplit=1)
+    comment = parts[1].strip() if len(parts) > 1 else ''
+    return parts[0], comment

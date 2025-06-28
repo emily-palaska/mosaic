@@ -1,69 +1,330 @@
 # Embedding Code Synthesis
-Query `Graph operations`
+Query `Create a regression model.`
 ## Script Variables
-- pg:<br>
->pg is a variable that is used to split the dataset into training and testing sets. The dataset is split into two sets, one for training and one for testing. The training set is used to train the model, and the testing set is used to evaluate the model's performance. The split() function is used to split the dataset into two sets, and the pg variable is used to store the result of the split() function.
-- graph:<br>
->The variable graph is a list of dictionaries. Each dictionary represents a node in the graph and contains the node's ID and its neighbors. The neighbors are represented as a list of tuples, where each tuple contains the ID of the neighbor and the weight of the edge connecting the two nodes.
-- signal:<br>
->It is a function that takes a graph and a group as input and returns a signal object. The signal object contains the signal values for each node in the group, as well as the signal values for each edge in the graph. The signal values are calculated using the pg.to_signal function, which takes the graph and group as input and returns a signal object. The signal object contains the signal values for each node in the group, as well as the signal values for each edge in the graph. The signal values are calculated using the pg.to_signal function, which takes the graph and group as input
-- group:<br>
->The variable group is a list of two variables, the first one is a list of nodes and the second one is a list of edges. The nodes are represented as strings and the edges are represented as tuples of two strings. The variable group is used to represent the graph structure of the dataset.
-- train:<br>
->It is a list of tuples, each tuple contains a pair of (word, score) where score is the probability of the word being a positive review.
-- test:<br>
->It is a variable that contains the test data. It is used to calculate the AUC score. The AUC score is a measure of the accuracy of a model in predicting whether a given data point belongs to the positive class or not. The test data is used to evaluate the performance of the model on unseen data.
-- split:<br>
->Split is a variable that is used to separate the dataset into two parts, train and test. The train part is used to train the model and the test part is used to evaluate the model's performance. The split variable is used to split the dataset into two parts, where the first part is used for training and the second part is used for testing. The split variable is used to split the dataset into two parts, where the first part is used for training and the second part is used for testing. The split variable is used to split the dataset into two parts, where the first part
-- degu:<br>
->degu is a dictionary that contains the degree of each node in the graph G. The degree of a node is the number of edges that are incident to that node. The value of each key in the dictionary is the square root of the degree of the corresponding node. This is done to ensure that the values in the dictionary are non-negative.
-- G:<br>
->The variable G is a graph object that represents the network of interactions between the nodes in the system. It contains information about the edges between the nodes, such as the weight of each edge, the direction of the edge, and any additional properties associated with the edge. The variable G is used to calculate the rank of each node in the network, which is a measure of the importance of each
+- RBF:<br>
+>RBF is an acronym for Radial Basis Function. It is a kernel function that is used in
+- PolynomialFeatures:<br>
+>PolynomialFeatures is a class that takes in a dataset and transforms it into a new dataset with polynomial
+- Nystroem:<br>
+>Nystroem is a kernel-based method that is used to transform the input data into a high
+- classifiers:<br>
+>The variable classifiers are used to determine the number of classifiers to be used in the script. They are
+- GaussianProcessClassifier:<br>
+>The GaussianProcessClassifier is a machine learning classifier that uses Gaussian processes to make predictions. It is a
+- LogisticRegression:<br>
+>Logistic regression is a supervised machine learning algorithm that is used for classification problems. It is a type
+- HistGradientBoostingClassifier:<br>
+>HistGradientBoostingClassifier is a machine learning algorithm that uses a gradient boosting technique to fit a history
+- KBinsDiscretizer:<br>
+>KBinsDiscretizer is a class that is used to discretize continuous features into a fixed number
+- make_pipeline:<br>
+>It is a function that takes in a list of classifiers and returns a pipeline object. The pipeline object
+- SplineTransformer:<br>
+>SplineTransformer is a class that transforms the input data into a new representation using splines. It
+- train_test_split:<br>
+>train_test_split() is a function in scikit-learn that is used to split a dataset
+- pd:<br>
+>It is a module that provides a high-performance, easy-to-use data structure for tabular data.
+- DecisionBoundaryDisplay:<br>
+>The DecisionBoundaryDisplay class is a tool for visualizing the decision boundary of a classifier. It is
+- cm:<br>
+>cm is a scalar map that is used to represent the colorbar. It is used to represent the
+- plt:<br>
+>plt is a Python library that provides a wide range of plotting functions and tools for creating and customizing
+- datasets:<br>
+>iris
+- np:<br>
+>It is a python library that provides a wide range of mathematical functions and tools for scientific computing. It
+- X:<br>
+>X is a matrix of size n x 4, where n is the number of samples. Each
+- q:<br>
+>It is the number of components in the PLS regression model. The higher the value of q,
+- PLSRegression:<br>
+>PLSRegression is a class that implements Partial Least Squares (PLS) regression. It is
+- print:<br>
+>The print function is used to display the output of a Python script to the console. It is a
+- n:<br>
+>n is the number of samples in the dataset.
+- B:<br>
+>Variable B is a matrix of size (q, p) where q is the number of components and
+- Y:<br>
+>Y is a matrix of size n x q where n is the number of samples and q is the
+- pls2:<br>
+>pls2 is a variable that is used to predict the value of B in the equation y = mx
+- X_train_r:<br>
+>X_train_r is a matrix of reduced dimensionality that contains the principal components of the training data.
+- Y_train_r:<br>
+>Y_train_r is a matrix of dimension 1000 x 2 that contains the results of the
+- X_test_r:<br>
+>X_test_r is a matrix of the test data, which is used to calculate the correlation between the
+- Y_test_r:<br>
+>Y_test_r is the transformed version of the test data, which is the output of the PLSC
+- y:<br>
+>The variable y is the target variable in the script. It is used to predict the value of the
+- axes:<br>
+>The axes variable is used to create a grid of axes in a figure. It is a list of
+- name:<br>
+>max_class_disp
+- classifier_idx:<br>
+>It is a variable that represents the classifier used to generate the decision boundary display. In this case,
+- classifier:<br>
+>The variable classifier is a machine learning algorithm that is used to classify data into different categories. It is
+- fig:<br>
+>fig is a variable that is used to store the figure object that is created by the script. It
+- y_unique:<br>
+>y_unique is a list of unique values in the y_test variable. It is used to create a
+- X_train:<br>
+>X_train is a numpy array of shape (n_samples, n_features) containing the training data.
+- y_test:<br>
+>y_test is the test set of Iris flower data. It contains the target values of the test set
+- levels:<br>
+>levels
+- X_test:<br>
+>The variable X_test is a test dataset that is used to evaluate the performance of the model. It
+- y_train:<br>
+>It is a target variable that contains the species of the iris flower. It is used to split the
+- iris:<br>
+>It is a dataset that contains information about the iris flowers. It has 3 classes of iris flowers
 - len:<br>
->len is a function that returns the length of a sequence. In this case, it is the number of nodes in the graph G. It is used to calculate the mean square error (msq) which is used to determine when the algorithm has converged.
-- float:<br>
->float is a data type that represents a floating-point number. It is a decimal number that can be represented with a fixed number of digits after the decimal point. The variable float is used to store a floating-point number in the script. It is used to calculate the degree of each node in the graph and to calculate the degree of each node in the graph with the symmetric degree. The variable float is used to store the result of the calculation and is used to calculate the degree of each node in the graph with the symmetric degree. The variable
-- u:<br>
->u is a variable that stores the degree of each node in the graph G. It is calculated by taking the square root of the number of neighbors for each node in the graph. This is done to make the values more manageable and easier to work with in the script. The script uses the built-in function len() to count the number of neighbors for each node and then takes the square root of the result to get the degree of each node. This is done for both the original graph G and the graph G with the degree of each node
-- v:<br>
->v is a variable that is used to store the degree of a node in the graph.
-- list:<br>
->degv
-- pickle:<br>
->It is a module that is used to serialize and deserialize Python objects. It is used to store the data in a binary format. It is used to store the data in a binary format. It is used to store the data in a binary format. It is used to store the data in a binary format. It is used to store the data in a binary format. It is used to store the data in a binary format. It is used to store the data in a binary format. It is used to store the data in a binary format. It is used to store the data
-- custom:<br>
->The variable custom is used to store the trained machine learning model. It is created as an instance of the CustomClassifier class, which is a custom machine learning model that is trained on the given data. If the file path provided exists, the model is loaded from the file. Otherwise, the model is trained and saved to the file. This allows the model to be loaded and used later in the script.
-- path:<br>
->path is a string variable that is used to store the path of the file where the pickle file is to be saved.
+>len is a variable that is used to count the number of elements in a list or tuple. It
+- y_pred:<br>
+>The variable y_pred is a prediction of the output of the model. It is used to determine the
+- n_classifiers:<br>
+>n_classifiers is the number of classifiers used in the script. It is used to determine the number
+- evaluation_results:<br>
+>It is a pandas DataFrame object that contains the evaluation results of the model. The columns of the DataFrame
 ## Synthesis Blocks
-### notebooks/pygrank_snippets.ipynb
-CONTEXT: def algorithm_comparison(): COMMENT: split signal to training and test subsets
+### notebooks/plot_classification_probability.ipynb
+CONTEXT:   Plot classification probability  This example illustrates the use of :class:`sklearn.inspection.DecisionBoundaryDisplay` to plot the
+predicted class probabilities of various classifiers in a 2D feature space, mostly for didactic purposes.  The first three columns shows the predicted
+probability for varying values of the two features. Round markers represent the test data that was predicted to belong to that class.  In the last
+column, all three classes are represented on each plot; the class with the highest predicted probability at each point is plotted. The round markers
+show the test data and are colored by their true label. Authors: The scikit-learn developers SPDX-License-Identifier: BSD-3-Clause   COMMENT:
 ```python
-['s', 'p', 'l', 'i', 't', ' ', '=', ' ', 'p', 'g', '.', 's', 'p', 'l', 'i', 't', '(', 's', 'i', 'g', 'n', 'a', 'l', ')', '\n', 't', 'r', 'a', 'i', 'n', ' ', '=', ' ', 's', 'p', 'l', 'i', 't', '[', '0', ']', '\n', 't', 'e', 's', 't', ' ', '=', ' ', 's', 'p', 'l', 'i', 't', '[', '1', ']']
+import matplotlib as mpl
+import matplotlib.pyplot as plt
+import numpy as np
+import pandas as pd
+from matplotlib import cm
+from sklearn import datasets
+from sklearn.ensemble import HistGradientBoostingClassifier
+from sklearn.gaussian_process import GaussianProcessClassifier
+from sklearn.gaussian_process.kernels import RBF
+from sklearn.inspection import DecisionBoundaryDisplay
+from sklearn.kernel_approximation import Nystroem
+from sklearn.linear_model import LogisticRegression
+from sklearn.metrics import accuracy_score, log_loss, roc_auc_score
+from sklearn.model_selection import train_test_split
+from sklearn.pipeline import make_pipeline
+from sklearn.preprocessing import (
+    KBinsDiscretizer,
+    PolynomialFeatures,
+    SplineTransformer,
+)
 ```
 
-### notebooks/pygrank_snippets.ipynb
-CONTEXT: def algorithm_comparison(): COMMENT: convert group to graph signal
+### notebooks/dataset2/cross_decomposition/plot_compare_cross_decomposition.ipynb
+CONTEXT:   Compare cross decomposition methods  Simple usage of various cross decomposition algorithms:  - PLSCanonical - PLSRegression, with
+multivariate response, a.k.a. PLS2 - PLSRegression, with univariate response, a.k.a. PLS1 - CCA  Given 2 multivariate covarying two-dimensional
+datasets, X, and Y, PLS extracts the 'directions of covariance', i.e. the components of each datasets that explain the most shared variance between
+both datasets. This is apparent on the **scatterplot matrix** display: components 1 in dataset X and dataset Y are maximally correlated (points lie
+around the first diagonal). This is also true for components 2 in both dataset, however, the correlation across datasets for different components is
+weak: the point cloud is very spherical.  COMMENT: Authors: The scikit-learn developers SPDX-License-Identifier: BSD-3-Clause
 ```python
-['s', 'i', 'g', 'n', 'a', 'l', ' ', '=', ' ', 'p', 'g', '.', 't', 'o', '_', 's', 'i', 'g', 'n', 'a', 'l', '(', 'g', 'r', 'a', 'p', 'h', ',', ' ', 'g', 'r', 'o', 'u', 'p', ')']
+import numpy as np
+n = 500
 ```
 
-### notebooks/example_more.ipynb
-CONTEXT: def load_custom_model(path, CustomClassifier, x, y): COMMENT: save
+### notebooks/plot_classification_probability.ipynb
+CONTEXT:  Plotting the decision boundaries  For each classifier, we plot the per-class probabilities on the first three columns and the probabilities
+of the most likely class on the last column.   COMMENT: Ensure legend not cut off
 ```python
-['p', 'i', 'c', 'k', 'l', 'e', '.', 'd', 'u', 'm', 'p', '(', 'c', 'u', 's', 't', 'o', 'm', ',', ' ', 'p', 'a', 't', 'h', ')']
+mpl.rcParams["savefig.bbox"] = "tight"
+fig, axes = plt.subplots(
+    nrows=n_classifiers,
+    ncols=len(iris.target_names) + 1,
+    figsize=(4 * 2.2, n_classifiers * 2.2),
+)
+evaluation_results = []
+levels = 100
+for classifier_idx, (name, classifier) in enumerate(classifiers.items()):
+    y_pred = classifier.fit(X_train, y_train).predict(X_test)
+    y_pred_proba = classifier.predict_proba(X_test)
+    accuracy_test = accuracy_score(y_test, y_pred)
+    roc_auc_test = roc_auc_score(y_test, y_pred_proba, multi_class="ovr")
+    log_loss_test = log_loss(y_test, y_pred_proba)
+    evaluation_results.append(
+        {
+            "name": name.replace("\n", " "),
+            "accuracy": accuracy_test,
+            "roc_auc": roc_auc_test,
+            "log_loss": log_loss_test,
+        }
+    )
+    for name in y_unique:
 ```
 
-### notebooks/example_more.ipynb
-CONTEXT: def pagerank_fast(G, prior_ranks, a, msq_error, order): COMMENT: calculate normalization parameters of symmetric Laplacian
+### notebooks/dataset2/cross_decomposition/plot_compare_cross_decomposition.ipynb
+CONTEXT:  PLS regression, with multivariate response, a.k.a. PLS2   COMMENT:
 ```python
-['d', 'e', 'g', 'v', ' ', '=', ' ', '{', 'v', ' ', ':', ' ', 'f', 'l', 'o', 'a', 't', '(', 'l', 'e', 'n', '(', 'l', 'i', 's', 't', '(', 'G', '.', 'n', 'e', 'i', 'g', 'h', 'b', 'o', 'r', 's', '(', 'v', ')', ')', ')', ')', '*', '*', '0', '.', '5', ' ', 'f', 'o', 'r', ' ', 'v', ' ', 'i', 'n', ' ', 'G', '.', 'n', 'o', 'd', 'e', 's', '(', ')', '}', '\n', 'd', 'e', 'g', 'u', ' ', '=', ' ', '{', 'u', ' ', ':', ' ', 'f', 'l', 'o', 'a', 't', '(', 'l', 'e', 'n', '(', 'l', 'i', 's', 't', '(', 'G', '.', 'n', 'e', 'i', 'g', 'h', 'b', 'o', 'r', 's', '(', 'u', ')', ')', ')', ')', '*', '*', '0', '.', '5', ' ', 'f', 'o', 'r', ' ', 'u', ' ', 'i', 'n', ' ', 'G', '.', 'n', 'o', 'd', 'e', 's', '(', ')', '}']
+Y = np.dot(X, B) + np.random.normal(size=n * q).reshape((n, q)) + 5
+pls2 = PLSRegression(n_components=3)
+pls2.fit(X, Y)
+print("True B (such that: Y = XB + Err)")
+print(B)
+```
+
+### notebooks/dataset2/cross_decomposition/plot_compare_cross_decomposition.ipynb
+CONTEXT:  Scatter plot of scores   COMMENT:
+```python
+plt.figure(figsize=(12, 8))
+plt.subplot(221)
+plt.scatter(X_train_r[:, 0], Y_train_r[:, 0], name="train", marker="o", s=25)
+plt.scatter(X_test_r[:, 0], Y_test_r[:, 0], name="test", marker="o", s=25)
+plt.xlabel("x scores")
+plt.ylabel("y scores")
+plt.title(
+    "Comp. 1: X vs Y (test corr = %.2f)"
+    % np.corrcoef(X_test_r[:, 0], Y_test_r[:, 0])[0, 1]
+)
+plt.xticks(())
+plt.yticks(())
+plt.legend(loc="best")
+plt.subplot(224)
+plt.scatter(X_train_r[:, 1], Y_train_r[:, 1], name="train", marker="o", s=25)
+plt.scatter(X_test_r[:, 1], Y_test_r[:, 1], name="test", marker="o", s=25)
+plt.xlabel("x scores")
+plt.ylabel("y scores")
+plt.title(
+    "Comp. 2: X vs Y (test corr = %.2f)"
+    % np.corrcoef(X_test_r[:, 1], Y_test_r[:, 1])[0, 1]
+)
+plt.xticks(())
+plt.yticks(())
+plt.legend(loc="best")
+```
+
+### notebooks/plot_classification_probability.ipynb
+CONTEXT:  Probabilistic classifiers  We will plot the decision boundaries of several classifiers that have a `predict_proba` method. This will allow
+us to visualize the uncertainty of the classifier in regions where it is not certain of its prediction.   COMMENT:
+```python
+classifiers = {
+    "Logistic regression\n(C=0.01)": LogisticRegression(C=0.1),
+    "Logistic regression\n(C=1)": LogisticRegression(C=100),
+    "Gaussian Process": GaussianProcessClassifier(kernel=1.0 * RBF([1.0, 1.0])),
+    "Logistic regression\n(RBF features)": make_pipeline(
+        Nystroem(kernel="rbf", gamma=5e-1, n_components=50, random_state=1),
+        LogisticRegression(C=10),
+    ),
+    "Gradient Boosting": HistGradientBoostingClassifier(),
+    "Logistic regression\n(binned features)": make_pipeline(
+        KBinsDiscretizer(n_bins=5, quantile_method="averaged_inverted_cdf"),
+        PolynomialFeatures(interaction_only=True),
+        LogisticRegression(C=10),
+    ),
+    "Logistic regression\n(spline features)": make_pipeline(
+        SplineTransformer(n_knots=5),
+        PolynomialFeatures(interaction_only=True),
+        LogisticRegression(C=10),
+    ),
+}
 ```
 
 ## Code Concatenation
 ```python
-['s', 'p', 'l', 'i', 't', ' ', '=', ' ', 'p', 'g', '.', 's', 'p', 'l', 'i', 't', '(', 's', 'i', 'g', 'n', 'a', 'l', ')', '\n', 't', 'r', 'a', 'i', 'n', ' ', '=', ' ', 's', 'p', 'l', 'i', 't', '[', '0', ']', '\n', 't', 'e', 's', 't', ' ', '=', ' ', 's', 'p', 'l', 'i', 't', '[', '1', ']']
-['s', 'i', 'g', 'n', 'a', 'l', ' ', '=', ' ', 'p', 'g', '.', 't', 'o', '_', 's', 'i', 'g', 'n', 'a', 'l', '(', 'g', 'r', 'a', 'p', 'h', ',', ' ', 'g', 'r', 'o', 'u', 'p', ')']
-['p', 'i', 'c', 'k', 'l', 'e', '.', 'd', 'u', 'm', 'p', '(', 'c', 'u', 's', 't', 'o', 'm', ',', ' ', 'p', 'a', 't', 'h', ')']
-['d', 'e', 'g', 'v', ' ', '=', ' ', '{', 'v', ' ', ':', ' ', 'f', 'l', 'o', 'a', 't', '(', 'l', 'e', 'n', '(', 'l', 'i', 's', 't', '(', 'G', '.', 'n', 'e', 'i', 'g', 'h', 'b', 'o', 'r', 's', '(', 'v', ')', ')', ')', ')', '*', '*', '0', '.', '5', ' ', 'f', 'o', 'r', ' ', 'v', ' ', 'i', 'n', ' ', 'G', '.', 'n', 'o', 'd', 'e', 's', '(', ')', '}', '\n', 'd', 'e', 'g', 'u', ' ', '=', ' ', '{', 'u', ' ', ':', ' ', 'f', 'l', 'o', 'a', 't', '(', 'l', 'e', 'n', '(', 'l', 'i', 's', 't', '(', 'G', '.', 'n', 'e', 'i', 'g', 'h', 'b', 'o', 'r', 's', '(', 'u', ')', ')', ')', ')', '*', '*', '0', '.', '5', ' ', 'f', 'o', 'r', ' ', 'u', ' ', 'i', 'n', ' ', 'G', '.', 'n', 'o', 'd', 'e', 's', '(', ')', '}']
+import matplotlib as mpl
+import matplotlib.pyplot as plt
+import numpy as np
+import pandas as pd
+from matplotlib import cm
+from sklearn import datasets
+from sklearn.ensemble import HistGradientBoostingClassifier
+from sklearn.gaussian_process import GaussianProcessClassifier
+from sklearn.gaussian_process.kernels import RBF
+from sklearn.inspection import DecisionBoundaryDisplay
+from sklearn.kernel_approximation import Nystroem
+from sklearn.linear_model import LogisticRegression
+from sklearn.metrics import accuracy_score, log_loss, roc_auc_score
+from sklearn.model_selection import train_test_split
+from sklearn.pipeline import make_pipeline
+from sklearn.preprocessing import (
+    KBinsDiscretizer,
+    PolynomialFeatures,
+    SplineTransformer,
+)
+import numpy as np
+n = 500
+mpl.rcParams["savefig.bbox"] = "tight"
+fig, axes = plt.subplots(
+    nrows=n_classifiers,
+    ncols=len(iris.target_names) + 1,
+    figsize=(4 * 2.2, n_classifiers * 2.2),
+)
+evaluation_results = []
+levels = 100
+for classifier_idx, (name, classifier) in enumerate(classifiers.items()):
+    y_pred = classifier.fit(X_train, y_train).predict(X_test)
+    y_pred_proba = classifier.predict_proba(X_test)
+    accuracy_test = accuracy_score(y_test, y_pred)
+    roc_auc_test = roc_auc_score(y_test, y_pred_proba, multi_class="ovr")
+    log_loss_test = log_loss(y_test, y_pred_proba)
+    evaluation_results.append(
+        {
+            "name": name.replace("\n", " "),
+            "accuracy": accuracy_test,
+            "roc_auc": roc_auc_test,
+            "log_loss": log_loss_test,
+        }
+    )
+    for name in y_unique:
+Y = np.dot(X, B) + np.random.normal(size=n * q).reshape((n, q)) + 5
+pls2 = PLSRegression(n_components=3)
+pls2.fit(X, Y)
+print("True B (such that: Y = XB + Err)")
+print(B)
+plt.figure(figsize=(12, 8))
+plt.subplot(221)
+plt.scatter(X_train_r[:, 0], Y_train_r[:, 0], name="train", marker="o", s=25)
+plt.scatter(X_test_r[:, 0], Y_test_r[:, 0], name="test", marker="o", s=25)
+plt.xlabel("x scores")
+plt.ylabel("y scores")
+plt.title(
+    "Comp. 1: X vs Y (test corr = %.2f)"
+    % np.corrcoef(X_test_r[:, 0], Y_test_r[:, 0])[0, 1]
+)
+plt.xticks(())
+plt.yticks(())
+plt.legend(loc="best")
+plt.subplot(224)
+plt.scatter(X_train_r[:, 1], Y_train_r[:, 1], name="train", marker="o", s=25)
+plt.scatter(X_test_r[:, 1], Y_test_r[:, 1], name="test", marker="o", s=25)
+plt.xlabel("x scores")
+plt.ylabel("y scores")
+plt.title(
+    "Comp. 2: X vs Y (test corr = %.2f)"
+    % np.corrcoef(X_test_r[:, 1], Y_test_r[:, 1])[0, 1]
+)
+plt.xticks(())
+plt.yticks(())
+plt.legend(loc="best")
+classifiers = {
+    "Logistic regression\n(C=0.01)": LogisticRegression(C=0.1),
+    "Logistic regression\n(C=1)": LogisticRegression(C=100),
+    "Gaussian Process": GaussianProcessClassifier(kernel=1.0 * RBF([1.0, 1.0])),
+    "Logistic regression\n(RBF features)": make_pipeline(
+        Nystroem(kernel="rbf", gamma=5e-1, n_components=50, random_state=1),
+        LogisticRegression(C=10),
+    ),
+    "Gradient Boosting": HistGradientBoostingClassifier(),
+    "Logistic regression\n(binned features)": make_pipeline(
+        KBinsDiscretizer(n_bins=5, quantile_method="averaged_inverted_cdf"),
+        PolynomialFeatures(interaction_only=True),
+        LogisticRegression(C=10),
+    ),
+    "Logistic regression\n(spline features)": make_pipeline(
+        SplineTransformer(n_knots=5),
+        PolynomialFeatures(interaction_only=True),
+        LogisticRegression(C=10),
+    ),
+}
 ```

@@ -1,46 +1,105 @@
 # Exhaustive Code Synthesis
-Query `Initialize a logistic regression model. Use standardization on training inputs. Train the model.`
+Query `Create classifiers with different types and names. Compare the classifiers and plot them.`
 ## Script Variables
-- x_train:<br>
->x_train is a numpy array of size (n_samples, n_features) containing the training data. The values of x_train are the features of the training data. The values of y_train are the labels of the training data.
-- preprocessing:<br>
->The preprocessing variable is used to normalize the data. It is used to remove the outliers and to make the data more robust. The data is normalized by subtracting the mean and dividing by the standard deviation. This helps to reduce the impact of outliers and to make the data more robust. The normalization process is done before the data is used for training the model.
-- print:<br>
->The variable print is a function that prints the output of the measure function, which is the rank of the train data set. The measure function is used to calculate the rank of the data set based on the given criteria. The rank is then used to determine the best model for the data set.
-- ppr:<br>
->ppr is a variable that is used to rank the data points in the training set. It is a measure of the proximity of a point to the nearest point in the training set. The rank of a point is the number of points in the training set that are closer to it than the point itself. The rank of a point is used to determine the distance between the point and the nearest point in the training set. The rank of a point is also used to determine the distance between the point and the nearest point in the training set. The rank of a
-- measure:<br>
->Measure is a variable that is used to rank the importance of each feature in a dataset. It is a measure of the predictive power of each feature in a dataset. It is used to rank the features based on their importance in predicting the target variable. It is calculated by taking the ratio of the variance of the feature to the variance of the target variable. The higher the value of the measure, the more important the feature is in predicting the target variable. It is used in machine learning algorithms such as decision trees, random forests, and gradient boosting to select the best features
-- train:<br>
->It is a list of tuples, each tuple contains a pair of (word, score) where score is the probability of the word being a positive review.
-- model:<br>
->The variable model is a logistic regression model that is trained on the training data. The model is used to predict the probability of a given observation being a member of a particular class. The model is trained using the training data and the training labels. The model is then used to predict the probability of a given observation being a member of a particular class. The model is used to make predictions on the test data and the test labels. The model is evaluated using the test labels and the test accuracy is calculated. The model is then used to make predictions on the test data and the test labels
-- y_train:<br>
->It is a list of integers that represents the labels of the training data.
+- disp:<br>
+>disp is a scalar map object that is used to create a colorbar for the surface plot. It
+- ax_single:<br>
+>It is a matplotlib Axes object that is used to create a colorbar for the figure. The color
+- fig:<br>
+>fig is a variable that is used to store the figure object that is created by the script. It
+- cm:<br>
+>cm is a scalar map that is used to represent the colorbar. It is used to represent the
+- plt:<br>
+>plt is a Python library that provides a wide range of plotting functions and tools for creating and customizing
+- _:<br>
+>The variable _ is used to store the color map for the probability class. It is used to create
+- RBF:<br>
+>RBF is an acronym for Radial Basis Function. It is a kernel function that is used in
+- PolynomialFeatures:<br>
+>PolynomialFeatures is a class that takes in a dataset and transforms it into a new dataset with polynomial
+- Nystroem:<br>
+>Nystroem is a kernel-based method that is used to transform the input data into a high
+- classifiers:<br>
+>The variable classifiers are used to determine the number of classifiers to be used in the script. They are
+- GaussianProcessClassifier:<br>
+>The GaussianProcessClassifier is a machine learning classifier that uses Gaussian processes to make predictions. It is a
+- LogisticRegression:<br>
+>Logistic regression is a supervised machine learning algorithm that is used for classification problems. It is a type
+- HistGradientBoostingClassifier:<br>
+>HistGradientBoostingClassifier is a machine learning algorithm that uses a gradient boosting technique to fit a history
+- KBinsDiscretizer:<br>
+>KBinsDiscretizer is a class that is used to discretize continuous features into a fixed number
+- make_pipeline:<br>
+>It is a function that takes in a list of classifiers and returns a pipeline object. The pipeline object
+- SplineTransformer:<br>
+>SplineTransformer is a class that transforms the input data into a new representation using splines. It
 ## Synthesis Blocks
-### notebooks/example_more.ipynb
-CONTEXT: def train_lr(x_train, y_train, preprocessing="normalize"): COMMENT: Normalize training data
+### notebooks/plot_classification_probability.ipynb
+CONTEXT:  Plotting the decision boundaries  For each classifier, we plot the per-class probabilities on the first three columns and the probabilities
+of the most likely class on the last column.   COMMENT: colorbar for single class plots
 ```python
-if preprocessing == "normalize":
-    x_train = (x_train - x_train.min(axis=0)) / (x_train.max(axis=0) - x_train.min(axis=0))
+ax_single = fig.add_axes([0.15, 0.01, 0.5, 0.02])
+plt.title("Probability")
+_ = plt.colorbar(
+    cm.ScalarMappable(norm=None, cmap=disp.surface_.cmap),
+    cax=ax_single,
+    orientation="horizontal",
+)
 ```
 
-### notebooks/example_more.ipynb
-CONTEXT: def train_lr(x_train, y_train, preprocessing="normalize"): COMMENT: train
+### notebooks/plot_classification_probability.ipynb
+CONTEXT:  Probabilistic classifiers  We will plot the decision boundaries of several classifiers that have a `predict_proba` method. This will allow
+us to visualize the uncertainty of the classifier in regions where it is not certain of its prediction.   COMMENT:
 ```python
-model.train(x_train, y_train)
-```
-
-### notebooks/pygrank_snippets.ipynb
-CONTEXT: def algorithm_comparison(): COMMENT: assess ppr
-```python
-print(measure(ppr.rank(train)))
+classifiers = {
+    "Logistic regression\n(C=0.01)": LogisticRegression(C=0.1),
+    "Logistic regression\n(C=1)": LogisticRegression(C=100),
+    "Gaussian Process": GaussianProcessClassifier(kernel=1.0 * RBF([1.0, 1.0])),
+    "Logistic regression\n(RBF features)": make_pipeline(
+        Nystroem(kernel="rbf", gamma=5e-1, n_components=50, random_state=1),
+        LogisticRegression(C=10),
+    ),
+    "Gradient Boosting": HistGradientBoostingClassifier(),
+    "Logistic regression\n(binned features)": make_pipeline(
+        KBinsDiscretizer(n_bins=5, quantile_method="averaged_inverted_cdf"),
+        PolynomialFeatures(interaction_only=True),
+        LogisticRegression(C=10),
+    ),
+    "Logistic regression\n(spline features)": make_pipeline(
+        SplineTransformer(n_knots=5),
+        PolynomialFeatures(interaction_only=True),
+        LogisticRegression(C=10),
+    ),
+}
 ```
 
 ## Code Concatenation
 ```python
-if preprocessing == "normalize":
-    x_train = (x_train - x_train.min(axis=0)) / (x_train.max(axis=0) - x_train.min(axis=0))
-model.train(x_train, y_train)
-print(measure(ppr.rank(train)))
+ax_single = fig.add_axes([0.15, 0.01, 0.5, 0.02])
+plt.title("Probability")
+_ = plt.colorbar(
+    cm.ScalarMappable(norm=None, cmap=disp.surface_.cmap),
+    cax=ax_single,
+    orientation="horizontal",
+)
+classifiers = {
+    "Logistic regression\n(C=0.01)": LogisticRegression(C=0.1),
+    "Logistic regression\n(C=1)": LogisticRegression(C=100),
+    "Gaussian Process": GaussianProcessClassifier(kernel=1.0 * RBF([1.0, 1.0])),
+    "Logistic regression\n(RBF features)": make_pipeline(
+        Nystroem(kernel="rbf", gamma=5e-1, n_components=50, random_state=1),
+        LogisticRegression(C=10),
+    ),
+    "Gradient Boosting": HistGradientBoostingClassifier(),
+    "Logistic regression\n(binned features)": make_pipeline(
+        KBinsDiscretizer(n_bins=5, quantile_method="averaged_inverted_cdf"),
+        PolynomialFeatures(interaction_only=True),
+        LogisticRegression(C=10),
+    ),
+    "Logistic regression\n(spline features)": make_pipeline(
+        SplineTransformer(n_knots=5),
+        PolynomialFeatures(interaction_only=True),
+        LogisticRegression(C=10),
+    ),
+}
 ```

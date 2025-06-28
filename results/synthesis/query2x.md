@@ -1,84 +1,172 @@
 # Exhaustive Code Synthesis
-Query `Graph operations`
+Query `Create a regression model.`
 ## Script Variables
-- G:<br>
->The variable G is a graph object that represents the network of interactions between the nodes in the system. It contains information about the edges between the nodes, such as the weight of each edge, the direction of the edge, and any additional properties associated with the edge. The variable G is used to calculate the rank of each node in the network, which is a measure of the importance of each
-- node1:<br>
->Node1 is a variable that is used to store the id of the node in the graph. It is used to identify the node in the graph and is used to create the links between the nodes. The value of node1 is the id of the node in the graph.
-- u:<br>
->u is a variable that stores the degree of each node in the graph G. It is calculated by taking the square root of the number of neighbors for each node in the graph. This is done to make the values more manageable and easier to work with in the script. The script uses the built-in function len() to count the number of neighbors for each node and then takes the square root of the result to get the degree of each node. This is done for both the original graph G and the graph G with the degree of each node
-- print:<br>
->The print function is used to display the output of an expression in the Python interpreter. It is a built-in function in Python that takes an expression as an argument and displays the result of the expression on the console. The print function is often used to display the output of a program or a function.
-- data:<br>
->The variable data is a dictionary containing two keys, 'nodes' and 'links'. The 'nodes' key contains a list of dictionaries, where each dictionary represents a node in the graph. Each node dictionary has an 'id' key, which is a unique identifier for the node, and a 'color_intensity' key, which is a value between 0
-- open:<br>
->The variable open is used to open the file 'visualize/data.json' in the current directory. The file is then written to the file 'visualize/data.json' in the current directory. The file is then opened in a web browser using the'start firefox.exe' command.
-- os:<br>
->The os module is a built-in module in Python that provides a portable way of using operating system dependent functionality. It provides a portable way of using operating system dependent functionality. It provides a portable way of using operating system dependent functionality. It provides a portable way of using operating system dependent functionality. It provides a portable way of using operating system dependent functionality. It provides
-- outfile:<br>
->The variable outfile is a file object that is used to write data to a file. The file is opened in write mode and the data is written to the file using the json.dump() function. The file is then closed using the close() method. The variable outfile is used to write the data to a file so that it can be used later in the script
-- str:<br>
->str is a built-in function in python which returns the string representation of the object. It is used to convert the object into a string. It is used to convert the object into a string. It is used to convert the object into a string. It is used to convert the object into a string. It is used to convert the object into a string.
-- json:<br>
->json is a python module that is used to convert python objects into json format. It is used to convert python objects into a json format that can be used by other programming languages such as javascript. It is also used to convert json format into python objects. It is a built-in module in python and is used to convert python objects into json format. It is
-- normalized_prior_ranks:<br>
->Normalized prior ranks are the normalized version of the prior ranks. They are used to visualize the prior ranks in the network. The prior ranks are used to determine the importance of each node in the network. The normalized prior ranks are used to determine the relative importance of each node in the network. The normalized prior ranks are used to determine
-- node2:<br>
->The node2 variable is a dictionary that contains information about the nodes in the graph. It is used to create the visualization of the graph using d3.js. The nodes in the graph are represented as dictionaries, where each dictionary contains the node id and a color intensity value. The color intensity value is calculated based on the normalized prior ranks of the nodes
-- pg:<br>
->pg is a variable that is used to split the dataset into training and testing sets. The dataset is split into two sets, one for training and one for testing. The training set is used to train the model, and the testing set is used to evaluate the model's performance. The split() function is used to split the dataset into two sets, and the pg variable is used to store the result of the split() function.
-- ppr:<br>
->ppr is a variable that is used to rank the data points in the training set. It is a measure of the proximity of a point to the nearest point in the training set. The rank of a point is the number of points in the training set that are closer to it than the point itself. The rank of a point is used to determine the distance between the point and the nearest point in the training set. The rank of a point is also used to determine the distance between the point and the nearest point in the training set. The rank of a
-- degu:<br>
->degu is a dictionary that contains the degree of each node in the graph G. The degree of a node is the number of edges that are incident to that node. The value of each key in the dictionary is the square root of the degree of the corresponding node. This is done to ensure that the values in the dictionary are non-negative.
+- axes:<br>
+>It is a variable that is used to create a grid of subplots. It is used to create
+- name:<br>
+>max_class_disp
+- classifier_idx:<br>
+>It is a variable that represents the classifier used to generate the decision boundary display. In this case,
+- classifier:<br>
+>The variable classifier is a machine learning algorithm that is used to classify data into different categories. It is
+- label:<br>
+>max_class_disp
+- fig:<br>
+>fig is a variable that is used to store the figure object that is created by the script. It
+- classifiers:<br>
+>The variable classifiers are used to determine the number of classifiers to be used in the script. They are
+- y_unique:<br>
+>y_unique is a list of unique values in the y_test variable. It is used to create a
+- plt:<br>
+>plt is a module in python that is used to create plots. It is used in this script to
+- X_train:<br>
+>X_train is a numpy array of shape (n_samples, n_features) containing the training data.
+- y_test:<br>
+>y_test is the test set of Iris flower data. It contains the target values of the test set
+- levels:<br>
+>levels
+- X_test:<br>
+>X_test is a test dataset that is used to evaluate the performance of the model on unseen data.
+- y_train:<br>
+>It is a target variable that contains the species of the iris flower. It is used to split the
+- iris:<br>
+>It is a dataset that contains information about the iris flowers. It has 3 classes of iris flowers
 - len:<br>
->len is a function that returns the length of a sequence. In this case, it is the number of nodes in the graph G. It is used to calculate the mean square error (msq) which is used to determine when the algorithm has converged.
-- float:<br>
->float is a data type that represents a floating-point number. It is a decimal number that can be represented with a fixed number of digits after the decimal point. The variable float is used to store a floating-point number in the script. It is used to calculate the degree of each node in the graph and to calculate the degree of each node in the graph with the symmetric degree. The variable float is used to store the result of the calculation and is used to calculate the degree of each node in the graph with the symmetric degree. The variable
-- degv:<br>
->degv is a dictionary that contains the degree of each node in the graph G. The degree of a node is the number of edges incident to that node. The value of each key in the dictionary is the square root of the degree of the corresponding node. This is done to ensure that the values in the dictionary are non-negative.
-- v:<br>
->v is a variable that is used to store the degree of a node in the graph.
-- list:<br>
->degv
+>len is a variable that is used to count the number of elements in a list or tuple. It
+- y_pred:<br>
+>The variable y_pred is a prediction of the output of the model. It is used to determine the
+- n_classifiers:<br>
+>n_classifiers is the number of classifiers used in the script. It is used to determine the number
+- evaluation_results:<br>
+>It is a pandas DataFrame object that contains the evaluation results of the model. The columns of the DataFrame
+- X:<br>
+>X is a matrix of size n x 4, where n is the number of samples. Each
+- np:<br>
+>It is a python library that provides a wide range of mathematical functions and tools for scientific computing. It
+- q:<br>
+>It is the number of components in the PLS regression model. The higher the value of q,
+- PLSRegression:<br>
+>PLSRegression is a class that implements Partial Least Squares (PLS) regression. It is
+- print:<br>
+>The print function is used to display the output of a Python script to the console. It is a
+- n:<br>
+>n is the number of samples in the dataset.
+- B:<br>
+>Variable B is a matrix of size (q, p) where q is the number of components and
+- Y:<br>
+>Y is a matrix of size n x q where n is the number of samples and q is the
+- pls2:<br>
+>pls2 is a variable that is used to predict the value of B in the equation y = mx
+- pls1:<br>
+>pls1 is an instance of the PLSRegression class. PLSRegression is a regression model that
+- image:<br>
+>The variable image is a 2D numpy array that represents the input image. It is used to
+- predicted:<br>
+>The variable predicted is a variable that is used to predict the output of the model. It is a
+- cm:<br>
+>cm is a 2D array of integers, where each row represents the number of times a given
+- zip:<br>
+>The zip() function is a built-in function in Python that takes an iterable (a sequence, list
+- _:<br>
+>The variable _ is a tuple that contains the axes of the subplots. The axes are used to
+- ax:<br>
+>ax is a variable that is used to store the axes of the subplots. It is used to
+- prediction:<br>
+>The variable prediction is a small description of the variable that is used to predict the output of the model
 ## Synthesis Blocks
-### notebooks/pygrank_snippets.ipynb
-CONTEXT: def algorithm_comparison(): COMMENT: create default pagerank
+### notebooks/plot_classification_probability.ipynb
+CONTEXT:  Plotting the decision boundaries  For each classifier, we plot the per-class probabilities on the first three columns and the probabilities
+of the most likely class on the last column.   COMMENT: Ensure legend not cut off
 ```python
-ppr = pg.PageRank()
+mpl.rcParams["savefig.bbox"] = "tight"
+fig, axes = plt.subplots(
+    nrows=n_classifiers,
+    ncols=len(iris.target_names) + 1,
+    figsize=(4 * 2.2, n_classifiers * 2.2),
+)
+evaluation_results = []
+levels = 100
+for classifier_idx, (name, classifier) in enumerate(classifiers.items()):
+    y_pred = classifier.fit(X_train, y_train).predict(X_test)
+    y_pred_proba = classifier.predict_proba(X_test)
+    accuracy_test = accuracy_score(y_test, y_pred)
+    roc_auc_test = roc_auc_score(y_test, y_pred_proba, multi_class="ovr")
+    log_loss_test = log_loss(y_test, y_pred_proba)
+    evaluation_results.append(
+        {
+            "name": name.replace("\n", " "),
+            "accuracy": accuracy_test,
+            "roc_auc": roc_auc_test,
+            "log_loss": log_loss_test,
+        }
+    )
+    for label in y_unique:
 ```
 
-### notebooks/example_more.ipynb
-CONTEXT: def pagerank(G, prior_ranks, a, msq_error): COMMENT: calculate normalization parameters of symmetric Laplacian
+### notebooks/dataset2/cross_decomposition/plot_compare_cross_decomposition.ipynb
+CONTEXT:  PLS regression, with univariate response, a.k.a. PLS1   COMMENT:
 ```python
-degv = {v : float(len(list(G.neighbors(v))))**0.5 for v in G.nodes()}
-degu = {u : float(len(list(G.neighbors(u))))**0.5 for u in G.nodes()}
+print("Estimated betas")
+print(np.round(pls1.coef_, 1))
 ```
 
-### notebooks/example_more.ipynb
-CONTEXT: def visualize(G, p): COMMENT:
+### notebooks/plot_digits_classification.ipynb
+CONTEXT: Below we visualize the first 4 test samples and show their predicted digit value in the title.   COMMENT:
 ```python
-print('----- Visualizing using d3 -----')
-data = {}
-data['nodes'] = [{'id':str(u),'color_intensity':normalized_prior_ranks[u]} for u in G.nodes()]
-data['links'] = [{'source':str(node1),'target':str(node2),'value':1} for node1,node2 in G.edges()]
-import os, json
-with open('visualize/data.json', 'w') as outfile:
-    json.dump(data, outfile)
-os.system('start firefox.exe "file:///'+os.getcwd()+'/visualize/visualize.html"')
+_, axes = plt.subplots(nrows=1, ncols=4, figsize=(10, 3))
+for ax, image, prediction in zip(axes, X_test, predicted):
+    ax.set_axis_off()
+    image = image.reshape(8, 8)
+    ax.imshow(image, cmap=plt.cm.gray_r, interpolation="nearest")
+    ax.set_title(f"Prediction: {prediction}")
+```
+
+### notebooks/dataset2/cross_decomposition/plot_compare_cross_decomposition.ipynb
+CONTEXT:  PLS regression, with multivariate response, a.k.a. PLS2   COMMENT:
+```python
+Y = np.dot(X, B) + np.random.normal(size=n * q).reshape((n, q)) + 5
+pls2 = PLSRegression(n_components=3)
+pls2.fit(X, Y)
+print("True B (such that: Y = XB + Err)")
+print(B)
 ```
 
 ## Code Concatenation
 ```python
-ppr = pg.PageRank()
-degv = {v : float(len(list(G.neighbors(v))))**0.5 for v in G.nodes()}
-degu = {u : float(len(list(G.neighbors(u))))**0.5 for u in G.nodes()}
-print('----- Visualizing using d3 -----')
-data = {}
-data['nodes'] = [{'id':str(u),'color_intensity':normalized_prior_ranks[u]} for u in G.nodes()]
-data['links'] = [{'source':str(node1),'target':str(node2),'value':1} for node1,node2 in G.edges()]
-import os, json
-with open('visualize/data.json', 'w') as outfile:
-    json.dump(data, outfile)
-os.system('start firefox.exe "file:///'+os.getcwd()+'/visualize/visualize.html"')
+mpl.rcParams["savefig.bbox"] = "tight"
+fig, axes = plt.subplots(
+    nrows=n_classifiers,
+    ncols=len(iris.target_names) + 1,
+    figsize=(4 * 2.2, n_classifiers * 2.2),
+)
+evaluation_results = []
+levels = 100
+for classifier_idx, (name, classifier) in enumerate(classifiers.items()):
+    y_pred = classifier.fit(X_train, y_train).predict(X_test)
+    y_pred_proba = classifier.predict_proba(X_test)
+    accuracy_test = accuracy_score(y_test, y_pred)
+    roc_auc_test = roc_auc_score(y_test, y_pred_proba, multi_class="ovr")
+    log_loss_test = log_loss(y_test, y_pred_proba)
+    evaluation_results.append(
+        {
+            "name": name.replace("\n", " "),
+            "accuracy": accuracy_test,
+            "roc_auc": roc_auc_test,
+            "log_loss": log_loss_test,
+        }
+    )
+    for label in y_unique:
+print("Estimated betas")
+print(np.round(pls1.coef_, 1))
+_, axes = plt.subplots(nrows=1, ncols=4, figsize=(10, 3))
+for ax, image, prediction in zip(axes, X_test, predicted):
+    ax.set_axis_off()
+    image = image.reshape(8, 8)
+    ax.imshow(image, cmap=plt.cm.gray_r, interpolation="nearest")
+    ax.set_title(f"Prediction: {prediction}")
+Y = np.dot(X, B) + np.random.normal(size=n * q).reshape((n, q)) + 5
+pls2 = PLSRegression(n_components=3)
+pls2.fit(X, Y)
+print("True B (such that: Y = XB + Err)")
+print(B)
 ```
