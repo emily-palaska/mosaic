@@ -44,7 +44,8 @@ def parse_script(script:str):
             tree = ast.parse(script)
             return tree
         except (IndentationError, SyntaxError):
-            script = dedent_blocks(script.split('\n', 1)[1])[0]
+            new_script = script.split('\n', 1)
+            script = dedent_blocks(new_script[1]) if len(new_script) > 1 else ''
     return None
 
 def ast_extraction(script: str):
@@ -57,7 +58,9 @@ def ast_io_split(manager):
     io_splits = []
     for script, variables in zip(manager.blocks, manager.var_dicts):
         analyzer, tree = VariableAnalyzer(io_split=True), parse_script(script)
-        if tree is None: return {'input': set(), 'output': set()}
+        if tree is None:
+            io_splits.append({'input': set(), 'output': set()})
+            continue
         analyzer.visit(tree)
 
         input_vars, output_vars = set(), set()
@@ -68,5 +71,4 @@ def ast_io_split(manager):
             if is_read and not is_written: input_vars.add(var)
             elif is_written: output_vars.add(var)
         io_splits.append({'input': input_vars, 'output': output_vars})
-
     return io_splits

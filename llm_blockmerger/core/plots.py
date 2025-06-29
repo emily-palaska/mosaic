@@ -1,23 +1,24 @@
 import numpy as np
 import matplotlib.pyplot as plt
 
-lang = 'eng'
+colors = {'b': '#1f497d', 't': '#309db1'}
+lang = 'gr'
 
 def sphere(ax):
     u, v = np.mgrid[0:2 * np.pi:100j, 0:np.pi:100j]
     x_s = np.cos(u) * np.sin(v)
     y_s = np.sin(u) * np.sin(v)
     z_s = np.cos(v)
-    ax.plot_surface(x_s, y_s, z_s, color='lavender', alpha=0.6, edgecolor='none')
+    ax.plot_surface(x_s, y_s, z_s, color=colors['t'], alpha=0.4, edgecolor='none')
 
 def vectors(v1, v2, ax):
     label1 = 'Search Vector s' if lang=='eng' else 'Διάνυσμα Αναζήτησης s'
-    label2 = 'Neighbor Vector n' if lang=='eng' else 'Διάνυσμα Γείτονα n'
+    label2 = 'Approx. Nearest Neighbor Vector n' if lang=='eng' else 'Διάνυσμα Προσεγγιστικά Κοντινότερου Γείτονα n'
 
     ax.plot([0, v1[0]], [0, v1[1]], [0, v1[2]], marker='o', markevery=[-1],
             color='red', linewidth=2, label=label1, zorder=10)
     ax.plot([0, v2[0]], [0, v2[1]], [0, v2[2]], marker='o', markevery=[-1],
-            color='blue', linewidth=2, label=label1, zorder=10)
+            color='blue', linewidth=2, label=label2, zorder=10)
 
 def plane(v1: np.ndarray, v2: np.ndarray, ax):
     normal = np.cross(v1, v2)
@@ -39,7 +40,7 @@ def plane(v1: np.ndarray, v2: np.ndarray, ax):
     yy_out = yy_flat[mask]
     zz_out = zz_flat[mask]
 
-    ax.scatter(xx_out, yy_out, zz_out, color='violet', zorder=2, s=5, alpha=0.8)
+    ax.scatter(xx_out, yy_out, zz_out, color=colors['b'], zorder=2, s=5, alpha=0.8)
 
 def disc(v1: np.ndarray, v2: np.ndarray, ax):
     normal = np.cross(v1, v2)
@@ -60,7 +61,7 @@ def disc(v1: np.ndarray, v2: np.ndarray, ax):
     yy_in = yy_flat[mask]
     zz_in = zz_flat[mask]
 
-    ax.scatter(xx_in, yy_in, zz_in, color='darkviolet', zorder=10, s=10, alpha=1)
+    ax.scatter(xx_in, yy_in, zz_in, color=colors['t'], zorder=10, s=10, alpha=1.0)
 
 def circle(v1: np.ndarray, v2: np.ndarray, ax):
     normal = np.cross(v1, v2)
@@ -74,20 +75,30 @@ def circle(v1: np.ndarray, v2: np.ndarray, ax):
     label = 'Intersection Circle' if lang=='eng' else 'Τομή Επιπέδου Διανυσμάτων'
     ax.plot(c[:, 0], c[:, 1], c[:, 2], color='darkviolet', linewidth=2, label=label, zorder=9)
 
+
+def points(ax, num=100, color=colors['b']):
+    p = []
+    while len(p) < num:
+        v = np.random.uniform(-1, 1, size=3)
+        p.append(v / np.linalg.norm(v))
+    p = np.array(p)
+
+    x, y, z = p[:, 0], p[:, 1], p[:, 2]
+    label = 'Κωδικοποιήσεις Μπλοκ' if lang=='gr' else 'Block Embeddings'
+    ax.scatter(x, y, z, color=color, s=25, label=label)
+
 def plot_sphere():
     fig = plt.figure(figsize=(10, 8))
     ax = fig.add_subplot(111, projection='3d')
-    v1 = np.array([0, 1.5, 1])
-    v2 = np.array([1, 0, 1])
-    v1 = v1 / np.linalg.norm(v1)
-    v2 = v2 / np.linalg.norm(v2)
-
+    v1, v2 = np.array([0, 1.5, 1]), np.array([1, 0, 1])
+    v1, v2 = v1 / np.linalg.norm(v1), v2 / np.linalg.norm(v2)
 
     vectors(v1, v2, ax)
     plane(v1, v2, ax)
     disc(v1, v2, ax)
     circle(v1, v2, ax)
     sphere(ax)
+    #points(ax)
 
     ax.set_xlim((-1.2, 1.2))
     ax.set_ylim((-1.2, 1.2))

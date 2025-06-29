@@ -1,8 +1,9 @@
 from json import load, loads
-from re import match
+from re import match, sub, escape
 from textwrap import indent, fill
 
-from torch import Tensor, combinations, arange
+from torch import Tensor, tensor
+from itertools import combinations
 
 
 def concat_block(block):
@@ -31,29 +32,29 @@ def remove_common_words(og: str, rem: str, repl='[UNK]'):
     return ' '.join(repl_words)
 
 def dedent_blocks(blocks):
+    if not isinstance(blocks, list): blocks = [blocks]
     dedented_blocks = []
     for block in blocks:
-        lines = block.splitlines()
+        lines = block if isinstance(block, list) else block.splitlines()
         script_lines = [line for line in lines if line.strip()]
-        ind = [
-            len(match(r'^\s*', line).group())
-                for line in script_lines
-        ]
+        ind = [len(match(r'^\s*', line).group())for line in script_lines]
 
         if not ind:
-            dedented_blocks.append(block)
+            dedented_blocks.append(lines)
             continue
         common_ind = min(ind)
 
         dedented_lines = [line[common_ind:] if line.strip() else '' for line in lines]
         dedented_blocks.append('\n'.join(dedented_lines))
-    return dedented_blocks
+    return dedented_blocks if len(dedented_blocks) > 1 else dedented_blocks[0]
+
 
 def encoded_json(field: str):
     loaded_once = loads(field)
     if isinstance(loaded_once, str):
         return loads(loaded_once)
     return loaded_once
+
 
 def print_synthesis(manager, specification: str, title='STRING'):
     print("\n" + "=" * 60)
@@ -82,6 +83,7 @@ def triplets(n):
     from itertools import combinations
     return list(combinations(range(0, n), 3))
 
+
 def remove_symbols(script):
     symbols = ['!', '"', "'", ',', '.', ':', '-', '+', '=', '-', '>', '<', '(', ')', '[', ']', '{', '}']
     for symbol in symbols:
@@ -89,15 +91,40 @@ def remove_symbols(script):
     return script
 
 
-def best_combination(n: int, r: int, target: float, components: Tensor):
-    device = components.device
-    comb = combinations(arange(n, device=device), r=r)
-    selected = components[comb]
-    sums = selected.sum(dim=1)
+def best_combination(n: int, r: int, target: float, components: Tensor, batch_size: int = 10_000):
+    best_sum, best_comb = None, None
+    device, batch = components.device, []
+    comb_gen = combinations(range(n), r)
 
+    for comb in comb_gen:
+        batch.append(comb)
+        if len(batch) == batch_size:
+            best_sum, best_comb = _process_batch(batch, components, target, best_sum, best_comb)
+            batch = []
+
+    if batch: best_sum, best_comb = _process_batch(batch, components, target, best_sum, best_comb)
+    return best_sum, best_comb
+
+
+def _process_batch(batch: list, components: Tensor, target: float, best_sum: float, best_comb: Tensor):
+    comb_tensor = tensor(batch, device=components.device)
+    selected = components[comb_tensor]
+    sums = selected.sum(dim=1)
     valid = (sums <= target)
     if valid.any():
         sums = sums[valid]
         max_sum, max_idx = sums.max(0)
-        return max_sum, comb[valid][max_idx]
-    return None, None
+        if best_sum is None or max_sum > best_sum: return max_sum.item(), comb_tensor[valid][max_idx]
+    return best_sum, best_comb
+
+
+def separate_lines(source):
+    separated = []
+    for string in source:
+        if '\n' in string: separated.extend([line for line in string.split('\n') if line != ''])
+        else: separated.append(string)
+    return separated
+
+
+def regular_replace(string, old, new):
+    return sub(r'\b' + escape(old) + r'\b', new, string)
