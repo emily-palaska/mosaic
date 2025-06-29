@@ -1,32 +1,62 @@
 # Random Code Synthesis
 Query `Graph operations`
 ## Script Variables
-- plt:<br>
->plt is a module that provides a number of command-line interfaces for plotting in Python. It is a
 - print:<br>
->The print function is used to display the output of a Python expression on the screen. It is a
-- y_test:<br>
->The variable y_test is a numpy array containing the true labels of the test data. It is used
-- predicted:<br>
->The variable predicted is the predicted value of the image. It is used to determine the classification of the
-- disp:<br>
->disp is a confusion matrix which is used to compare the predicted values with the actual values. It is
-- metrics:<br>
->Confusion matrix
+>The variable print is used to print the correlation matrix of the input data. It is used to check
+- X_test:<br>
+>X_test is a matrix of size (n_samples, n_features) where n_samples is the number
+- Y_test:<br>
+>Y_test is a variable that is used to test the performance of the PLSCanonical algorithm on
+- np:<br>
+>The np variable is a Python package that provides a large collection of mathematical functions and data structures. It
+- X_train:<br>
+>X_train is a dataset of 1000 observations and 20 variables. It is used to train
+- l1:<br>
+>l1 is a numpy array of size n which is used to generate the latent variables l1 and
+- n:<br>
+>The value of n is 1000 which is the number of samples in the dataset.
+- Y_train:<br>
+>Y_train is a matrix of size 1000x1, which contains the target values for the
+- l2:<br>
+>l2 is a random variable that is generated using the normal distribution with a size of n. It
+- Y:<br>
+>Y is a matrix of size (n, 4) where n is the number of samples.
+- X:<br>
+>X is a matrix of size n x q where n is the number of samples and q is the
+- latents:<br>
+>latents is a matrix of 4 rows and n columns. Each row represents a latent variable.
 ## Synthesis Blocks
-### notebooks/dataset2/classification/plot_digits_classification.ipynb
-CONTEXT: We can also plot a `confusion matrix <confusion_matrix>` of the true digit values and the predicted digit values.   COMMENT:
+### notebooks/dataset2/cross_decomposition/plot_compare_cross_decomposition.ipynb
+CONTEXT:  Dataset based latent variables model   COMMENT:
 ```python
-disp = metrics.ConfusionMatrixDisplay.from_predictions(y_test, predicted)
-disp.figure_.suptitle("Confusion Matrix")
-print(f"Confusion matrix:\n{disp.confusion_matrix}")
-plt.show()
+l1 = np.random.normal(size=n)
+l2 = np.random.normal(size=n)
+latents = np.array([l1, l1, l2, l2]).T
+X = latents + np.random.normal(size=4 * n).reshape((n, 4))
+Y = latents + np.random.normal(size=4 * n).reshape((n, 4))
+X_train = X[: n // 2]
+Y_train = Y[: n // 2]
+X_test = X[n // 2 :]
+Y_test = Y[n // 2 :]
+print("Corr(X)")
+print(np.round(np.corrcoef(X.T), 2))
+print("Corr(Y)")
+print(np.round(np.corrcoef(Y.T), 2))
 ```
 
 ## Code Concatenation
 ```python
-disp = metrics.ConfusionMatrixDisplay.from_predictions(y_test, predicted)
-disp.figure_.suptitle("Confusion Matrix")
-print(f"Confusion matrix:\n{disp.confusion_matrix}")
-plt.show()
+l1 = np.random.normal(size=n)
+l2 = np.random.normal(size=n)
+latents = np.array([l1, l1, l2, l2]).T
+X = latents + np.random.normal(size=4 * n).reshape((n, 4))
+Y = latents + np.random.normal(size=4 * n).reshape((n, 4))
+X_train = X[: n // 2]
+Y_train = Y[: n // 2]
+X_test = X[n // 2 :]
+Y_test = Y[n // 2 :]
+print("Corr(X)")
+print(np.round(np.corrcoef(X.T), 2))
+print("Corr(Y)")
+print(np.round(np.corrcoef(Y.T), 2))
 ```

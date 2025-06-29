@@ -1,6 +1,26 @@
 # Exhaustive Code Synthesis
-Query `Create Regression, SVM, Tree, AdaBoost and Bayes classifiers. Compare the classifiers and plot them.`
+Query `Create classifiers with names Regression, SVM, Tree, AdaBoost and Bayes classifiers. Compare them and plot them.`
 ## Script Variables
+- plt:<br>
+>plt is a module that provides a large suite of command line tools for creating plots. It is a
+- ax:<br>
+>ax is a scatter plot object that is used to plot the training data points on the scatter plot.
+- ds_cnt:<br>
+>It is a counter that keeps track of the number of datasets in the list of datasets. It is
+- datasets:<br>
+>The variable datasets are the datasets used to train the machine learning models. They are used to predict the
+- cm_bright:<br>
+>cm_bright is a colormap that is used to color the scatter plot. It is a color map
+- len:<br>
+>len is a function that returns the length of an object. In this case, it is used to
+- classifiers:<br>
+>The variable classifiers are used to determine the number of classifiers used in the model. This is done by
+- i:<br>
+>The variable i is a counter that is used to keep track of the number of plots that have been
+- ListedColormap:<br>
+>It is a colormap that is used to represent the color of the points in the scatter plot. The
+- cm:<br>
+>cm is a colormap object which is used to color the data points in the scatter plot.
 - X_train:<br>
 >X_train is a matrix containing the first two features of the Iris dataset. It is used to train
 - evaluation_results:<br>
@@ -11,8 +31,6 @@ Query `Create Regression, SVM, Tree, AdaBoost and Bayes classifiers. Compare the
 >The classifier_idx variable is used to iterate over the classifiers dictionary. It is used to access the name
 - X_test:<br>
 >X_test is a matrix of size (n_samples, n_features) where n_samples is the number
-- classifiers:<br>
->The variable classifiers are used to determine the number of classifiers used in the model. This is done by
 - iris:<br>
 >iris is a dataset that contains information about 150 flowers of the Iris species. The dataset contains
 - y_train:<br>
@@ -31,14 +49,10 @@ Query `Create Regression, SVM, Tree, AdaBoost and Bayes classifiers. Compare the
 >The variable classifier is a machine learning algorithm that is used to identify the most important features in a dataset
 - y_test:<br>
 >y_test is a variable that is used to test the model. It is a list of integers that
-- plt:<br>
->plt is a module that provides a large suite of command line tools for creating plots. It is a
 - accuracy_score:<br>
 >Accuracy score is a measure of the quality of a binary classification model. It is calculated as the ratio
 - axes:<br>
 >The variable axes are used to display the decision boundary of the classifier on the training data. The classifier
-- len:<br>
->len is a function that returns the length of an object. In this case, it is used to
 - accuracy_test:<br>
 >Accuracy test is a metric used to evaluate the performance of a machine learning model in classifying data.
 - y_pred:<br>
@@ -53,49 +67,21 @@ Query `Create Regression, SVM, Tree, AdaBoost and Bayes classifiers. Compare the
 >The roc_auc_score is a function that calculates the area under the receiver operating characteristic curve (ROC)
 - y_pred_proba:<br>
 >It is a probability vector of length 3, which represents the probability of each class (0,
-- make_pipeline:<br>
->make_pipeline() is a function in scikit-learn that allows us to create a pipeline of machine
-- SplineTransformer:<br>
->SplineTransformer is a class that transforms the input data into a new feature space using splines.
-- LogisticRegression:<br>
->Logistic regression is a type of classification algorithm that is used to predict the probability of a given outcome
-- RBF:<br>
->RBF is an acronym for Radial Basis Function. It is a type of kernel function used in
-- Nystroem:<br>
->Nystroem is a kernel-based method for dimensionality reduction. It is a wrapper around a
-- HistGradientBoostingClassifier:<br>
->HistGradientBoostingClassifier is a machine learning algorithm that uses a gradient boosting technique to fit a histogram
-- KBinsDiscretizer:<br>
->KBinsDiscretizer is a class used to discretize continuous features into a fixed number of bins
-- GaussianProcessClassifier:<br>
->The GaussianProcessClassifier is a classifier that uses a Gaussian process to make predictions. It is a non
-- PolynomialFeatures:<br>
->PolynomialFeatures is a class that is used to create polynomial features from the input data. It is
 ## Synthesis Blocks
-### notebooks/dataset2/classification/plot_classification_probability.ipynb
-CONTEXT:  Probabilistic classifiers  We will plot the decision boundaries of several classifiers that have a `predict_proba` method. This will allow
-us to visualize the uncertainty of the classifier in regions where it is not certain of its prediction.   COMMENT:
+### notebooks/dataset2/classification/plot_classifier_comparison.ipynb
+CONTEXT:   Classifier comparison  A comparison of several classifiers in scikit-learn on synthetic datasets. The point of this example is to
+illustrate the nature of decision boundaries of different classifiers. This should be taken with a grain of salt, as the intuition conveyed by these
+examples does not necessarily carry over to real datasets.  Particularly in high-dimensional spaces, data can more easily be separated linearly and
+the simplicity of classifiers such as naive Bayes and linear SVMs might lead to better generalization than is achieved by other classifiers.  The
+plots show training points in solid colors and testing points semi-transparent. The lower right shows the classification accuracy on the test set.
+COMMENT: just plot the dataset first
 ```python
-classifiers = {
-    "Logistic regression\n(C=0.01)": LogisticRegression(C=0.1),
-    "Logistic regression\n(C=1)": LogisticRegression(C=100),
-    "Gaussian Process": GaussianProcessClassifier(kernel=1.0 * RBF([1.0, 1.0])),
-    "Logistic regression\n(RBF features)": make_pipeline(
-        Nystroem(kernel="rbf", gamma=5e-1, n_components=50, random_state=1),
-        LogisticRegression(C=10),
-    ),
-    "Gradient Boosting": HistGradientBoostingClassifier(),
-    "Logistic regression\n(binned features)": make_pipeline(
-        KBinsDiscretizer(n_bins=5, quantile_method="averaged_inverted_cdf"),
-        PolynomialFeatures(interaction_only=True),
-        LogisticRegression(C=10),
-    ),
-    "Logistic regression\n(spline features)": make_pipeline(
-        SplineTransformer(n_knots=5),
-        PolynomialFeatures(interaction_only=True),
-        LogisticRegression(C=10),
-    ),
-}
+cm = plt.cm.RdBu
+cm_bright = ListedColormap(["#FF0000", "#0000FF"])
+
+ax = plt.subplot(len(datasets), len(classifiers) + 1, i)
+if ds_cnt == 0:
+    ax.set_title("Input data")
 ```
 
 ### notebooks/dataset2/classification/plot_classification_probability.ipynb
@@ -128,26 +114,12 @@ for classifier_idx, (name, classifier) in enumerate(classifiers.items()):
 
 ## Code Concatenation
 ```python
-classifiers = {
-    "Logistic regression\n(C=0.01)": LogisticRegression(C=0.1),
-    "Logistic regression\n(C=1)": LogisticRegression(C=100),
-    "Gaussian Process": GaussianProcessClassifier(kernel=1.0 * RBF([1.0, 1.0])),
-    "Logistic regression\n(RBF features)": make_pipeline(
-        Nystroem(kernel="rbf", gamma=5e-1, n_components=50, random_state=1),
-        LogisticRegression(C=10),
-    ),
-    "Gradient Boosting": HistGradientBoostingClassifier(),
-    "Logistic regression\n(binned features)": make_pipeline(
-        KBinsDiscretizer(n_bins=5, quantile_method="averaged_inverted_cdf"),
-        PolynomialFeatures(interaction_only=True),
-        LogisticRegression(C=10),
-    ),
-    "Logistic regression\n(spline features)": make_pipeline(
-        SplineTransformer(n_knots=5),
-        PolynomialFeatures(interaction_only=True),
-        LogisticRegression(C=10),
-    ),
-}
+cm = plt.cm.RdBu
+cm_bright = ListedColormap(["#FF0000", "#0000FF"])
+
+ax = plt.subplot(len(datasets), len(classifiers) + 1, i)
+if ds_cnt == 0:
+    ax.set_title("Input data")
 mpl.rcParams["savefig.bbox"] = "tight"
 fig, axes = plt.subplots(
     nrows=n_classifiers,

@@ -1,5 +1,5 @@
 # String Code Synthesis
-Query `Create Regression, SVM, Tree, AdaBoost and Bayes classifiers. Compare the classifiers and plot them.`
+Query `Create classifiers with names Regression, SVM, Tree, AdaBoost and Bayes classifiers. Compare them and plot them.`
 ## Script Variables
 - make_pipeline:<br>
 >make_pipeline() is a function in scikit-learn that allows us to create a pipeline of machine

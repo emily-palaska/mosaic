@@ -3,23 +3,36 @@ Query `How to perform cross_decomposition`
 ## Script Variables
 - np:<br>
 >The np variable is a Python package that provides a large collection of mathematical functions and data structures. It
+- y:<br>
+>The variable y is a 1000x1 matrix containing the actual values of the dependent variable.
 - n:<br>
 >The value of n is 1000 which is the number of samples in the dataset.
+- p:<br>
+>p is the number of components in the PLS model. In this case, it is 3
+- pls1:<br>
+>pls1 is a PLSRegression object which is used to perform PLS regression. PLS regression
+- PLSRegression:<br>
+>PLSRegression is a class that implements Partial Least Squares (PLS) regression. PLS
+- X:<br>
+>X is a matrix of size n x q where n is the number of samples and q is the
 ## Synthesis Blocks
 ### notebooks/dataset2/cross_decomposition/plot_compare_cross_decomposition.ipynb
-CONTEXT:   Compare cross decomposition methods  Simple usage of various cross decomposition algorithms:  - PLSCanonical - PLSRegression, with
-multivariate response, a.k.a. PLS2 - PLSRegression, with univariate response, a.k.a. PLS1 - CCA  Given 2 multivariate covarying two-dimensional
-datasets, X, and Y, PLS extracts the 'directions of covariance', i.e. the components of each datasets that explain the most shared variance between
-both datasets. This is apparent on the **scatterplot matrix** display: components 1 in dataset X and dataset Y are maximally correlated (points lie
-around the first diagonal). This is also true for components 2 in both dataset, however, the correlation across datasets for different components is
-weak: the point cloud is very spherical.  COMMENT: Authors: The scikit-learn developers SPDX-License-Identifier: BSD-3-Clause
+CONTEXT:  PLS regression, with multivariate response, a.k.a. PLS2   COMMENT: compare pls2.coef_ with B
 ```python
-import numpy as np
-n = 500
+n = 1000
+p = 10
+X = np.random.normal(size=n * p).reshape((n, p))
+y = X[:, 0] + 2 * X[:, 1] + np.random.normal(size=n * 1) + 5
+pls1 = PLSRegression(n_components=3)
+pls1.fit(X, y)
 ```
 
 ## Code Concatenation
 ```python
-import numpy as np
-n = 500
+n = 1000
+p = 10
+X = np.random.normal(size=n * p).reshape((n, p))
+y = X[:, 0] + 2 * X[:, 1] + np.random.normal(size=n * 1) + 5
+pls1 = PLSRegression(n_components=3)
+pls1.fit(X, y)
 ```

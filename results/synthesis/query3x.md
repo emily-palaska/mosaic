@@ -5,10 +5,6 @@ Query `How to perform cross_decomposition`
 >The np variable is a Python package that provides a large collection of mathematical functions and data structures. It
 - n:<br>
 >The value of n is 1000 which is the number of samples in the dataset.
-- print:<br>
->The variable print is used to print the correlation matrix of the input data. It is used to check
-- pls1:<br>
->pls1 is a PLSRegression object which is used to perform PLS regression. PLS regression
 - LinearRegression:<br>
 >LinearRegression is a linear regression model that fits a linear model with coefficients w to minimize the residual sum
 - axes:<br>
@@ -47,6 +43,10 @@ Query `How to perform cross_decomposition`
 >StandardScaler is a class that is used to scale the features of a dataset. It is a preprocessing
 - train_test_split:<br>
 >The train_test_split function is used to split the data into training and testing sets. It takes in
+- print:<br>
+>The variable print is used to print the correlation matrix of the input data. It is used to check
+- pls1:<br>
+>pls1 is a PLSRegression object which is used to perform PLS regression. PLS regression
 ## Synthesis Blocks
 ### notebooks/dataset2/cross_decomposition/plot_compare_cross_decomposition.ipynb
 CONTEXT:   Compare cross decomposition methods  Simple usage of various cross decomposition algorithms:  - PLSCanonical - PLSRegression, with

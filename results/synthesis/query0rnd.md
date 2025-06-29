@@ -1,73 +1,47 @@
 # Random Code Synthesis
-Query `Create Regression, SVM, Tree, AdaBoost and Bayes classifiers. Compare the classifiers and plot them.`
+Query `Create classifiers with names Regression, SVM, Tree, AdaBoost and Bayes classifiers. Compare them and plot them.`
 ## Script Variables
-- make_pipeline:<br>
->make_pipeline() is a function in scikit-learn that allows us to create a pipeline of machine
-- classifiers:<br>
->The variable classifiers are used to determine the number of classifiers used in the model. This is done by
-- SplineTransformer:<br>
->SplineTransformer is a class that transforms the input data into a new feature space using splines.
-- LogisticRegression:<br>
->Logistic regression is a type of classification algorithm that is used to predict the probability of a given outcome
-- RBF:<br>
->RBF is an acronym for Radial Basis Function. It is a type of kernel function used in
-- Nystroem:<br>
->Nystroem is a kernel-based method for dimensionality reduction. It is a wrapper around a
-- HistGradientBoostingClassifier:<br>
->HistGradientBoostingClassifier is a machine learning algorithm that uses a gradient boosting technique to fit a histogram
-- KBinsDiscretizer:<br>
->KBinsDiscretizer is a class used to discretize continuous features into a fixed number of bins
-- GaussianProcessClassifier:<br>
->The GaussianProcessClassifier is a classifier that uses a Gaussian process to make predictions. It is a non
-- PolynomialFeatures:<br>
->PolynomialFeatures is a class that is used to create polynomial features from the input data. It is
+- ax:<br>
+>ax is a scatter plot object that is used to plot the training data points on the scatter plot.
+- y_min:<br>
+>The variable y_min is the minimum value of the y axis. It is used to set the limits
+- x_min:<br>
+>x_min is the minimum value of the first column of the dataset X. It is used to determine
+- cm_bright:<br>
+>cm_bright is a colormap that is used to color the scatter plot. It is a color map
+- X_test:<br>
+>X_test is a 2D array containing the test data. It is used to plot the scatter
+- i:<br>
+>The variable i is a counter that is used to keep track of the number of plots that have been
+- y_test:<br>
+>It is a test dataset used to evaluate the performance of the classifier. It is a binary classification problem
 ## Synthesis Blocks
-### notebooks/dataset2/classification/plot_classification_probability.ipynb
-CONTEXT:  Probabilistic classifiers  We will plot the decision boundaries of several classifiers that have a `predict_proba` method. This will allow
-us to visualize the uncertainty of the classifier in regions where it is not certain of its prediction.   COMMENT:
+### notebooks/dataset2/classification/plot_classifier_comparison.ipynb
+CONTEXT:   Classifier comparison  A comparison of several classifiers in scikit-learn on synthetic datasets. The point of this example is to
+illustrate the nature of decision boundaries of different classifiers. This should be taken with a grain of salt, as the intuition conveyed by these
+examples does not necessarily carry over to real datasets.  Particularly in high-dimensional spaces, data can more easily be separated linearly and
+the simplicity of classifiers such as naive Bayes and linear SVMs might lead to better generalization than is achieved by other classifiers.  The
+plots show training points in solid colors and testing points semi-transparent. The lower right shows the classification accuracy on the test set.
+COMMENT: Plot the testing points
 ```python
-classifiers = {
-    "Logistic regression\n(C=0.01)": LogisticRegression(C=0.1),
-    "Logistic regression\n(C=1)": LogisticRegression(C=100),
-    "Gaussian Process": GaussianProcessClassifier(kernel=1.0 * RBF([1.0, 1.0])),
-    "Logistic regression\n(RBF features)": make_pipeline(
-        Nystroem(kernel="rbf", gamma=5e-1, n_components=50, random_state=1),
-        LogisticRegression(C=10),
-    ),
-    "Gradient Boosting": HistGradientBoostingClassifier(),
-    "Logistic regression\n(binned features)": make_pipeline(
-        KBinsDiscretizer(n_bins=5, quantile_method="averaged_inverted_cdf"),
-        PolynomialFeatures(interaction_only=True),
-        LogisticRegression(C=10),
-    ),
-    "Logistic regression\n(spline features)": make_pipeline(
-        SplineTransformer(n_knots=5),
-        PolynomialFeatures(interaction_only=True),
-        LogisticRegression(C=10),
-    ),
-}
+ax.scatter(
+    X_test[:, 0], X_test[:, 1], c=y_test, cmap=cm_bright, alpha=0.6, edgecolors="k"
+)
+ax.set_xlim(x_min, y_min)
+ax.set_ylim(y_min, y_min)
+ax.set_xticks(())
+ax.set_yticks(())
+i += 1
 ```
 
 ## Code Concatenation
 ```python
-classifiers = {
-    "Logistic regression\n(C=0.01)": LogisticRegression(C=0.1),
-    "Logistic regression\n(C=1)": LogisticRegression(C=100),
-    "Gaussian Process": GaussianProcessClassifier(kernel=1.0 * RBF([1.0, 1.0])),
-    "Logistic regression\n(RBF features)": make_pipeline(
-        Nystroem(kernel="rbf", gamma=5e-1, n_components=50, random_state=1),
-        LogisticRegression(C=10),
-    ),
-    "Gradient Boosting": HistGradientBoostingClassifier(),
-    "Logistic regression\n(binned features)": make_pipeline(
-        KBinsDiscretizer(n_bins=5, quantile_method="averaged_inverted_cdf"),
-        PolynomialFeatures(interaction_only=True),
-        LogisticRegression(C=10),
-    ),
-    "Logistic regression\n(spline features)": make_pipeline(
-        SplineTransformer(n_knots=5),
-        PolynomialFeatures(interaction_only=True),
-        LogisticRegression(C=10),
-    ),
-}
+ax.scatter(
+    X_test[:, 0], X_test[:, 1], c=y_test, cmap=cm_bright, alpha=0.6, edgecolors="k"
+)
+ax.set_xlim(x_min, y_min)
+ax.set_ylim(y_min, y_min)
+ax.set_xticks(())
+ax.set_yticks(())
+i += 1
 ```

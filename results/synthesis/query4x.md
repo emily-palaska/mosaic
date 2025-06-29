@@ -1,16 +1,14 @@
 # Exhaustive Code Synthesis
 Query `Simple PCA algorithm.`
 ## Script Variables
-- pca:<br>
->pca is a PCA object that is used to reduce the dimensionality of the data. It does
-- pcr:<br>
->The variable pcr is a pipeline that contains a standard scaler, a PCA component, and a linear
 - var:<br>
 >var is a variable that is used to multiply the value of comp by a variable value. It is
 - comp:<br>
 >The variable comp is a 2D array that represents the principal components of the dataset. It is
 - plt:<br>
 >plt is a module in python that is used for plotting graphs. It is a part of the matplotlib
+- pca:<br>
+>pca is a PCA object that is used to reduce the dimensionality of the data. It does
 - PCA:<br>
 >PCA is a dimensionality reduction technique that is used to reduce the number of features in a dataset while
 - n_samples:<br>
@@ -29,6 +27,8 @@ Query `Simple PCA algorithm.`
 >The zip() function is used to create an iterator that aggregates elements from
 - cov:<br>
 >The variable cov is a 2x2 matrix that represents the covariance between the two features in the
+- pcr:<br>
+>The variable pcr is a pipeline that contains a standard scaler, a PCA component, and a linear
 ## Synthesis Blocks
 ### notebooks/dataset2/cross_decomposition/plot_pcr_vs_pls.ipynb
 CONTEXT:  The data  We start by creating a simple dataset with two features. Before we even dive into PCR and PLS, we fit a PCA estimator to display

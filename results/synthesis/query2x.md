@@ -1,22 +1,18 @@
 # Exhaustive Code Synthesis
 Query `Graph operations`
 ## Script Variables
-- np:<br>
->The np variable is a Python package that provides a large collection of mathematical functions and data structures. It
-- Y_test_r:<br>
->Y_test_r is a matrix of the same size as X_test, where each row is the result
-- X_test_r:<br>
->X_test_r is the transformed version of the test dataset using the PLSCanonical model. It
-- X_train_r:<br>
->X_train_r is a matrix of 1000 rows and 2 columns. Each row represents a
-- Y_train_r:<br>
->Y_train_r is a numpy array of shape (n_samples, 1) which contains the y
-- Y:<br>
->Y is a matrix of size (n, 4) where n is the number of samples.
-- X:<br>
->X is a matrix of size n x q where n is the number of samples and q is the
 - plt:<br>
->plt is a module that provides a number of command-line interfaces for plotting in Python. It is a
+>plt is a Python library that is used to create plots. It is a part of the Matplotlib
+- print:<br>
+>The print function is used to display the output of a Python expression on the screen. It is a
+- y_test:<br>
+>The variable y_test is a numpy array containing the true labels of the test data. It is used
+- predicted:<br>
+>The variable predicted is the predicted value of the image. It is used to determine the classification of the
+- disp:<br>
+>disp is a confusion matrix which is used to compare the predicted values with the actual values. It is
+- metrics:<br>
+>Confusion matrix
 - digits:<br>
 >It is a variable that is used to store the digits of the image. It is a 2
 - _:<br>
@@ -35,16 +31,20 @@ Query `Graph operations`
 >The variable axes is a tuple containing the axes of the subplots. It is used to create a
 - label:<br>
 >The variable label is a dataset that contains 1797 images of digits from 0 to 9
-- print:<br>
->The print function is used to display the output of a Python expression on the screen. It is a
-- y_test:<br>
->The variable y_test is a numpy array containing the true labels of the test data. It is used
-- predicted:<br>
->The variable predicted is the predicted value of the image. It is used to determine the classification of the
-- disp:<br>
->disp is a confusion matrix which is used to compare the predicted values with the actual values. It is
-- metrics:<br>
->Confusion matrix
+- np:<br>
+>The np variable is a Python package that provides a large collection of mathematical functions and data structures. It
+- Y_test_r:<br>
+>Y_test_r is a matrix of the same size as X_test, where each row is the result
+- X_test_r:<br>
+>X_test_r is the transformed version of the test dataset using the PLSCanonical model. It
+- X_train_r:<br>
+>X_train_r is a matrix of 1000 rows and 2 columns. Each row represents a
+- Y_train_r:<br>
+>Y_train_r is a numpy array of shape (n_samples, 1) which contains the y
+- Y:<br>
+>Y is a matrix of size (n, 4) where n is the number of samples.
+- X:<br>
+>X is a matrix of size n x q where n is the number of samples and q is the
 ## Synthesis Blocks
 ### notebooks/dataset2/cross_decomposition/plot_compare_cross_decomposition.ipynb
 CONTEXT:  Canonical (symmetric) PLS   Transform data   COMMENT:

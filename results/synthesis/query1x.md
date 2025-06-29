@@ -3,12 +3,10 @@ Query `Create a regression model.`
 ## Script Variables
 - print:<br>
 >The variable print is used to print the correlation matrix of the input data. It is used to check
-- np:<br>
->The np variable is a Python package that provides a large collection of mathematical functions and data structures. It
-- pls1:<br>
->pls1 is a PLSRegression object which is used to perform PLS regression. PLS regression
 - q:<br>
 >The variable q is the number of components used in the PLS regression model. It is used to
+- np:<br>
+>The np variable is a Python package that provides a large collection of mathematical functions and data structures. It
 - n:<br>
 >The value of n is 1000 which is the number of samples in the dataset.
 - Y:<br>
@@ -21,14 +19,6 @@ Query `Create a regression model.`
 >pls2 is a PLSRegression object that is used to fit the data and predict the output.
 - B:<br>
 >B is a matrix of size (q, p) where q is the number of components and p
-- data:<br>
->Variable data is a dataset that contains information about the digits in the MNIST dataset.
-- digits:<br>
->It is a variable that is used to store the digits of the image. It is a 2
-- n_samples:<br>
->It is the number of samples in the dataset. In this case, it is 1797.
-- len:<br>
->len is a built-in function that returns the length of an object. In this case, it is
 - make_pipeline:<br>
 >make_pipeline() is a function in scikit-learn that allows us to create a pipeline of machine
 - classifiers:<br>
@@ -49,6 +39,16 @@ Query `Create a regression model.`
 >The GaussianProcessClassifier is a classifier that uses a Gaussian process to make predictions. It is a non
 - PolynomialFeatures:<br>
 >PolynomialFeatures is a class that is used to create polynomial features from the input data. It is
+- data:<br>
+>Variable data is a dataset that contains information about the digits in the MNIST dataset.
+- digits:<br>
+>It is a variable that is used to store the digits of the image. It is a 2
+- n_samples:<br>
+>It is the number of samples in the dataset. In this case, it is 1797.
+- len:<br>
+>len is a built-in function that returns the length of an object. In this case, it is
+- pls1:<br>
+>pls1 is a PLSRegression object which is used to perform PLS regression. PLS regression
 ## Synthesis Blocks
 ### notebooks/dataset2/classification/plot_digits_classification.ipynb
 CONTEXT:  Classification  To apply a classifier on this data, we need to flatten the images, turning each 2-D array of grayscale values from shape

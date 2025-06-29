@@ -1,19 +1,47 @@
 # Random Code Synthesis
-Query `Run a PCA algorithm and visualize it.`
+Query `Run a PCA algorithm. Visualize it by plotting some plt plots.`
 ## Script Variables
-- pca:<br>
->pca is a PCA object that is used to reduce the dimensionality of the data. It does
-- pcr:<br>
->The variable pcr is a pipeline that contains a standard scaler, a PCA component, and a linear
+- n_classifiers:<br>
+>n_classifiers is a variable that stores the number of classifiers used in the script. It is used
+- classifiers:<br>
+>The variable classifiers are used to determine the number of classifiers used in the model. This is done by
+- y_unique:<br>
+>The variable y_unique is a list of unique values in the y-axis of the surface plot. It
+- len:<br>
+>len is a function that returns the length of an object. In this case, it is used to
+- scatter_kwargs:<br>
+>It is a dictionary that contains the keyword arguments for the scatter() function. The keyword arguments are used
+- np:<br>
+>np is a python library that provides a large set of mathematical functions and data structures. It is used
+- s:<br>
+>s is a colormap which is used to color the surface of the plot. It is a list of
+- y:<br>
+>The variable y is a unique identifier for each sample in the dataset. It is used to identify the
 ## Synthesis Blocks
-### notebooks/dataset2/cross_decomposition/plot_pcr_vs_pls.ipynb
-CONTEXT: For the purpose of this example, we now define the target `y` such that it is strongly correlated with a direction that has a small variance.
-To this end, we will project `X` onto the second component, and add some noise to it.   COMMENT:
+### notebooks/dataset2/classification/plot_classification_probability.ipynb
+CONTEXT:  Plotting the decision boundaries  For each classifier, we plot the per-class probabilities on the first three columns and the probabilities
+of the most likely class on the last column.   COMMENT:
 ```python
-pca = pcr.named_steps["pca"]
+n_classifiers = len(classifiers)
+scatter_kwargs = {
+    "s": 25,
+    "marker": "o",
+    "linewidths": 0.8,
+    "edgecolor": "k",
+    "alpha": 0.7,
+}
+y_unique = np.unique(y)
 ```
 
 ## Code Concatenation
 ```python
-pca = pcr.named_steps["pca"]
+n_classifiers = len(classifiers)
+scatter_kwargs = {
+    "s": 25,
+    "marker": "o",
+    "linewidths": 0.8,
+    "edgecolor": "k",
+    "alpha": 0.7,
+}
+y_unique = np.unique(y)
 ```

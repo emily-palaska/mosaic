@@ -1,10 +1,10 @@
 # Reverse Embedding Code Synthesis
-Query `Create Regression, SVM, Tree, AdaBoost and Bayes classifiers. Compare the classifiers and plot them.`
+Query `Create classifiers with names Regression, SVM, Tree, AdaBoost and Bayes classifiers. Compare them and plot them.`
 ## Script Variables
 - make_pipeline:<br>
 >make_pipeline() is a function in scikit-learn that allows us to create a pipeline of machine
 - classifiers:<br>
->The variable classifiers are used to determine the number of classifiers used in the model. This is done by
+>The variable classifiers are used to classify the input data into different classes. They are used to identify the
 - SplineTransformer:<br>
 >SplineTransformer is a class that transforms the input data into a new feature space using splines.
 - LogisticRegression:<br>
@@ -21,53 +21,37 @@ Query `Create Regression, SVM, Tree, AdaBoost and Bayes classifiers. Compare the
 >The GaussianProcessClassifier is a classifier that uses a Gaussian process to make predictions. It is a non
 - PolynomialFeatures:<br>
 >PolynomialFeatures is a class that is used to create polynomial features from the input data. It is
-- np:<br>
->The np variable is a Python package that provides a large collection of mathematical functions and data structures. It
-- Y_test_r:<br>
->Y_test_r is a matrix of the same size as X_test, where each row is the result
-- y:<br>
->The variable y is a 1000x1 matrix containing the actual values of the dependent variable.
-- X_test_r:<br>
->X_test_r is the transformed version of the test dataset using the PLSCanonical model. It
-- X_train_r:<br>
->X_train_r is a matrix of 1000 rows and 2 columns. Each row represents a
-- Y_train_r:<br>
->Y_train_r is a numpy array of shape (n_samples, 1) which contains the y
-- Y:<br>
->Y is a matrix of size (n, 4) where n is the number of samples.
-- X:<br>
->X is a matrix of size n x q where n is the number of samples and q is the
 - plt:<br>
->plt is a Python library that is used to create plots. It is a part of the Matplotlib
+>plt is a module in Python that is used for plotting and graphing. It is a part of
+- ax:<br>
+>ax is a scatter plot object that is used to plot the training data points on the scatter plot.
+- ds_cnt:<br>
+>It is a counter that keeps track of the number of datasets in the list of datasets. It is
+- datasets:<br>
+>The variable datasets are the datasets used to train the machine learning models. They are used to predict the
+- cm_bright:<br>
+>cm_bright is a colormap that is used to color the scatter plot. It is a color map
+- len:<br>
+>len is a function that returns the length of an object. In this case, it is used to
+- i:<br>
+>The variable i is a counter that is used to keep track of the number of plots that have been
+- ListedColormap:<br>
+>It is a colormap that is used to represent the color of the points in the scatter plot. The
 ## Synthesis Blocks
-### notebooks/dataset2/cross_decomposition/plot_compare_cross_decomposition.ipynb
-CONTEXT:  Scatter plot of scores   COMMENT:
+### notebooks/dataset2/classification/plot_classifier_comparison.ipynb
+CONTEXT:   Classifier comparison  A comparison of several classifiers in scikit-learn on synthetic datasets. The point of this example is to
+illustrate the nature of decision boundaries of different classifiers. This should be taken with a grain of salt, as the intuition conveyed by these
+examples does not necessarily carry over to real datasets.  Particularly in high-dimensional spaces, data can more easily be separated linearly and
+the simplicity of classifiers such as naive Bayes and linear SVMs might lead to better generalization than is achieved by other classifiers.  The
+plots show training points in solid colors and testing points semi-transparent. The lower right shows the classification accuracy on the test set.
+COMMENT: just plot the dataset first
 ```python
-plt.figure(figsize=(12, 8))
-plt.subplot(221)
-plt.scatter(X_train_r[:, 0], Y_train_r[:, 0], label="train", marker="o", s=25)
-plt.scatter(X_test_r[:, 0], Y_test_r[:, 0], label="test", marker="o", s=25)
-plt.xlabel("x scores")
-plt.ylabel("y scores")
-plt.title(
-    "Comp. 1: X vs Y (test corr = %.2f)"
-    % np.corrcoef(X_test_r[:, 0], Y_test_r[:, 0])[0, 1]
-)
-plt.xticks(())
-plt.yticks(())
-plt.legend(loc="best")
-plt.subplot(224)
-plt.scatter(X_train_r[:, 1], Y_train_r[:, 1], label="train", marker="o", s=25)
-plt.scatter(X_test_r[:, 1], Y_test_r[:, 1], label="test", marker="o", s=25)
-plt.xlabel("x scores")
-plt.ylabel("y scores")
-plt.title(
-    "Comp. 2: X vs Y (test corr = %.2f)"
-    % np.corrcoef(X_test_r[:, 1], Y_test_r[:, 1])[0, 1]
-)
-plt.xticks(())
-plt.yticks(())
-plt.legend(loc="best")
+cm_bright = plt.cm_bright.RdBu
+cm_bright = ListedColormap(["#FF0000", "#0000FF"])
+
+ax = plt.subplot(len(datasets), len(classifiers) + 1, i)
+if ds_cnt == 0:
+    ax.set_title("Input data")
 ```
 
 ### notebooks/dataset2/classification/plot_classification_probability.ipynb
@@ -98,31 +82,12 @@ classifiers = {
 
 ## Code Concatenation
 ```python
-plt.figure(figsize=(12, 8))
-plt.subplot(221)
-plt.scatter(X_train_r[:, 0], Y_train_r[:, 0], label="train", marker="o", s=25)
-plt.scatter(X_test_r[:, 0], Y_test_r[:, 0], label="test", marker="o", s=25)
-plt.xlabel("x scores")
-plt.ylabel("y scores")
-plt.title(
-    "Comp. 1: X vs Y (test corr = %.2f)"
-    % np.corrcoef(X_test_r[:, 0], Y_test_r[:, 0])[0, 1]
-)
-plt.xticks(())
-plt.yticks(())
-plt.legend(loc="best")
-plt.subplot(224)
-plt.scatter(X_train_r[:, 1], Y_train_r[:, 1], label="train", marker="o", s=25)
-plt.scatter(X_test_r[:, 1], Y_test_r[:, 1], label="test", marker="o", s=25)
-plt.xlabel("x scores")
-plt.ylabel("y scores")
-plt.title(
-    "Comp. 2: X vs Y (test corr = %.2f)"
-    % np.corrcoef(X_test_r[:, 1], Y_test_r[:, 1])[0, 1]
-)
-plt.xticks(())
-plt.yticks(())
-plt.legend(loc="best")
+cm_bright = plt.cm_bright.RdBu
+cm_bright = ListedColormap(["#FF0000", "#0000FF"])
+
+ax = plt.subplot(len(datasets), len(classifiers) + 1, i)
+if ds_cnt == 0:
+    ax.set_title("Input data")
 classifiers = {
     "Logistic regression\n(C=0.01)": LogisticRegression(C=0.1),
     "Logistic regression\n(C=1)": LogisticRegression(C=100),
