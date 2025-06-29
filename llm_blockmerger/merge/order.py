@@ -1,3 +1,6 @@
+from llm_blockmerger.load import BlockManager
+from llm_blockmerger.core import ast_io_split
+
 def io_order(io_splits: list):
     outputs = set()
     outputs.add(out_var for io_split in io_splits for out_var in io_split['output'])
@@ -16,3 +19,14 @@ def io_order(io_splits: list):
         def_outputs |= io_splits[min_index]['output']
         remaining.remove(min_index)
     return order
+
+
+def import_order(synthesis: BlockManager):
+    return [i for i, block in enumerate(synthesis.blocks) if 'import' in block]
+
+
+def synthesis_order(synthesis: BlockManager):
+    io = io_order(ast_io_split(synthesis))
+    imp = import_order(synthesis)
+    for i in imp: io.remove(i)
+    return imp + io
