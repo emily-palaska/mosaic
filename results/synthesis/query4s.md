@@ -1,19 +1,25 @@
 # String Code Synthesis
-Query `Simple PCA algorithm.`
+Query `How to perform cross_decomposition`
 ## Script Variables
-- pca:<br>
->pca is a PCA object that is used to reduce the dimensionality of the data. It does
-- pcr:<br>
->The variable pcr is a pipeline that contains a standard scaler, a PCA component, and a linear
+- np:<br>
+>The np variable is a Python package that provides a large collection of mathematical functions and data structures. It
+- n:<br>
+>The value of n is 1000 which is the number of samples in the dataset.
 ## Synthesis Blocks
-### notebooks/dataset2/cross_decomposition/plot_pcr_vs_pls.ipynb
-CONTEXT: For the purpose of this example, we now define the target `y` such that it is strongly correlated with a direction that has a small variance.
-To this end, we will project `X` onto the second component, and add some noise to it.   COMMENT:
+### notebooks/dataset2/cross_decomposition/plot_compare_cross_decomposition.ipynb
+CONTEXT:   Compare cross decomposition methods  Simple usage of various cross decomposition algorithms:  - PLSCanonical - PLSRegression, with
+multivariate response, a.k.a. PLS2 - PLSRegression, with univariate response, a.k.a. PLS1 - CCA  Given 2 multivariate covarying two-dimensional
+datasets, X, and Y, PLS extracts the 'directions of covariance', i.e. the components of each datasets that explain the most shared variance between
+both datasets. This is apparent on the **scatterplot matrix** display: components 1 in dataset X and dataset Y are maximally correlated (points lie
+around the first diagonal). This is also true for components 2 in both dataset, however, the correlation across datasets for different components is
+weak: the point cloud is very spherical.  COMMENT: Authors: The scikit-learn developers SPDX-License-Identifier: BSD-3-Clause
 ```python
-pca = pcr.named_steps["pca"]
+import numpy as np
+n = 500
 ```
 
 ## Code Concatenation
 ```python
-pca = pcr.named_steps["pca"]
+import numpy as np
+n = 500
 ```

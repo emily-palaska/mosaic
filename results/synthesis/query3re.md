@@ -1,40 +1,39 @@
 # Reverse Embedding Code Synthesis
-Query `How to perform cross_decomposition`
+Query `Graph operations`
 ## Script Variables
-- np:<br>
->The np variable is a Python package that provides a large collection of mathematical functions and data structures. It
-- n:<br>
->The value of n is 1000 which is the number of samples in the dataset.
-- clf:<br>
->It is a classifier that is used to predict the class of a given data point.
-- svm:<br>
->svm is a short form of support vector machine. It is a machine learning algorithm that is used for
+- plt:<br>
+>plt is a Python library that is used to create plots. It is a part of the Matplotlib
+- print:<br>
+>The print function is used to display the output of a Python expression on the screen. It is a
+- y_test:<br>
+>The variable y_test is a numpy array containing the true labels of the test data. It is used
+- predicted:<br>
+>The variable predicted is the predicted value of the image. It is used to determine the classification of the
+- disp:<br>
+>disp is a confusion matrix which is used to compare the predicted values with the actual values. It is
+- metrics:<br>
+>Confusion matrix
 ## Synthesis Blocks
 ### notebooks/dataset2/cross_decomposition/plot_compare_cross_decomposition.ipynb
-CONTEXT:   Compare cross decomposition methods  Simple usage of various cross decomposition algorithms:  - PLSCanonical - PLSRegression, with
-multivariate response, a.k.a. PLS2 - PLSRegression, with univariate response, a.k.a. PLS1 - CCA  Given 2 multivariate covarying two-dimensional
-datasets, X, and Y, PLS extracts the 'directions of covariance', i.e. the components of each datasets that explain the most shared variance between
-both datasets. This is apparent on the **scatterplot matrix** display: components 1 in dataset X and dataset Y are maximally correlated (points lie
-around the first diagonal). This is also true for components 2 in both dataset, however, the correlation across datasets for different components is
-weak: the point cloud is very spherical.  COMMENT: Authors: The scikit-learn developers SPDX-License-Identifier: BSD-3-Clause
+CONTEXT:  Canonical (symmetric) PLS   Transform data   COMMENT:
 ```python
-import numpy as np
-n = 500
+import matplotlib.pyplot as plt
 ```
 
 ### notebooks/dataset2/classification/plot_digits_classification.ipynb
-CONTEXT:  Classification  To apply a classifier on this data, we need to flatten the images, turning each 2-D array of grayscale values from shape
-``(8, 8)`` into shape ``(64,)``. Subsequently, the entire dataset will be of shape ``(n_samples, n_features)``, where ``n_samples`` is the number of
-images and ``n_features`` is the total number of pixels in each image.  We can then split the data into train and test subsets and fit a support
-vector classifier on the train samples. The fitted classifier can subsequently be used to predict the value of the digit for the samples in the test
-subset.   COMMENT: Create a classifier: a support vector classifier
+CONTEXT: We can also plot a `confusion matrix <confusion_matrix>` of the true digit values and the predicted digit values.   COMMENT:
 ```python
-clf = svm.SVC(gamma=0.001)
+disp = metrics.ConfusionMatrixDisplay.from_predictions(y_test, predicted)
+disp.figure_.suptitle("Confusion Matrix")
+print(f"Confusion matrix:\n{disp.confusion_matrix}")
+plt.show()
 ```
 
 ## Code Concatenation
 ```python
-import numpy as np
-n = 500
-clf = svm.SVC(gamma=0.001)
+import matplotlib.pyplot as plt
+disp = metrics.ConfusionMatrixDisplay.from_predictions(y_test, predicted)
+disp.figure_.suptitle("Confusion Matrix")
+print(f"Confusion matrix:\n{disp.confusion_matrix}")
+plt.show()
 ```

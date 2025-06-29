@@ -1,5 +1,5 @@
 # String Code Synthesis
-Query `Create a regression model.`
+Query `Initialize a logistic regression model. Use standardization on training inputs. Train the model.`
 ## Script Variables
 - make_pipeline:<br>
 >make_pipeline() is a function in scikit-learn that allows us to create a pipeline of machine

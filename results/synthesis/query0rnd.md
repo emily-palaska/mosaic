@@ -1,47 +1,92 @@
 # Random Code Synthesis
 Query `Create classifiers with names Regression, SVM, Tree, AdaBoost and Bayes classifiers. Compare them and plot them.`
 ## Script Variables
-- ax:<br>
->ax is a scatter plot object that is used to plot the training data points on the scatter plot.
-- y_min:<br>
->The variable y_min is the minimum value of the y axis. It is used to set the limits
-- x_min:<br>
->x_min is the minimum value of the first column of the dataset X. It is used to determine
-- cm_bright:<br>
->cm_bright is a colormap that is used to color the scatter plot. It is a color map
-- X_test:<br>
->X_test is a 2D array containing the test data. It is used to plot the scatter
+- var:<br>
+>var is a variable that is used to multiply the value of comp by a variable value. It is
+- comp:<br>
+>The variable comp is a 2D array that represents the principal components of the dataset. It is
+- plt:<br>
+>plt is a module in python that is used for plotting graphs. It is a part of the matplotlib
+- pca:<br>
+>pca is a PCA object that is used to reduce the dimensionality of the data. It does
+- n_samples:<br>
+>The variable n_samples is the number of samples in the dataset. It is used to create a random
+- rng:<br>
+>The variable rng is used to generate random numbers for the train-test split and the PLSRegression model
+- X:<br>
+>X is a dataset containing information about the properties of a house, such as its size, location,
 - i:<br>
->The variable i is a counter that is used to keep track of the number of plots that have been
-- y_test:<br>
->It is a test dataset used to evaluate the performance of the classifier. It is a binary classification problem
+>The variable i is used to represent the index of the component in the PCA model. It is used
+- enumerate:<br>
+>Enumerate is a built-in function in Python that returns a list of tuples containing the index and value
+- np:<br>
+>Numpy is a library for scientific computing which provides a high-performance multidimensional array object, and tools
+- zip:<br>
+>The zip() function is used to create an iterator that aggregates elements from
+- cov:<br>
+>The variable cov is a 2x2 matrix that represents the covariance between the two features in the
 ## Synthesis Blocks
-### notebooks/dataset2/classification/plot_classifier_comparison.ipynb
-CONTEXT:   Classifier comparison  A comparison of several classifiers in scikit-learn on synthetic datasets. The point of this example is to
-illustrate the nature of decision boundaries of different classifiers. This should be taken with a grain of salt, as the intuition conveyed by these
-examples does not necessarily carry over to real datasets.  Particularly in high-dimensional spaces, data can more easily be separated linearly and
-the simplicity of classifiers such as naive Bayes and linear SVMs might lead to better generalization than is achieved by other classifiers.  The
-plots show training points in solid colors and testing points semi-transparent. The lower right shows the classification accuracy on the test set.
-COMMENT: Plot the testing points
+### notebooks/dataset2/cross_decomposition/plot_pcr_vs_pls.ipynb
+CONTEXT:  The data  We start by creating a simple dataset with two features. Before we even dive into PCR and PLS, we fit a PCA estimator to display
+the two principal components of this dataset, i.e. the two directions that explain the most variance in the data.   COMMENT: scale component by its
+variance explanation power
 ```python
-ax.scatter(
-    X_test[:, 0], X_test[:, 1], c=y_test, cmap=cm_bright, alpha=0.6, edgecolors="k"
+import matplotlib.pyplot as plt
+import numpy as np
+from sklearn.decomposition import pca
+rng = np.random.RandomState(0)
+n_samples = 500
+cov = [[3, 3], [3, 4]]
+X = rng.multivariate_normal(mean=[0, 0], cov=cov, size=n_samples)
+pca = pca(n_components=2).fit(X)
+plt.scatter(X[:, 0], X[:, 1], alpha=0.3, label="samples")
+for i, (comp, var) in enumerate(zip(pca.components_, pca.explained_variance_)):
+    comp = comp * var
+
+    plt.plot(
+        [0, comp[0]],
+        [0, comp[1]],
+        label=f"Component {i}",
+        linewidth=5,
+        color=f"C{i + 2}",
+    )
+plt.gca().set(
+    aspect="equal",
+    title="2-dimensional dataset with principal components",
+    xlabel="first feature",
+    ylabel="second feature",
 )
-ax.set_xlim(x_min, y_min)
-ax.set_ylim(y_min, y_min)
-ax.set_xticks(())
-ax.set_yticks(())
-i += 1
+plt.legend()
+plt.show()
 ```
 
 ## Code Concatenation
 ```python
-ax.scatter(
-    X_test[:, 0], X_test[:, 1], c=y_test, cmap=cm_bright, alpha=0.6, edgecolors="k"
+import matplotlib.pyplot as plt
+import numpy as np
+from sklearn.decomposition import pca
+rng = np.random.RandomState(0)
+n_samples = 500
+cov = [[3, 3], [3, 4]]
+X = rng.multivariate_normal(mean=[0, 0], cov=cov, size=n_samples)
+pca = pca(n_components=2).fit(X)
+plt.scatter(X[:, 0], X[:, 1], alpha=0.3, label="samples")
+for i, (comp, var) in enumerate(zip(pca.components_, pca.explained_variance_)):
+    comp = comp * var
+
+    plt.plot(
+        [0, comp[0]],
+        [0, comp[1]],
+        label=f"Component {i}",
+        linewidth=5,
+        color=f"C{i + 2}",
+    )
+plt.gca().set(
+    aspect="equal",
+    title="2-dimensional dataset with principal components",
+    xlabel="first feature",
+    ylabel="second feature",
 )
-ax.set_xlim(x_min, y_min)
-ax.set_ylim(y_min, y_min)
-ax.set_xticks(())
-ax.set_yticks(())
-i += 1
+plt.legend()
+plt.show()
 ```

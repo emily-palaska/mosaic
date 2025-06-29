@@ -1,32 +1,73 @@
 # String Code Synthesis
-Query `Graph operations`
+Query `Create a regression model.`
 ## Script Variables
-- plt:<br>
->plt is a module that provides a number of command-line interfaces for plotting in Python. It is a
-- print:<br>
->The print function is used to display the output of a Python expression on the screen. It is a
-- y_test:<br>
->The variable y_test is a numpy array containing the true labels of the test data. It is used
-- predicted:<br>
->The variable predicted is the predicted value of the image. It is used to determine the classification of the
-- disp:<br>
->disp is a confusion matrix which is used to compare the predicted values with the actual values. It is
-- metrics:<br>
->Confusion matrix
+- make_pipeline:<br>
+>make_pipeline() is a function in scikit-learn that allows us to create a pipeline of machine
+- classifiers:<br>
+>The variable classifiers are used to determine the number of classifiers used in the model. This is done by
+- SplineTransformer:<br>
+>SplineTransformer is a class that transforms the input data into a new feature space using splines.
+- LogisticRegression:<br>
+>Logistic regression is a type of classification algorithm that is used to predict the probability of a given outcome
+- RBF:<br>
+>RBF is an acronym for Radial Basis Function. It is a type of kernel function used in
+- Nystroem:<br>
+>Nystroem is a kernel-based method for dimensionality reduction. It is a wrapper around a
+- HistGradientBoostingClassifier:<br>
+>HistGradientBoostingClassifier is a machine learning algorithm that uses a gradient boosting technique to fit a histogram
+- KBinsDiscretizer:<br>
+>KBinsDiscretizer is a class used to discretize continuous features into a fixed number of bins
+- GaussianProcessClassifier:<br>
+>The GaussianProcessClassifier is a classifier that uses a Gaussian process to make predictions. It is a non
+- PolynomialFeatures:<br>
+>PolynomialFeatures is a class that is used to create polynomial features from the input data. It is
 ## Synthesis Blocks
-### notebooks/dataset2/classification/plot_digits_classification.ipynb
-CONTEXT: We can also plot a `confusion matrix <confusion_matrix>` of the true digit values and the predicted digit values.   COMMENT:
+### notebooks/dataset2/classification/plot_classification_probability.ipynb
+CONTEXT:  Probabilistic classifiers  We will plot the decision boundaries of several classifiers that have a `predict_proba` method. This will allow
+us to visualize the uncertainty of the classifier in regions where it is not certain of its prediction.   COMMENT:
 ```python
-disp = metrics.ConfusionMatrixDisplay.from_predictions(y_test, predicted)
-disp.figure_.suptitle("Confusion Matrix")
-print(f"Confusion matrix:\n{disp.confusion_matrix}")
-plt.show()
+classifiers = {
+    "Logistic regression\n(C=0.01)": LogisticRegression(C=0.1),
+    "Logistic regression\n(C=1)": LogisticRegression(C=100),
+    "Gaussian Process": GaussianProcessClassifier(kernel=1.0 * RBF([1.0, 1.0])),
+    "Logistic regression\n(RBF features)": make_pipeline(
+        Nystroem(kernel="rbf", gamma=5e-1, n_components=50, random_state=1),
+        LogisticRegression(C=10),
+    ),
+    "Gradient Boosting": HistGradientBoostingClassifier(),
+    "Logistic regression\n(binned features)": make_pipeline(
+        KBinsDiscretizer(n_bins=5, quantile_method="averaged_inverted_cdf"),
+        PolynomialFeatures(interaction_only=True),
+        LogisticRegression(C=10),
+    ),
+    "Logistic regression\n(spline features)": make_pipeline(
+        SplineTransformer(n_knots=5),
+        PolynomialFeatures(interaction_only=True),
+        LogisticRegression(C=10),
+    ),
+}
 ```
 
 ## Code Concatenation
 ```python
-disp = metrics.ConfusionMatrixDisplay.from_predictions(y_test, predicted)
-disp.figure_.suptitle("Confusion Matrix")
-print(f"Confusion matrix:\n{disp.confusion_matrix}")
-plt.show()
+classifiers = {
+    "Logistic regression\n(C=0.01)": LogisticRegression(C=0.1),
+    "Logistic regression\n(C=1)": LogisticRegression(C=100),
+    "Gaussian Process": GaussianProcessClassifier(kernel=1.0 * RBF([1.0, 1.0])),
+    "Logistic regression\n(RBF features)": make_pipeline(
+        Nystroem(kernel="rbf", gamma=5e-1, n_components=50, random_state=1),
+        LogisticRegression(C=10),
+    ),
+    "Gradient Boosting": HistGradientBoostingClassifier(),
+    "Logistic regression\n(binned features)": make_pipeline(
+        KBinsDiscretizer(n_bins=5, quantile_method="averaged_inverted_cdf"),
+        PolynomialFeatures(interaction_only=True),
+        LogisticRegression(C=10),
+    ),
+    "Logistic regression\n(spline features)": make_pipeline(
+        SplineTransformer(n_knots=5),
+        PolynomialFeatures(interaction_only=True),
+        LogisticRegression(C=10),
+    ),
+}
 ```

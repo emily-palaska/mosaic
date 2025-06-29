@@ -1,154 +1,138 @@
 # Exhaustive Code Synthesis
-Query `Graph operations`
+Query `Create a regression model.`
 ## Script Variables
-- plt:<br>
->plt is a Python library that is used to create plots. It is a part of the Matplotlib
-- print:<br>
->The print function is used to display the output of a Python expression on the screen. It is a
-- y_test:<br>
->The variable y_test is a numpy array containing the true labels of the test data. It is used
-- predicted:<br>
->The variable predicted is the predicted value of the image. It is used to determine the classification of the
-- disp:<br>
->disp is a confusion matrix which is used to compare the predicted values with the actual values. It is
-- metrics:<br>
->Confusion matrix
+- data:<br>
+>Variable data is a dataset that contains information about the digits in the MNIST dataset.
 - digits:<br>
 >It is a variable that is used to store the digits of the image. It is a 2
-- _:<br>
->The variable _ is a placeholder for the value of the variable digits, which is a dictionary containing the
-- zip:<br>
->It is a function that takes two arguments, a list of lists and a list of strings. It
-- ax:<br>
->The variable ax is a subplot object that is used to display the images in the script. It is
-- datasets:<br>
->The dataset is a collection of 1797 images of handwritten digits, each image is a 8
-- cm:<br>
->cm is a confusion matrix that is used to compare the actual values of the target variable with the predicted
-- image:<br>
->Image is a 2D array of size 8x8. It contains the pixels of the
-- axes:<br>
->The variable axes is a tuple containing the axes of the subplots. It is used to create a
-- label:<br>
->The variable label is a dataset that contains 1797 images of digits from 0 to 9
+- n_samples:<br>
+>It is the number of samples in the dataset. In this case, it is 1797.
+- len:<br>
+>len is a built-in function that returns the length of an object. In this case, it is
+- print:<br>
+>The variable print is used to print the correlation matrix of the input data. It is used to check
+- q:<br>
+>The variable q is the number of components used in the PLS regression model. It is used to
 - np:<br>
 >The np variable is a Python package that provides a large collection of mathematical functions and data structures. It
-- Y_test_r:<br>
->Y_test_r is a matrix of the same size as X_test, where each row is the result
-- X_test_r:<br>
->X_test_r is the transformed version of the test dataset using the PLSCanonical model. It
-- X_train_r:<br>
->X_train_r is a matrix of 1000 rows and 2 columns. Each row represents a
-- Y_train_r:<br>
->Y_train_r is a numpy array of shape (n_samples, 1) which contains the y
+- n:<br>
+>The value of n is 1000 which is the number of samples in the dataset.
 - Y:<br>
 >Y is a matrix of size (n, 4) where n is the number of samples.
+- PLSRegression:<br>
+>PLSRegression is a class that implements Partial Least Squares (PLS) regression. PLS
 - X:<br>
 >X is a matrix of size n x q where n is the number of samples and q is the
+- pls2:<br>
+>pls2 is a PLSRegression object that is used to fit the data and predict the output.
+- B:<br>
+>B is a matrix of size (q, p) where q is the number of components and p
+- make_pipeline:<br>
+>make_pipeline() is a function in scikit-learn that allows us to create a pipeline of machine
+- classifiers:<br>
+>The variable classifiers are used to determine the number of classifiers used in the model. This is done by
+- SplineTransformer:<br>
+>SplineTransformer is a class that transforms the input data into a new feature space using splines.
+- LogisticRegression:<br>
+>Logistic regression is a type of classification algorithm that is used to predict the probability of a given outcome
+- RBF:<br>
+>RBF is an acronym for Radial Basis Function. It is a type of kernel function used in
+- Nystroem:<br>
+>Nystroem is a kernel-based method for dimensionality reduction. It is a wrapper around a
+- HistGradientBoostingClassifier:<br>
+>HistGradientBoostingClassifier is a machine learning algorithm that uses a gradient boosting technique to fit a histogram
+- KBinsDiscretizer:<br>
+>KBinsDiscretizer is a class used to discretize continuous features into a fixed number of bins
+- GaussianProcessClassifier:<br>
+>The GaussianProcessClassifier is a classifier that uses a Gaussian process to make predictions. It is a non
+- PolynomialFeatures:<br>
+>PolynomialFeatures is a class that is used to create polynomial features from the input data. It is
+- pls1:<br>
+>pls1 is a PLSRegression object which is used to perform PLS regression. PLS regression
 ## Synthesis Blocks
-### notebooks/dataset2/cross_decomposition/plot_compare_cross_decomposition.ipynb
-CONTEXT:  Canonical (symmetric) PLS   Transform data   COMMENT:
-```python
-import matplotlib.pyplot as plt
-```
-
 ### notebooks/dataset2/classification/plot_digits_classification.ipynb
-CONTEXT:   Recognizing hand-written digits  This example shows how scikit-learn can be used to recognize images of hand-written digits, from 0-9.
-COMMENT: Authors: The scikit-learn developers SPDX-License-Identifier: BSD-3-Clause Standard scientific Python imports
+CONTEXT:  Classification  To apply a classifier on this data, we need to flatten the images, turning each 2-D array of grayscale values from shape
+``(8, 8)`` into shape ``(64,)``. Subsequently, the entire dataset will be of shape ``(n_samples, n_features)``, where ``n_samples`` is the number of
+images and ``n_features`` is the total number of pixels in each image.  We can then split the data into train and test subsets and fit a support
+vector classifier on the train samples. The fitted classifier can subsequently be used to predict the value of the digit for the samples in the test
+subset.   COMMENT: flatten the images
 ```python
-import matplotlib.pyplot as plt
-```
-
-### notebooks/dataset2/classification/plot_digits_classification.ipynb
-CONTEXT:  Digits dataset  The digits dataset consists of 8x8 pixel images of digits. The ``images`` attribute of the dataset stores 8x8 arrays of
-grayscale values for each image. We will use these arrays to visualize the first 4 images. The ``target`` attribute of the dataset stores the digit
-each image represents and this is included in the title of the 4 plots below.  Note: if we were working from image files (e.g., 'png' files), we would
-load them using :func:`matplotlib.pyplot.imread`.   COMMENT:
-```python
-digits = datasets.load_digits()
-_, axes = plt.subplots(nrows=1, ncols=4, figsize=(10, 3))
-for ax, image, label in zip(axes, digits.images, digits.target):
-    ax.set_axis_off()
-    ax.imshow(image, cmap=plt.cm.gray_r, interpolation="nearest")
-    ax.set_title("Training: %i" % label)
-```
-
-### notebooks/dataset2/classification/plot_digits_classification.ipynb
-CONTEXT: We can also plot a `confusion matrix <confusion_matrix>` of the true digit values and the predicted digit values.   COMMENT:
-```python
-disp = metrics.ConfusionMatrixDisplay.from_predictions(y_test, predicted)
-disp.figure_.suptitle("Confusion Matrix")
-print(f"Confusion matrix:\n{disp.confusion_matrix}")
-plt.show()
+n_samples = len(digits.images)
+data = digits.images.reshape((n_samples, -1))
 ```
 
 ### notebooks/dataset2/cross_decomposition/plot_compare_cross_decomposition.ipynb
-CONTEXT:  Scatter plot of scores   COMMENT: On diagonal plot X vs Y scores on each components
+CONTEXT:  PLS regression, with univariate response, a.k.a. PLS1   COMMENT:
 ```python
-plt.subplot(222)
-plt.scatter(X_train_r[:, 0], X_train_r[:, 1], label="train", marker="*", s=50)
-plt.scatter(X_test_r[:, 0], X_test_r[:, 1], label="test", marker="*", s=50)
-plt.xlabel("X comp. 1")
-plt.ylabel("X comp. 2")
-plt.title(
-    "X comp. 1 vs X comp. 2 (test corr = %.2f)"
-    % np.corrcoef(X_test_r[:, 0], X_test_r[:, 1])[0, 1]
-)
-plt.legend(loc="best")
-plt.xticks(())
-plt.yticks(())
-plt.subplot(223)
-plt.scatter(Y_train_r[:, 0], Y_train_r[:, 1], label="train", marker="*", s=50)
-plt.scatter(Y_test_r[:, 0], Y_test_r[:, 1], label="test", marker="*", s=50)
-plt.xlabel("Y comp. 1")
-plt.ylabel("Y comp. 2")
-plt.title(
-    "Y comp. 1 vs Y comp. 2 , (test corr = %.2f)"
-    % np.corrcoef(Y_test_r[:, 0], Y_test_r[:, 1])[0, 1]
-)
-plt.legend(loc="best")
-plt.xticks(())
-plt.yticks(())
-plt.show()
+print("Estimated betas")
+print(np.round(pls1.coef_, 1))
+```
+
+### notebooks/dataset2/cross_decomposition/plot_compare_cross_decomposition.ipynb
+CONTEXT:  PLS regression, with multivariate response, a.k.a. PLS2   COMMENT:
+```python
+Y = np.dot(X, B) + np.random.normal(size=n * q).reshape((n, q)) + 5
+pls2 = PLSRegression(n_components=3)
+pls2.fit(X, Y)
+print("True B (such that: Y = XB + Err)")
+print(B)
+```
+
+### notebooks/dataset2/classification/plot_classification_probability.ipynb
+CONTEXT:  Probabilistic classifiers  We will plot the decision boundaries of several classifiers that have a `predict_proba` method. This will allow
+us to visualize the uncertainty of the classifier in regions where it is not certain of its prediction.   COMMENT:
+```python
+classifiers = {
+    "Logistic regression\n(C=0.01)": LogisticRegression(C=0.1),
+    "Logistic regression\n(C=1)": LogisticRegression(C=100),
+    "Gaussian Process": GaussianProcessClassifier(kernel=1.0 * RBF([1.0, 1.0])),
+    "Logistic regression\n(RBF features)": make_pipeline(
+        Nystroem(kernel="rbf", gamma=5e-1, n_components=50, random_state=1),
+        LogisticRegression(C=10),
+    ),
+    "Gradient Boosting": HistGradientBoostingClassifier(),
+    "Logistic regression\n(binned features)": make_pipeline(
+        KBinsDiscretizer(n_bins=5, quantile_method="averaged_inverted_cdf"),
+        PolynomialFeatures(interaction_only=True),
+        LogisticRegression(C=10),
+    ),
+    "Logistic regression\n(spline features)": make_pipeline(
+        SplineTransformer(n_knots=5),
+        PolynomialFeatures(interaction_only=True),
+        LogisticRegression(C=10),
+    ),
+}
 ```
 
 ## Code Concatenation
 ```python
-import matplotlib.pyplot as plt
-import matplotlib.pyplot as plt
-digits = datasets.load_digits()
-_, axes = plt.subplots(nrows=1, ncols=4, figsize=(10, 3))
-for ax, image, label in zip(axes, digits.images, digits.target):
-    ax.set_axis_off()
-    ax.imshow(image, cmap=plt.cm.gray_r, interpolation="nearest")
-    ax.set_title("Training: %i" % label)
-disp = metrics.ConfusionMatrixDisplay.from_predictions(y_test, predicted)
-disp.figure_.suptitle("Confusion Matrix")
-print(f"Confusion matrix:\n{disp.confusion_matrix}")
-plt.show()
-plt.subplot(222)
-plt.scatter(X_train_r[:, 0], X_train_r[:, 1], label="train", marker="*", s=50)
-plt.scatter(X_test_r[:, 0], X_test_r[:, 1], label="test", marker="*", s=50)
-plt.xlabel("X comp. 1")
-plt.ylabel("X comp. 2")
-plt.title(
-    "X comp. 1 vs X comp. 2 (test corr = %.2f)"
-    % np.corrcoef(X_test_r[:, 0], X_test_r[:, 1])[0, 1]
-)
-plt.legend(loc="best")
-plt.xticks(())
-plt.yticks(())
-plt.subplot(223)
-plt.scatter(Y_train_r[:, 0], Y_train_r[:, 1], label="train", marker="*", s=50)
-plt.scatter(Y_test_r[:, 0], Y_test_r[:, 1], label="test", marker="*", s=50)
-plt.xlabel("Y comp. 1")
-plt.ylabel("Y comp. 2")
-plt.title(
-    "Y comp. 1 vs Y comp. 2 , (test corr = %.2f)"
-    % np.corrcoef(Y_test_r[:, 0], Y_test_r[:, 1])[0, 1]
-)
-plt.legend(loc="best")
-plt.xticks(())
-plt.yticks(())
-plt.show()
+n_samples = len(digits.images)
+data = digits.images.reshape((n_samples, -1))
+print("Estimated betas")
+print(np.round(pls1.coef_, 1))
+Y = np.dot(X, B) + np.random.normal(size=n * q).reshape((n, q)) + 5
+pls2 = PLSRegression(n_components=3)
+pls2.fit(X, Y)
+print("True B (such that: Y = XB + Err)")
+print(B)
+classifiers = {
+    "Logistic regression\n(C=0.01)": LogisticRegression(C=0.1),
+    "Logistic regression\n(C=1)": LogisticRegression(C=100),
+    "Gaussian Process": GaussianProcessClassifier(kernel=1.0 * RBF([1.0, 1.0])),
+    "Logistic regression\n(RBF features)": make_pipeline(
+        Nystroem(kernel="rbf", gamma=5e-1, n_components=50, random_state=1),
+        LogisticRegression(C=10),
+    ),
+    "Gradient Boosting": HistGradientBoostingClassifier(),
+    "Logistic regression\n(binned features)": make_pipeline(
+        KBinsDiscretizer(n_bins=5, quantile_method="averaged_inverted_cdf"),
+        PolynomialFeatures(interaction_only=True),
+        LogisticRegression(C=10),
+    ),
+    "Logistic regression\n(spline features)": make_pipeline(
+        SplineTransformer(n_knots=5),
+        PolynomialFeatures(interaction_only=True),
+        LogisticRegression(C=10),
+    ),
+}
 ```

@@ -1,5 +1,5 @@
 # Embedding Code Synthesis
-Query `Create a regression model.`
+Query `Initialize a logistic regression model. Use standardization on training inputs. Train the model.`
 ## Script Variables
 - make_pipeline:<br>
 >The variable make_pipeline is a function that takes a list of classifiers and returns a pipeline object that can
@@ -10,7 +10,7 @@ Query `Create a regression model.`
 - LogisticRegression:<br>
 >Logistic regression is a type of classification algorithm that is used to predict the probability of a given outcome
 - RBF:<br>
->RBF is an acronym for Radial Basis Function. It is a type of kernel function used in
+>RBF stands for Radial Basis Function. It is a kernel function used in Gaussian Process Classifier.
 - Nystroem:<br>
 >Nystroem is a kernel-based method for dimensionality reduction. It is a wrapper around a
 - HistGradientBoostingClassifier:<br>
@@ -18,111 +18,144 @@ Query `Create a regression model.`
 - KBinsDiscretizer:<br>
 >KBinsDiscretizer is a class used to discretize continuous features into a fixed number of bins
 - GaussianProcessClassifier:<br>
->The GaussianProcessClassifier is a classifier that uses a Gaussian process to make predictions. It is a non
+>GaussianProcessClassifier is a machine learning algorithm that uses a Gaussian process to classify data. It is
 - PolynomialFeatures:<br>
 >PolynomialFeatures is a class that is used to create polynomial features from the input data. It is
-- train_test_split:<br>
->train_test_split is a function that splits the dataset into two parts, one part is used for
-- pd:<br>
->pd is a python package that provides data structures and operations for manipulating numerical data and time series data
-- mpl:<br>
->mpl is a python package that provides a comprehensive set of tools for creating and manipulating plots in a variety
 - plt:<br>
->plt is a Python library that is used to create plots. It is a part of the Matplotlib
-- accuracy_score:<br>
->Accuracy score is a measure of the quality of a binary classification model. It is calculated as the ratio
-- datasets:<br>
->The variable datasets are the datasets used to train the machine learning models. They are used to predict the
-- cm:<br>
->cm is a colormap object which is used to color the data points in the scatter plot.
-- np:<br>
->The np variable is a Python package that provides a large collection of mathematical functions and data structures. It
-- DecisionBoundaryDisplay:<br>
->It is a class that is used to display the decision boundary of a classifier. It takes in a
-- log_loss:<br>
->The log_loss function is used to calculate the loss function for a binary classification problem. It is a
-- roc_auc_score:<br>
->The roc_auc_score is a function that calculates the area under the receiver operating characteristic curve (ROC)
-- print:<br>
->The variable print is used to print the correlation matrix of the input data. It is used to check
-- q:<br>
->The variable q is the number of components used in the PLS regression model. It is used to
-- n:<br>
->The value of n is 1000 which is the number of samples in the dataset.
-- Y:<br>
->Y is a matrix of size (n, 4) where n is the number of samples.
-- PLSRegression:<br>
->PLSRegression is a class that implements Partial Least Squares (PLS) regression. PLS
-- X:<br>
->X is a numpy array containing the training data for the dataset. It is a 2D array
-- pls2:<br>
->pls2 is a PLSRegression object that is used to fit the data and predict the output.
-- B:<br>
->B is a matrix of size (q, p) where q is the number of components and p
-- Y_test_r:<br>
->Y_test_r is a matrix of the same size as X_test, where each row is the result
-- y:<br>
->The variable y is a 1000x1 matrix containing the actual values of the dependent variable.
-- X_test_r:<br>
->X_test_r is the transformed version of the test dataset using the PLSCanonical model. It
-- X_train_r:<br>
->X_train_r is a matrix of 1000 rows and 2 columns. Each row represents a
-- Y_train_r:<br>
->Y_train_r is a numpy array of shape (n_samples, 1) which contains the y
-- ax:<br>
->ax is a scatter plot object that is used to plot the training data points on the scatter plot.
+>plt is a module that provides a large suite of command line tools for creating plots. It is a
+- GaussianNB:<br>
+>GaussianNB is a classifier that uses a Gaussian distribution to represent the class conditional density. The model
 - StandardScaler:<br>
 >StandardScaler is a class that is used to scale the data to a standard normal distribution. It is
+- MLPClassifier:<br>
+>MLPClassifier is a machine learning algorithm that uses a multi-layer perceptron (MLP) to
+- QuadraticDiscriminantAnalysis:<br>
+>QuadraticDiscriminantAnalysis is a classification algorithm that uses quadratic discriminant analysis to classify data points
+- KNeighborsClassifier:<br>
+>KNeighborsClassifier is a classifier that uses a k-Nearest Neighbors algorithm to classify new data
 - names:<br>
 >X
-- X_train:<br>
->X_train is a matrix of size 500x2 containing the features of the training dataset.
-- X_test:<br>
->X_test is a 2D array containing the test data. It is used to plot the scatter
-- len:<br>
->len is a function that returns the length of an object. In this case, it is used to
-- clf:<br>
->clf is a classifier object that is used to predict the class of a given data point. It is
-- y_train:<br>
->It is a vector of size 400 which contains the labels of the training data. It is used
+- make_classification:<br>
+>The make_classification function is a function in the sklearn.datasets module that generates synthetic data for classification problems.
+- datasets:<br>
+>The variable datasets are the datasets used to train the machine learning models. They are used to predict the
+- X:<br>
+>X is a numpy array containing the training data for the dataset. It is a 2D array
+- make_circles:<br>
+>The make_circles function creates a dataset of two-dimensional data points that are generated from two circles with
+- SVC:<br>
+>SVC stands for Support Vector Classifier. It is a supervised machine learning algorithm that is used for classification
+- DecisionTreeClassifier:<br>
+>DecisionTreeClassifier is a classifier that uses a decision tree to predict the class of an input sample.
+- np:<br>
+>The np variable is a Python package that provides a large collection of mathematical functions and data structures. It
 - i:<br>
 >The variable i is a counter that is used to keep track of the number of plots that have been
-- y_test:<br>
->It is a test dataset used to evaluate the performance of the classifier. It is a binary classification problem
-- zip:<br>
->The zip() function in Python is used to create an iterator that aggregates elements from two or more iter
-- score:<br>
->It is a variable that represents the accuracy of the model on the test data. It is used to
-- name:<br>
->The variable name is 'clf' which is an abbreviation for classifier. It is a classifier that is
+- DecisionBoundaryDisplay:<br>
+>It is a class that is used to display the decision boundary of a classifier. It takes in a
+- make_moons:<br>
+>The make_moons function is a function that generates a dataset of two-dimensional data points that are either
+- AdaBoostClassifier:<br>
+>AdaBoostClassifier is a machine learning algorithm that combines multiple weak classifiers to create a strong classifier. It
+- ListedColormap:<br>
+>It is a colormap that is used to represent the color of the points in the scatter plot. The
+- y:<br>
+>The variable y is a numpy array containing the labels of the training and testing data. It is used
+- figure:<br>
+>The variable figure is used to create a figure object in matplotlib. It is used to display the output
+- rng:<br>
+>The variable rng is a random number generator. It is used to generate random numbers for the script.
+- train_test_split:<br>
+>train_test_split() is a function that splits the dataset into training and testing sets. The test_size
+- RandomForestClassifier:<br>
+>RandomForestClassifier is a classifier that uses a collection of decision trees, each of which is trained on
+- linearly_separable:<br>
+>The variable linearly_separable is a tuple containing two numpy arrays, X and y. X is
+- clf:<br>
+>It is a classifier that is used to predict the class of a given data point.
+- predicted:<br>
+>The variable predicted is the predicted value of the image. It is used to determine the classification of the
+- X_test:<br>
+>X_test is a test dataset which is used to evaluate the model's performance. It is a subset
+- _:<br>
+>The variable _ is used to create a colorbar for the maximum class probability surface. It is used
+- fig:<br>
+>fig is a variable that is used to create a figure object. It is used to create a plot
+- cm:<br>
+>cm is a scalar map object that is used to create a colorbar. It is used to create
+- ax_single:<br>
+>ax_single is a matplotlib.axes.Axes object that is used to create a colorbar. It is
+- disp:<br>
+>disp is a variable that is used to display the decision boundary of the classifier. It is used to
+- n_train:<br>
+>n_train is the number of training samples. It is used to initialize the covariance matrix of the O
+- n:<br>
+>The value of n is 1000 which is the number of samples in the dataset.
 ## Synthesis Blocks
-### notebooks/dataset2/classification/plot_classification_probability.ipynb
-CONTEXT:   Plot classification probability  This example illustrates the use of :class:`sklearn.inspection.DecisionBoundaryDisplay` to plot the
-predicted class probabilities of various classifiers in a 2D feature space, mostly for didactic purposes.  The first three columns shows the predicted
-probability for varying values of the two features. Round markers represent the test data that was predicted to belong to that class.  In the last
-column, all three classes are represented on each plot; the class with the highest predicted probability at each point is plotted. The round markers
-show the test data and are colored by their true label. Authors: The scikit-learn developers SPDX-License-Identifier: BSD-3-Clause   COMMENT:
+### notebooks/dataset2/classification/plot_classifier_comparison.ipynb
+CONTEXT:   Classifier comparison  A comparison of several classifiers in scikit-learn on synthetic datasets. The point of this example is to
+illustrate the nature of decision boundaries of different classifiers. This should be taken with a grain of salt, as the intuition conveyed by these
+examples does not necessarily carry over to real datasets.  Particularly in high-dimensional spaces, data can more easily be separated linearly and
+the simplicity of classifiers such as naive Bayes and linear SVMs might lead to better generalization than is achieved by other classifiers.  The
+plots show training points in solid colors and testing points semi-transparent. The lower right shows the classification accuracy on the test set.
+COMMENT: Authors: The scikit-learn developers SPDX-License-Identifier: BSD-3-Clause
 ```python
-import matplotlib as mpl
 import matplotlib.pyplot as plt
 import numpy as np
-import pandas as pd
-from matplotlib import cm
-from sklearn import datasets
-from sklearn.ensemble import HistGradientBoostingClassifier
+from matplotlib.colors import ListedColormap
+from sklearn.datasets import make_circles, make_classification, make_moons
+from sklearn.discriminant_analysis import QuadraticDiscriminantAnalysis
+from sklearn.ensemble import AdaBoostClassifier, RandomForestClassifier
 from sklearn.gaussian_process import GaussianProcessClassifier
 from sklearn.gaussian_process.kernels import RBF
 from sklearn.inspection import DecisionBoundaryDisplay
-from sklearn.kernel_approximation import Nystroem
-from sklearn.linear_model import LogisticRegression
-from sklearn.metrics import accuracy_score, log_loss, roc_auc_score
 from sklearn.model_selection import train_test_split
+from sklearn.naive_bayes import GaussianNB
+from sklearn.neighbors import KNeighborsClassifier
+from sklearn.neural_network import MLPClassifier
 from sklearn.pipeline import make_pipeline
-from sklearn.preprocessing import (
-    KBinsDiscretizer,
-    PolynomialFeatures,
-    SplineTransformer,
+from sklearn.preprocessing import StandardScaler
+from sklearn.svm import SVC
+from sklearn.tree import DecisionTreeClassifier
+names = [
+    "Nearest Neighbors",
+    "Linear SVM",
+    "RBF SVM",
+    "Gaussian Process",
+    "Decision Tree",
+    "Random Forest",
+    "Neural Net",
+    "AdaBoost",
+    "Naive Bayes",
+    "QDA",
+]
+classifiers = [
+    KNeighborsClassifier(3),
+    SVC(kernel="linear", C=0.025, random_state=42),
+    SVC(gamma=2, C=1, random_state=42),
+    GaussianProcessClassifier(1.0 * RBF(1.0), random_state=42),
+    DecisionTreeClassifier(max_depth=5, random_state=42),
+    RandomForestClassifier(
+        max_depth=5, n_estimators=10, max_features=1, random_state=42
+    ),
+    MLPClassifier(alpha=1, max_iter=1000, random_state=42),
+    AdaBoostClassifier(random_state=42),
+    GaussianNB(),
+    QuadraticDiscriminantAnalysis(),
+]
+X, y = make_classification(
+    n_features=2, n_redundant=0, n_informative=2, random_state=1, n_clusters_per_class=1
 )
+rng = np.random.RandomState(2)
+X += 2 * rng.uniform(size=X.shape)
+linearly_separable = (X, y)
+datasets = [
+    make_moons(noise=0.3, random_state=0),
+    make_circles(noise=0.2, factor=0.5, random_state=1),
+    linearly_separable,
+]
+figure = plt.figure(figsize=(27, 9))
+i = 1
 ```
 
 ### notebooks/dataset2/cross_decomposition/plot_compare_cross_decomposition.ipynb
@@ -137,60 +170,34 @@ import numpy as np
 n = 500
 ```
 
-### notebooks/dataset2/classification/plot_lda_qda.ipynb
-CONTEXT: We generate three datasets. In the first dataset, the two classes share the same covariance matrix, and this covariance matrix has the
-specificity of being spherical (isotropic). The second dataset is similar to the first one but does not enforce the covariance to be spherical.
-Finally, the third dataset has a non-spherical covariance matrix for each class.   COMMENT:
+### notebooks/dataset2/classification/plot_lda.ipynb
+CONTEXT:   Normal, Ledoit-Wolf and OAS Linear Discriminant Analysis for classification  This example illustrates how the Ledoit-Wolf and Oracle
+Approximating Shrinkage (OAS) estimators of covariance can improve classification.  COMMENT: samples for training
 ```python
-import matplotlib as mpl
-from matplotlib import colors
-from sklearn.inspection import DecisionBoundaryDisplay
+n_train = 20
 ```
 
-### notebooks/dataset2/cross_decomposition/plot_compare_cross_decomposition.ipynb
-CONTEXT:  Canonical (symmetric) PLS   Transform data   COMMENT:
+### notebooks/dataset2/classification/plot_digits_classification.ipynb
+CONTEXT:  Classification  To apply a classifier on this data, we need to flatten the images, turning each 2-D array of grayscale values from shape
+``(8, 8)`` into shape ``(64,)``. Subsequently, the entire dataset will be of shape ``(n_samples, n_features)``, where ``n_samples`` is the number of
+images and ``n_features`` is the total number of pixels in each image.  We can then split the data into train and test subsets and fit a support
+vector classifier on the train samples. The fitted classifier can subsequently be used to predict the value of the digit for the samples in the test
+subset.   COMMENT: Predict the value of the digit on the test subset
 ```python
-import matplotlib.pyplot as plt
+predicted = clf.predict(X_test)
 ```
 
-### notebooks/dataset2/cross_decomposition/plot_compare_cross_decomposition.ipynb
-CONTEXT:  PLS regression, with multivariate response, a.k.a. PLS2   COMMENT:
+### notebooks/dataset2/classification/plot_classification_probability.ipynb
+CONTEXT:  Plotting the decision boundaries  For each classifier, we plot the per-class probabilities on the first three columns and the probabilities
+of the most likely class on the last column.   COMMENT: colorbar for single class plots
 ```python
-Y = np.dot(X, B) + np.random.normal(size=n * q).reshape((n, q)) + 5
-pls2 = PLSRegression(n_components=3)
-pls2.fit(X, Y)
-print("True B (such that: Y = XB + Err)")
-print(B)
-```
-
-### notebooks/dataset2/cross_decomposition/plot_compare_cross_decomposition.ipynb
-CONTEXT:  Scatter plot of scores   COMMENT:
-```python
-plt.figure(figsize=(12, 8))
-plt.subplot(221)
-plt.scatter(X_train_r[:, 0], Y_train_r[:, 0], label="train", marker="o", s=25)
-plt.scatter(X_test_r[:, 0], Y_test_r[:, 0], label="test", marker="o", s=25)
-plt.xlabel("x scores")
-plt.ylabel("y scores")
-plt.title(
-    "Comp. 1: X vs Y (test corr = %.2f)"
-    % np.corrcoef(X_test_r[:, 0], Y_test_r[:, 0])[0, 1]
+ax_single = fig.add_axes([0.15, 0.01, 0.5, 0.02])
+plt.title("Probability")
+_ = plt.colorbar(
+    cm.ScalarMappable(norm=None, cmap=disp.surface_.cmap),
+    cax=ax_single,
+    orientation="horizontal",
 )
-plt.xticks(())
-plt.yticks(())
-plt.legend(loc="best")
-plt.subplot(224)
-plt.scatter(X_train_r[:, 1], Y_train_r[:, 1], label="train", marker="o", s=25)
-plt.scatter(X_test_r[:, 1], Y_test_r[:, 1], label="test", marker="o", s=25)
-plt.xlabel("x scores")
-plt.ylabel("y scores")
-plt.title(
-    "Comp. 2: X vs Y (test corr = %.2f)"
-    % np.corrcoef(X_test_r[:, 1], Y_test_r[:, 1])[0, 1]
-)
-plt.xticks(())
-plt.yticks(())
-plt.legend(loc="best")
 ```
 
 ### notebooks/dataset2/classification/plot_classification_probability.ipynb
@@ -219,82 +226,75 @@ classifiers = {
 }
 ```
 
-### notebooks/dataset2/classification/plot_classifier_comparison.ipynb
-CONTEXT:   Classifier comparison  A comparison of several classifiers in scikit-learn on synthetic datasets. The point of this example is to
-illustrate the nature of decision boundaries of different classifiers. This should be taken with a grain of salt, as the intuition conveyed by these
-examples does not necessarily carry over to real datasets.  Particularly in high-dimensional spaces, data can more easily be separated linearly and
-the simplicity of classifiers such as naive Bayes and linear SVMs might lead to better generalization than is achieved by other classifiers.  The
-plots show training points in solid colors and testing points semi-transparent. The lower right shows the classification accuracy on the test set.
-COMMENT: iterate over classifiers
-```python
-for name, clf in zip(names, classifiers):
-    ax = plt.subplot(len(datasets), len(classifiers) + 1, i)
-    clf = make_pipeline(StandardScaler(), clf)
-    clf.fit(X_train, y_train)
-    score = clf.score(X_test, y_test)
-    DecisionBoundaryDisplay.from_estimator(
-        clf, X, cmap=cm, alpha=0.8, ax=ax, eps=0.5
-    )
-```
-
 ## Code Concatenation
 ```python
-import matplotlib as mpl
 import matplotlib.pyplot as plt
 import numpy as np
-import pandas as pd
-from matplotlib import cm
-from sklearn import datasets
-from sklearn.ensemble import HistGradientBoostingClassifier
+from matplotlib.colors import ListedColormap
+from sklearn.datasets import make_circles, make_classification, make_moons
+from sklearn.discriminant_analysis import QuadraticDiscriminantAnalysis
+from sklearn.ensemble import AdaBoostClassifier, RandomForestClassifier
 from sklearn.gaussian_process import GaussianProcessClassifier
 from sklearn.gaussian_process.kernels import RBF
 from sklearn.inspection import DecisionBoundaryDisplay
-from sklearn.kernel_approximation import Nystroem
-from sklearn.linear_model import LogisticRegression
-from sklearn.metrics import accuracy_score, log_loss, roc_auc_score
 from sklearn.model_selection import train_test_split
+from sklearn.naive_bayes import GaussianNB
+from sklearn.neighbors import KNeighborsClassifier
+from sklearn.neural_network import MLPClassifier
 from sklearn.pipeline import make_pipeline
-from sklearn.preprocessing import (
-    KBinsDiscretizer,
-    PolynomialFeatures,
-    SplineTransformer,
+from sklearn.preprocessing import StandardScaler
+from sklearn.svm import SVC
+from sklearn.tree import DecisionTreeClassifier
+names = [
+    "Nearest Neighbors",
+    "Linear SVM",
+    "RBF SVM",
+    "Gaussian Process",
+    "Decision Tree",
+    "Random Forest",
+    "Neural Net",
+    "AdaBoost",
+    "Naive Bayes",
+    "QDA",
+]
+classifiers = [
+    KNeighborsClassifier(3),
+    SVC(kernel="linear", C=0.025, random_state=42),
+    SVC(gamma=2, C=1, random_state=42),
+    GaussianProcessClassifier(1.0 * RBF(1.0), random_state=42),
+    DecisionTreeClassifier(max_depth=5, random_state=42),
+    RandomForestClassifier(
+        max_depth=5, n_estimators=10, max_features=1, random_state=42
+    ),
+    MLPClassifier(alpha=1, max_iter=1000, random_state=42),
+    AdaBoostClassifier(random_state=42),
+    GaussianNB(),
+    QuadraticDiscriminantAnalysis(),
+]
+X, y = make_classification(
+    n_features=2, n_redundant=0, n_informative=2, random_state=1, n_clusters_per_class=1
 )
+rng = np.random.RandomState(2)
+X += 2 * rng.uniform(size=X.shape)
+linearly_separable = (X, y)
+datasets = [
+    make_moons(noise=0.3, random_state=0),
+    make_circles(noise=0.2, factor=0.5, random_state=1),
+    linearly_separable,
+]
+figure = plt.figure(figsize=(27, 9))
+i = 1
 import numpy as np
 n = 500
-import matplotlib as mpl
-from matplotlib import colors
-from sklearn.inspection import DecisionBoundaryDisplay
-import matplotlib.pyplot as plt
-Y = np.dot(X, B) + np.random.normal(size=n * q).reshape((n, q)) + 5
-pls2 = PLSRegression(n_components=3)
-pls2.fit(X, Y)
-print("True B (such that: Y = XB + Err)")
-print(B)
-plt.figure(figsize=(12, 8))
-plt.subplot(221)
-plt.scatter(X_train_r[:, 0], Y_train_r[:, 0], label="train", marker="o", s=25)
-plt.scatter(X_test_r[:, 0], Y_test_r[:, 0], label="test", marker="o", s=25)
-plt.xlabel("x scores")
-plt.ylabel("y scores")
-plt.title(
-    "Comp. 1: X vs Y (test corr = %.2f)"
-    % np.corrcoef(X_test_r[:, 0], Y_test_r[:, 0])[0, 1]
+n_train = 20
+predicted = clf.predict(X_test)
+ax_single = fig.add_axes([0.15, 0.01, 0.5, 0.02])
+plt.title("Probability")
+_ = plt.colorbar(
+    cm.ScalarMappable(norm=None, cmap=disp.surface_.cmap),
+    cax=ax_single,
+    orientation="horizontal",
 )
-plt.xticks(())
-plt.yticks(())
-plt.legend(loc="best")
-plt.subplot(224)
-plt.scatter(X_train_r[:, 1], Y_train_r[:, 1], label="train", marker="o", s=25)
-plt.scatter(X_test_r[:, 1], Y_test_r[:, 1], label="test", marker="o", s=25)
-plt.xlabel("x scores")
-plt.ylabel("y scores")
-plt.title(
-    "Comp. 2: X vs Y (test corr = %.2f)"
-    % np.corrcoef(X_test_r[:, 1], Y_test_r[:, 1])[0, 1]
-)
-plt.xticks(())
-plt.yticks(())
-plt.legend(loc="best")
 classifiers = {
     "Logistic regression\n(C=0.01)": LogisticRegression(C=0.1),
     "Logistic regression\n(C=1)": LogisticRegression(C=100),
@@ -315,12 +315,4 @@ classifiers = {
         LogisticRegression(C=10),
     ),
 }
-for name, clf in zip(names, classifiers):
-    ax = plt.subplot(len(datasets), len(classifiers) + 1, i)
-    clf = make_pipeline(StandardScaler(), clf)
-    clf.fit(X_train, y_train)
-    score = clf.score(X_test, y_test)
-    DecisionBoundaryDisplay.from_estimator(
-        clf, X, cmap=cm, alpha=0.8, ax=ax, eps=0.5
-    )
 ```

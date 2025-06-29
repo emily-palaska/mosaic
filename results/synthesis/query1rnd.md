@@ -1,24 +1,31 @@
 # Random Code Synthesis
-Query `Create a regression model.`
+Query `Initialize a logistic regression model. Use standardization on training inputs. Train the model.`
 ## Script Variables
-- clf:<br>
->It is a classifier that is used to predict the class of a given data point.
-- predicted:<br>
->The variable predicted is the predicted value of the image. It is used to determine the classification of the
-- X_test:<br>
->X_test is a test dataset which is used to evaluate the model's performance. It is a subset
+- ax:<br>
+>ax is a scatter plot object that is used to plot the training data points on the scatter plot.
+- X_train:<br>
+>X_train is a matrix of size 500x2 containing the features of the training dataset.
+- cm_bright:<br>
+>cm_bright is a colormap that is used to color the scatter plot. It is a color map
+- y_train:<br>
+>It is a vector of size 400 which contains the labels of the training data. It is used
 ## Synthesis Blocks
-### notebooks/dataset2/classification/plot_digits_classification.ipynb
-CONTEXT:  Classification  To apply a classifier on this data, we need to flatten the images, turning each 2-D array of grayscale values from shape
-``(8, 8)`` into shape ``(64,)``. Subsequently, the entire dataset will be of shape ``(n_samples, n_features)``, where ``n_samples`` is the number of
-images and ``n_features`` is the total number of pixels in each image.  We can then split the data into train and test subsets and fit a support
-vector classifier on the train samples. The fitted classifier can subsequently be used to predict the value of the digit for the samples in the test
-subset.   COMMENT: Predict the value of the digit on the test subset
+### notebooks/dataset2/classification/plot_classifier_comparison.ipynb
+CONTEXT:   Classifier comparison  A comparison of several classifiers in scikit-learn on synthetic datasets. The point of this example is to
+illustrate the nature of decision boundaries of different classifiers. This should be taken with a grain of salt, as the intuition conveyed by these
+examples does not necessarily carry over to real datasets.  Particularly in high-dimensional spaces, data can more easily be separated linearly and
+the simplicity of classifiers such as naive Bayes and linear SVMs might lead to better generalization than is achieved by other classifiers.  The
+plots show training points in solid colors and testing points semi-transparent. The lower right shows the classification accuracy on the test set.
+COMMENT: Plot the training points
 ```python
-predicted = clf.predict(X_test)
+ax.scatter(
+    X_train[:, 0], X_train[:, 1], c=y_train, cmap=cm_bright, edgecolors="k"
+)
 ```
 
 ## Code Concatenation
 ```python
-predicted = clf.predict(X_test)
+ax.scatter(
+    X_train[:, 0], X_train[:, 1], c=y_train, cmap=cm_bright, edgecolors="k"
+)
 ```

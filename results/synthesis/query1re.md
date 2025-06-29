@@ -1,5 +1,5 @@
 # Reverse Embedding Code Synthesis
-Query `Create a regression model.`
+Query `Initialize a logistic regression model. Use standardization on training inputs. Train the model.`
 ## Script Variables
 - make_pipeline:<br>
 >make_pipeline() is a function in scikit-learn that allows us to create a pipeline of machine
@@ -21,33 +21,44 @@ Query `Create a regression model.`
 >The GaussianProcessClassifier is a classifier that uses a Gaussian process to make predictions. It is a non
 - PolynomialFeatures:<br>
 >PolynomialFeatures is a class that is used to create polynomial features from the input data. It is
+- pls:<br>
+>It is a variable that is used to store the value of the PLS regression score. This score
 - print:<br>
->The variable print is used to print the correlation matrix of the input data. It is used to check
-- q:<br>
->The variable q is the number of components used in the PLS regression model. It is used to
-- np:<br>
->The np variable is a Python package that provides a large collection of mathematical functions and data structures. It
-- n:<br>
->The value of n is 1000 which is the number of samples in the dataset.
-- Y:<br>
->Y is a matrix of size (n, 4) where n is the number of samples.
-- PLSRegression:<br>
->PLSRegression is a class that implements Partial Least Squares (PLS) regression. PLS
-- X:<br>
->X is a matrix of size n x q where n is the number of samples and q is the
-- pls2:<br>
->pls2 is a PLSRegression object that is used to fit the data and predict the output.
-- B:<br>
->B is a matrix of size (q, p) where q is the number of components and p
+>The print function is used to display the results of a calculation or other operation to the console. It
+- pcr:<br>
+>The variable pcr is a pipeline that contains a standard scaler, a PCA component, and a linear
+- y_test:<br>
+>The variable y_test is a test dataset that is used to evaluate the performance of the PCA algorithm.
+- X_test:<br>
+>X_test is a dataset of 2 components of the PCA transformation of the original dataset X_train.
+- data:<br>
+>Variable data is a dataset that contains information about the digits in the MNIST dataset.
+- digits:<br>
+>It is a variable that is used to store the digits of the image. It is a 2
+- n_samples:<br>
+>It is the number of samples in the dataset. In this case, it is 1797.
+- len:<br>
+>len is a built-in function that returns the length of an object. In this case, it is
 ## Synthesis Blocks
-### notebooks/dataset2/cross_decomposition/plot_compare_cross_decomposition.ipynb
-CONTEXT:  PLS regression, with multivariate response, a.k.a. PLS2   COMMENT:
+### notebooks/dataset2/classification/plot_digits_classification.ipynb
+CONTEXT:  Classification  To apply a classifier on this data, we need to flatten the images, turning each 2-D array of grayscale values from shape
+``(8, 8)`` into shape ``(64,)``. Subsequently, the entire dataset will be of shape ``(n_samples, n_features)``, where ``n_samples`` is the number of
+images and ``n_features`` is the total number of pixels in each image.  We can then split the data into train and test subsets and fit a support
+vector classifier on the train samples. The fitted classifier can subsequently be used to predict the value of the digit for the samples in the test
+subset.   COMMENT: flatten the images
 ```python
-Y = np.dot(X, B) + np.random.normal(size=n * q).reshape((n, q)) + 5
-pls2 = PLSRegression(n_components=3)
-pls2.fit(X, Y)
-print("True B (such that: Y = XB + Err)")
-print(B)
+n_samples = len(digits.images)
+data = digits.images.reshape((n_samples, -1))
+```
+
+### notebooks/dataset2/cross_decomposition/plot_pcr_vs_pls.ipynb
+CONTEXT:  Projection on one component and predictive power  We now create two regressors: PCR and PLS, and for our illustration purposes we set the
+number of components to 1. Before feeding the data to the PCA step of PCR, we first standardize it, as recommended by good practice. The PLS estimator
+has built-in scaling capabilities.  For both models, we plot the projected data onto the first component against the target. In both cases, this
+projected data is what the regressors will use as training data.   COMMENT:
+```python
+print(f"PCR r-squared {pcr.score(X_test, y_test):.3f}")
+print(f"PLS r-squared {pls.score(X_test, y_test):.3f}")
 ```
 
 ### notebooks/dataset2/classification/plot_classification_probability.ipynb
@@ -78,11 +89,10 @@ classifiers = {
 
 ## Code Concatenation
 ```python
-Y = np.dot(X, B) + np.random.normal(size=n * q).reshape((n, q)) + 5
-pls2 = PLSRegression(n_components=3)
-pls2.fit(X, Y)
-print("True B (such that: Y = XB + Err)")
-print(B)
+n_samples = len(digits.images)
+data = digits.images.reshape((n_samples, -1))
+print(f"PCR r-squared {pcr.score(X_test, y_test):.3f}")
+print(f"PLS r-squared {pls.score(X_test, y_test):.3f}")
 classifiers = {
     "Logistic regression\n(C=0.01)": LogisticRegression(C=0.1),
     "Logistic regression\n(C=1)": LogisticRegression(C=100),

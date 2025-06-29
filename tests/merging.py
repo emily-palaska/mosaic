@@ -10,7 +10,7 @@ from llm_blockmerger.merge import embedding_synthesis
 
 queries = [
     'Create classifiers with names Regression, SVM, Tree, AdaBoost and Bayes classifiers. Compare them and plot them.',
-    #'Initialize a logistic regression model. Use standardization on training inputs. Train the model.',
+    'Initialize a logistic regression model. Use standardization on training inputs. Train the model.',
     'Create a regression model.',
     'Graph operations',
     'How to perform cross_decomposition',
@@ -43,29 +43,36 @@ def runtime(A=1000):
         print('\rExperiment completed')
 
 
-def gather_codes(synthesis):
-    codes = dict()
-    for s in synthesis:
-        for k, v in s.items():
-            try: codes[k].append('\n'.join(v.labels) + '\n' + '\n'.join(v.blocks))
-            except KeyError: codes[k] = ['\n'.join(v.labels) + '\n' + '\n'.join(v.blocks)]
-    return codes
+def separate_methods(synthesis_list):
+    results = dict()
+    for synthesis_dict in synthesis_list:
+        for m, s in synthesis_dict.items():
+            try: results[m].append('\n'.join(s.labels) + '\n' + '\n'.join(s.blocks))
+            except KeyError: results[m] = ['\n'.join(s.labels) + '\n' + '\n'.join(s.blocks)]
+    return results
 
 
 def quantitative():
     model = LLM(task='embedding')
-    synthesis = merge(queries)
-    codes = gather_codes(synthesis)
-    print(dumps(codes, indent=2))
+    synthesis_list = merge(queries)
+    results = separate_methods(synthesis_list)
 
     qs = [model.encode(query) for query in queries]
-    cs = {k: model.encode(b) for k, b in codes.items()}
-    sims = {k: norm_cos_sim(qs[i], cs[k]).tolist() for i, k in enumerate(cs.keys())}
+    rs = {k: model.encode(r) for k, r in results.items()}
+    sims = {k: norm_cos_sim(qs[i], rs[k]).tolist() for i, k in enumerate(rs.keys())}
+
     results ='results/merging_quan.txt'
     with open(results, 'w') as file:
         file.write(f'sims = {dumps(sims, indent=2)}')
 
+    print('Average similarities')
     for k, v in sims.items(): print(f'{k}: {mean(v)} ± {std(v)}')
+    print('Blocks:')
+    for i, synthesis_dict in enumerate(synthesis_list):
+        print(f'\tQ{i}: ', end='')
+        for m, s in synthesis_dict.items():
+            print(f'{m}={len(s)}', end=' ')
+        print('')
 
 
 def integration():

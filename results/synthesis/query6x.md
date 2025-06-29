@@ -1,6 +1,24 @@
 # Exhaustive Code Synthesis
-Query `Create classifiers with names Regression, SVM, Tree, AdaBoost and Bayes classifiers. Compare them and plot them.`
+Query `Run a PCA algorithm. Visualize it by plotting some plt plots.`
 ## Script Variables
+- print:<br>
+>The variable print is used to print the correlation matrix of the input data. It is used to check
+- q:<br>
+>The variable q is the number of components used in the PLS regression model. It is used to
+- np:<br>
+>The np variable is a Python package that provides a large collection of mathematical functions and data structures. It
+- n:<br>
+>The value of n is 1000 which is the number of samples in the dataset.
+- Y:<br>
+>Y is a matrix of size (n, 4) where n is the number of samples.
+- PLSRegression:<br>
+>PLSRegression is a class that implements Partial Least Squares (PLS) regression. PLS
+- X:<br>
+>X is a matrix of size n x q where n is the number of samples and q is the
+- pls2:<br>
+>pls2 is a PLSRegression object that is used to fit the data and predict the output.
+- B:<br>
+>B is a matrix of size (q, p) where q is the number of components and p
 - X_train:<br>
 >X_train is a matrix containing the first two features of the Iris dataset. It is used to train
 - evaluation_results:<br>
@@ -12,7 +30,7 @@ Query `Create classifiers with names Regression, SVM, Tree, AdaBoost and Bayes c
 - X_test:<br>
 >X_test is a matrix of size (n_samples, n_features) where n_samples is the number
 - classifiers:<br>
->The variable classifiers are used to classify the input data into different classes. They are used to identify the
+>The variable classifiers are used to determine the number of classifiers used in the model. This is done by
 - iris:<br>
 >iris is a dataset that contains information about 150 flowers of the Iris species. The dataset contains
 - y_train:<br>
@@ -32,7 +50,7 @@ Query `Create classifiers with names Regression, SVM, Tree, AdaBoost and Bayes c
 - y_test:<br>
 >y_test is a variable that is used to test the model. It is a list of integers that
 - plt:<br>
->plt is a module in Python that is used for plotting and graphing. It is a part of
+>plt is a module that provides a large suite of command line tools for creating plots. It is a
 - accuracy_score:<br>
 >Accuracy score is a measure of the quality of a binary classification model. It is calculated as the ratio
 - axes:<br>
@@ -53,35 +71,54 @@ Query `Create classifiers with names Regression, SVM, Tree, AdaBoost and Bayes c
 >The roc_auc_score is a function that calculates the area under the receiver operating characteristic curve (ROC)
 - y_pred_proba:<br>
 >It is a probability vector of length 3, which represents the probability of each class (0,
-- ax:<br>
->ax is a scatter plot object that is used to plot the training data points on the scatter plot.
-- ds_cnt:<br>
->It is a counter that keeps track of the number of datasets in the list of datasets. It is
-- datasets:<br>
->The variable datasets are the datasets used to train the machine learning models. They are used to predict the
-- cm_bright:<br>
->cm_bright is a colormap that is used to color the scatter plot. It is a color map
-- i:<br>
->The variable i is a counter that is used to keep track of the number of plots that have been
-- ListedColormap:<br>
->It is a colormap that is used to represent the color of the points in the scatter plot. The
-- cm:<br>
->cm is a colormap object which is used to color the data points in the scatter plot.
+- label:<br>
+>The variable label is a list of colors that are used to represent the different classes in the dataset.
+- max_class_disp:<br>
+>max_class_disp is a variable that is used to store the maximum class dispersion of the surface. It
+- y_unique:<br>
+>The variable y_unique is a list of unique values in the y-axis of the surface plot. It
+- mask_label:<br>
+>The variable mask_label is used to select the rows of the test dataset that correspond to the label of
+- scatter_kwargs:<br>
+>It is a dictionary that contains the keyword arguments for the scatter() function. The keyword arguments are used
+- DecisionBoundaryDisplay:<br>
+>It is a class that displays the decision boundary of a classifier. It is used to visualize the decision
 ## Synthesis Blocks
-### notebooks/dataset2/classification/plot_classifier_comparison.ipynb
-CONTEXT:   Classifier comparison  A comparison of several classifiers in scikit-learn on synthetic datasets. The point of this example is to
-illustrate the nature of decision boundaries of different classifiers. This should be taken with a grain of salt, as the intuition conveyed by these
-examples does not necessarily carry over to real datasets.  Particularly in high-dimensional spaces, data can more easily be separated linearly and
-the simplicity of classifiers such as naive Bayes and linear SVMs might lead to better generalization than is achieved by other classifiers.  The
-plots show training points in solid colors and testing points semi-transparent. The lower right shows the classification accuracy on the test set.
-COMMENT: just plot the dataset first
+### notebooks/dataset2/cross_decomposition/plot_compare_cross_decomposition.ipynb
+CONTEXT:  PLS regression, with multivariate response, a.k.a. PLS2   COMMENT:
 ```python
-cm = plt.cm.RdBu
-cm_bright = ListedColormap(["#FF0000", "#0000FF"])
+Y = np.dot(X, B) + np.random.normal(size=n * q).reshape((n, q)) + 5
+pls2 = PLSRegression(n_components=3)
+pls2.fit(X, Y)
+print("True B (such that: Y = XB + Err)")
+print(B)
+```
 
-ax = plt.subplot(len(datasets), len(classifiers) + 1, i)
-if ds_cnt == 0:
-    ax.set_title("Input data")
+### notebooks/dataset2/classification/plot_classification_probability.ipynb
+CONTEXT:  Plotting the decision boundaries  For each classifier, we plot the per-class probabilities on the first three columns and the probabilities
+of the most likely class on the last column.   COMMENT: add column that shows all classes by plotting class with max 'predict_proba'
+```python
+max_class_disp = DecisionBoundaryDisplay.from_estimator(
+    classifier,
+    X_train,
+    response_method="predict_proba",
+    class_of_interest=None,
+    ax=axes[classifier_idx, len(y_unique)],
+    vmin=0,
+    vmax=1,
+    levels=levels,
+)
+for label in y_unique:
+    mask_label = y_test == label
+    axes[classifier_idx, 3].scatter(
+        X_test[mask_label, 0],
+        X_test[mask_label, 1],
+        c=max_class_disp.multiclass_colors_[[label], :],
+        **scatter_kwargs,
+    )
+axes[classifier_idx, 3].set(xticks=(), yticks=())
+axes[classifier_idx, 3].set_title("Max class")
+axes[classifier_idx, 0].set_ylabel(name)
 ```
 
 ### notebooks/dataset2/classification/plot_classification_probability.ipynb
@@ -114,12 +151,32 @@ for classifier_idx, (name, classifier) in enumerate(classifiers.items()):
 
 ## Code Concatenation
 ```python
-cm = plt.cm.RdBu
-cm_bright = ListedColormap(["#FF0000", "#0000FF"])
-
-ax = plt.subplot(len(datasets), len(classifiers) + 1, i)
-if ds_cnt == 0:
-    ax.set_title("Input data")
+Y = np.dot(X, B) + np.random.normal(size=n * q).reshape((n, q)) + 5
+pls2 = PLSRegression(n_components=3)
+pls2.fit(X, Y)
+print("True B (such that: Y = XB + Err)")
+print(B)
+max_class_disp = DecisionBoundaryDisplay.from_estimator(
+    classifier,
+    X_train,
+    response_method="predict_proba",
+    class_of_interest=None,
+    ax=axes[classifier_idx, len(y_unique)],
+    vmin=0,
+    vmax=1,
+    levels=levels,
+)
+for label in y_unique:
+    mask_label = y_test == label
+    axes[classifier_idx, 3].scatter(
+        X_test[mask_label, 0],
+        X_test[mask_label, 1],
+        c=max_class_disp.multiclass_colors_[[label], :],
+        **scatter_kwargs,
+    )
+axes[classifier_idx, 3].set(xticks=(), yticks=())
+axes[classifier_idx, 3].set_title("Max class")
+axes[classifier_idx, 0].set_ylabel(name)
 mpl.rcParams["savefig.bbox"] = "tight"
 fig, axes = plt.subplots(
     nrows=n_classifiers,
