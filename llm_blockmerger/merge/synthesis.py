@@ -6,7 +6,7 @@ from llm_blockmerger.learn import MLP
 from llm_blockmerger.merge.merger import merge_variables
 from llm_blockmerger.merge.order import synthesis_order
 
-from torch import tensor, Tensor
+from torch import tensor, Tensor, rand
 
 
 def check_repetitions(max_rep:int, ids:list, top_nn:list):
@@ -44,8 +44,9 @@ def string_synthesis(model:LLM, db:BlockDB, query:str, max_rep=2, repl:str='[UNK
 def embedding_synthesis(model:LLM, db:BlockDB, query:str, k:float=0.9, l:float=1.4, t:float=0.05,
                         max_it:int|None=None, mlp:MLP|None=None, var:bool=True, rot:str|None=None):
     synthesis, last_nn = BlockManager(), None
-    q = s = mlp(tensor(model.encode(query))[0]) if mlp else tensor(model.encode(query))[0]
-    i = s.norm().item()
+    q = mlp(tensor(model.encode(query))[0]) if mlp else tensor(model.encode(query))[0]
+    s = rand(q.shape) if rot == 'rnd' else q
+    i = q.norm().item()
 
     for _ in range(max_it if max_it else q.shape[0]):
         if i < t: break # Break condition: Information norm below the norm threshold
@@ -53,10 +54,9 @@ def embedding_synthesis(model:LLM, db:BlockDB, query:str, k:float=0.9, l:float=1
         nn = db.read(s, limit=1)[0]
         if nn is None or nn == last_nn: break  # Break condition: No neighbors
 
-
         n = nn.embedding
         s, i, norm_proj = pivot_rotation(q, n, s, i, k, l, method=rot)
-        if norm_proj < t and not rot=='rnd': break  # Break condition: Perpendicular embeddings (pivot rotation only)
+        if norm_proj < t and not rot=='rnd': break  # Break condition: Perpendicular embeddings (not for rnd)
         synthesis.append_doc(nn)
         last_nn = nn
 

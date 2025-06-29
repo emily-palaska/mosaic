@@ -1,5 +1,4 @@
 import os
-
 os.chdir("../")
 
 from time import time
@@ -10,13 +9,13 @@ from llm_blockmerger.core import LLM, norm_cos_sim
 from llm_blockmerger.merge import embedding_synthesis
 
 queries = [
-    'Create Regression, SVM, Tree, AdaBoost and Bayes classifiers. Compare the classifiers and plot them.',
+    'Create classifiers with names Regression, SVM, Tree, AdaBoost and Bayes classifiers. Compare them and plot them.',
     #'Initialize a logistic regression model. Use standardization on training inputs. Train the model.',
     'Create a regression model.',
     'Graph operations',
     'How to perform cross_decomposition',
     'Simple PCA algorithm.',
-    'Run a PCA algorithm and visualize it.'
+    'Run a PCA algorithm. Visualize it by plotting some plt plots.'
 ]
 
 
@@ -48,8 +47,8 @@ def gather_codes(synthesis):
     codes = dict()
     for s in synthesis:
         for k, v in s.items():
-            try: codes[k].append('\n'.join(v.blocks))
-            except KeyError: codes[k] = ['\n'.join(v.blocks)]
+            try: codes[k].append('\n'.join(v.labels) + '\n' + '\n'.join(v.blocks))
+            except KeyError: codes[k] = ['\n'.join(v.labels) + '\n' + '\n'.join(v.blocks)]
     return codes
 
 
@@ -78,4 +77,4 @@ def qualitive():
 
 
 if __name__ == '__main__':
-    qualitive()
+    quantitative()
