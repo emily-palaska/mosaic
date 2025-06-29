@@ -1,58 +1,68 @@
-import os
 from torch import stack
+from os.path import join
 
 from llm_blockmerger.core import LLM, plot_sim, norm_cos_sim, print_synthesis, encoded_json
 from llm_blockmerger.load import init_managers, nb_variables, flatten_labels, create_blockdata
 from llm_blockmerger.merge import string_synthesis, embedding_synthesis, exhaustive_synthesis
-from llm_blockmerger.store import BlockDB
+from llm_blockmerger.store import BlockDB, ApproxNN, ExactNN
 from llm_blockmerger.learn import MLP
-from tests.core.utils import md_dumb_synthesis
+from tests.core.utils import md_dumb_synthesis, slice_2d
 
 
-def preprocess(paths: list, plot=False, db=False):
+def preprocess(paths: list, plot:bool=False, db:bool=False, limit:int|None=None, empty:bool=True):
     managers = init_managers(paths)
+    if limit: managers = slice_2d(managers, limit)
+    for manager in managers: print(manager)
 
     llama = LLM(task='question')
     for manager in managers:
         nb_variables(manager, llama)
+        print(manager)
 
     model = LLM(task='embedding')
     embeddings = model.encode(flatten_labels(managers, code=True))
     if plot: plot_sim(norm_cos_sim(embeddings), './plots/similarity_matrix.png')
 
     if db:
-        db = BlockDB(empty=True)
-        db.create(embeddings=embeddings, blockdata=create_blockdata(managers, embeddings))
-        assert db.num_docs() == len(embeddings), f'{db.num_docs()} != {len(embeddings)}'
+        blockdb = BlockDB(empty=empty)
+        docs = blockdb.num_docs()
+        blockdb.create(embeddings=embeddings, blockdata=create_blockdata(managers, embeddings))
+        assert blockdb.num_docs() == len(embeddings) + docs, f'{blockdb.num_docs()} != {len(embeddings) + docs}'
+        return blockdb
+    return None
 
 
-def restore():
+def restore(dbtype:type[ApproxNN|ExactNN]=ApproxNN):
     model = LLM(task='embedding')
-    db = BlockDB(empty=False)
+    db = BlockDB(dbtype=dbtype, empty=False)
     return model, db
 
 
-def merge(queries: list, path='./results/synthesis/', mlp:MLP|None=None, save=True, verbose=True):
-    methods = {'s': 'String', 'e': 'Embedding', 'x': 'Exhaustive'}
-    model = LLM(task='embedding')
-    db = BlockDB(empty=False)
+def merge(queries:list, path:str='./results/synthesis/', model:LLM|None=None, db:BlockDB|None=None,
+          mlp:MLP|None=None, save:bool=True, verbose:bool=True):
+    names = {'s': 'String', 'e': 'Embedding', 're': 'Reverse Embedding', 'rnd': 'Random', 'x': 'Exhaustive'}
+    if model is None: model = LLM(task='embedding')
+    if db is None: db = BlockDB(empty=False)
     if verbose: print(f'Initialized BlockDB with {db.num_docs()} docs')
 
-    query_synthesis = []
-    for query in queries:
-        query_synthesis.append((
-            string_synthesis(model, db, query, mlp=mlp),
-            embedding_synthesis(model, db, query, mlp=mlp),
-            exhaustive_synthesis(model, db, query, mlp=mlp)
-        ))
+    results = []
+    for i, query in enumerate(queries):
+        qpath = join(path, f'query{i}')
+        methods = {
+            's': string_synthesis(model, db, query, mlp=mlp),
+            'e': embedding_synthesis(model, db, query, mlp=mlp),
+            're': embedding_synthesis(model, db, query, mlp=mlp, rot='rev'),
+            'rnd': embedding_synthesis(model, db, query, mlp=mlp, rot='rnd'),
+            'x': exhaustive_synthesis(model, db, query, mlp=mlp)
+        }
+        results.append(methods)
 
-    for i, synthesis in enumerate(query_synthesis):
-        qpath = os.path.join(path, f'query{i}')
-        for m, s in zip(methods, synthesis):
-            if save:
-                md_dumb_synthesis(s, queries[i], methods[m], qpath + f'{m}.md')
-            else: print_synthesis(s, queries[i], title=methods[m].upper())
+        for key, synthesis in methods.items():
+            if save: md_dumb_synthesis(synthesis, query, names[key], qpath + f'{key}.md')
+            elif verbose: print_synthesis(synthesis, query, title=names[key].upper())
+
     if save and verbose: print(f'Results saved in {path}')
+    return results
 
 def deploy_mlp(model, embeddings, blockdata):
     new_embeddings = stack([model(embedding.to(model.device)) for embedding in embeddings]).tolist()

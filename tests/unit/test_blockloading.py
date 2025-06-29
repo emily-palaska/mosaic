@@ -3,7 +3,7 @@ from llm_blockmerger.load.scripts import *
 
 @pytest.fixture
 def notebook_data():
-    path = '../../notebooks/test_notebook.ipynb'
+    path = '../../notebooks/dataset1/test_notebook.ipynb'
     blocks = [
         ['    return a + b '],
         ['def add(a, b):\n', '    return a + b '],

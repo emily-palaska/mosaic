@@ -1,8 +1,9 @@
+import numpy as np
 from llm_blockmerger.load import BlockManager
 from textwrap import fill
 
 def md_dumb_synthesis(synthesis: BlockManager, query:str, method: str, path: str):
-    assert method in ['String', 'Embedding', 'Exhaustive'], 'Invalid method'
+    assert method in ['String', 'Embedding', 'Exhaustive', 'Reverse Embedding', 'Random'], f'Invalid method {method}'
     blocks, labels, var_dicts, sources = synthesis.unzip()
 
     content = f"# {method} Code Synthesis\nQuery `{query}`\n"
@@ -21,3 +22,32 @@ def md_dumb_synthesis(synthesis: BlockManager, query:str, method: str, path: str
 
     with open(path, 'w', encoding='utf-8') as file:
         file.write(content)
+
+
+def slice_2d(lists: list, limit: int):
+    cut, count = [], 0
+    for l in lists:
+        take = min(len(l), max(0, limit - count))
+        if take == 0: break
+        cut.append(l[:take])
+        count += take
+    return cut
+
+
+def linear_regression(x, y):
+    if not isinstance(x, np.ndarray): x = np.array(x)
+    if not isinstance(y, np.ndarray): y = np.array(y)
+
+    x_mean, y_mean = np.mean(x), np.mean(y)
+
+    numerator = np.sum((x - x_mean) * (y - y_mean))
+    denominator = np.sum((x - x_mean) ** 2)
+    m = numerator / denominator
+    b = y_mean - m * x_mean
+
+    y_pred = m * x + b
+    ss_res = np.sum((y - y_pred) ** 2)
+    ss_tot = np.sum((y - y_mean) ** 2)
+    r_squared = 1 - (ss_res / ss_tot)
+
+    return y_pred, m, b, r_squared

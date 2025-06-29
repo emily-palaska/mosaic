@@ -60,7 +60,7 @@ def integration():
         'notebooks/dataset2/cross_decomposition/plot_compare_cross_decomposition.ipynb',
         'notebooks/dataset2/cross_decomposition/plot_pcr_vs_pls.ipynb'
     ]
-    db = preprocess(classification, plot=True, db=True, empty=False)
+    db = preprocess(cross_decomposition, plot=True, db=True, empty=False)
     print(f'Created database with {db.num_docs()} documents')
 
 if __name__ == '__main__':
