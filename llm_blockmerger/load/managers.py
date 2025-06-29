@@ -61,7 +61,7 @@ class BlockManager:
 
     def append_doc(self, doc):
         blockdata = encoded_json(doc.blockdata)
-        self.blocks.append(blockdata["blocks"])
+        self.blocks.append(blockdata["block"])
         self.labels.append(blockdata["label"])
         self.var_dicts.append(blockdata["var_dict"])
         if not isinstance(self.sources, list): self.sources = [self.sources]
@@ -93,7 +93,7 @@ def create_blockdata(managers, embeddings):
     return [
         dumps({
             "label": manager.labels[i],
-            "blocks": manager.blocks[i],
+            "block": manager.blocks[i],
             "var_dict": manager.var_dicts[i],
             "source": manager.sources,
             "embedding": next(emb_iter)

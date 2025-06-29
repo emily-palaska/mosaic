@@ -1,3 +1,5 @@
+from re import match, escape
+
 from llm_blockmerger.core import dedent_blocks, separate_lines
 
 
@@ -23,6 +25,7 @@ def generate_blocks(cells, acc_md):
     blocks, labels = [], []
 
     for md, cell in zip(acc_md, cells):
+        cell = reposition_comments(cell)
         md_prefix = f'CONTEXT: {md}\nCOMMENT: ' if md else 'COMMENT: '
         sections = _split_sections(cell)
 
@@ -82,16 +85,12 @@ def main_section(lines, prefix):
     for line in lines:
         stripped = line.strip()
 
-        # Handle side comments
         if '#' in line and not stripped.startswith('#'):
-            code, comment = side_comment(line)
-            if code.strip() and comment:
-                blocks.append(code.rstrip())
-                labels.append(prefix + comment.strip())
-            line = code.rstrip() + '\n'
-            stripped = line.strip()
+            block, label, stripped, line = side_comment(line, prefix)
+            if block:
+                blocks.append(block)
+                labels.append(label)
 
-        # Handle full-line comments
         if stripped.startswith('#'):
             if curr_block:
                 blocks.append(curr_block)
@@ -106,9 +105,44 @@ def main_section(lines, prefix):
         labels.append(prefix + '\n'.join(curr_comments))
     return blocks, labels
 
-def side_comment(line):
+
+def side_comment(line, prefix):
+    code, comment = hash_split(line)
+    block, label = '', ''
+    if code.strip() and comment:
+        block = code.rstrip()
+        label = prefix + comment.strip()
+    line = code.rstrip() + '\n'
+    stripped = line.strip()
+    return block, label, stripped, line
+
+
+def hash_split(line):
     # This regex splits on '#' only if it's not inside quotes
     import re
     parts = re.split(r'#(?=(?:[^"\']*["\'][^"\']*["\'])*[^"\']*$)', line, maxsplit=1)
     comment = parts[1].strip() if len(parts) > 1 else ''
     return parts[0], comment
+
+
+def reposition_comments(cell: list):
+    script = '\n'.join(cell)
+    lines, out_lines, i = script.splitlines(), [], 0
+    block_keywords = {'if', 'elif', 'else', 'for', 'while', 'try', 'except', 'finally', 'with', 'def', 'class'}
+
+    while i < len(lines):
+        line = lines[i]
+        out_lines.append(line)
+
+        # Match indent-introducing lines
+        if m := match(r'^(\s*)(%s)\b.*:\s*$' % '|'.join(block_keywords), line):
+            indent = m.group(1)
+            if i + 1 < len(lines):
+                next_line = lines[i + 1]
+                if match(r'^' + escape(indent) + r'[ \t]+#', next_line):
+                    out_lines.pop()
+                    out_lines.append(next_line[4:])
+                    out_lines.append(line)
+                    i += 1
+        i += 1
+    return out_lines
