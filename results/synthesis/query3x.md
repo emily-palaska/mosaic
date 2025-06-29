@@ -1,154 +1,144 @@
 # Exhaustive Code Synthesis
-Query `Graph operations`
+Query `How to perform cross_decomposition`
 ## Script Variables
-- image:<br>
->The variable image is a 2D numpy array that represents the input image. It is used to
-- digits:<br>
->It is a 2D array of size 28x28, which is the image of the
-- cm:<br>
->cm is a 2D array of integers, where each row represents the number of times a given
-- zip:<br>
->The zip() function is a built-in function in Python that takes an iterable (a sequence, list
-- _:<br>
->The variable _ is a tuple that contains the axes of the subplots. The axes are used to
-- axes:<br>
->It is a variable that is used to create a grid of subplots. It is used to create
-- plt:<br>
->plt is a python library that is used to create plots in python. It is a python library that
-- ax:<br>
->ax is a variable that is used to store the axes of the subplots. It is used to
-- datasets:<br>
->The variable datasets is a set of data that is used to train a machine learning model. It contains
-- label:<br>
->The variable label is a list of 64x64 pixel images of digits. The images are in
-- metrics:<br>
->The variable metrics is a function that calculates the classification report for a given classifier. It takes two arguments
-- predicted:<br>
->The variable predicted is a variable that is used to predict the output of the model. It is a
-- y_test:<br>
->y_test is a numpy array that contains the actual values of the test data. It is used to
-- disp:<br>
->disp is a confusion matrix that is used to compare the predicted values with the actual values.
-- print:<br>
->print() is a function that prints a string to the console. In this case, it is used
-- X:<br>
->X is a matrix of size n x 4, where n is the number of samples. Each
 - np:<br>
->It is a python library that provides a wide range of mathematical functions and tools for scientific computing. It
-- X_train_r:<br>
->X_train_r is a matrix of reduced dimensionality that contains the principal components of the training data.
-- Y_train_r:<br>
->Y_train_r is a matrix of dimension 1000 x 2 that contains the results of the
-- Y:<br>
->Y is a matrix of size n x q where n is the number of samples and q is the
-- X_test_r:<br>
->X_test_r is a matrix of the test data, which is used to calculate the correlation between the
-- Y_test_r:<br>
->Y_test_r is the transformed version of the test data, which is the output of the PLSC
+>The np variable is a Python package that provides a large collection of mathematical functions and data structures. It
+- n:<br>
+>The value of n is 1000 which is the number of samples in the dataset.
+- print:<br>
+>The variable print is used to print the correlation matrix of the input data. It is used to check
+- pls1:<br>
+>pls1 is a PLSRegression object which is used to perform PLS regression. PLS regression
+- LinearRegression:<br>
+>LinearRegression is a linear regression model that fits a linear model with coefficients w to minimize the residual sum
+- axes:<br>
+>The variable axes in the given Python script are as follows
+- plt:<br>
+>plt is a module in python that is used for plotting graphs. It is a part of the matplotlib
+- pca:<br>
+>pca is a PCA object that is used to reduce the dimensionality of the data. It does
+- pls:<br>
+>It is a variable that is used to store the value of the PLS regression score. This score
+- y_train:<br>
+>The variable y_train is a numpy array containing the target values for the training data. It is used
+- fig:<br>
+>fig is a figure object that is used to display the results of the PCA and PLS regression models
+- pcr:<br>
+>The variable pcr is a pipeline that contains a standard scaler, a PCA component, and a linear
+- X_train:<br>
+>X_train is a numpy array containing the training data. It is used to train the model and make
+- y_test:<br>
+>The variable y_test is a test dataset that is used to evaluate the performance of the PCA algorithm.
+- PCA:<br>
+>PCA is a dimensionality reduction technique that is used to reduce the number of features in a dataset while
+- X_test:<br>
+>X_test is a dataset of 2 components of the PCA transformation of the original dataset X_train.
+- rng:<br>
+>The variable rng is used to generate random numbers for the train-test split and the PLSRegression model
+- X:<br>
+>X is a dataset containing information about the properties of a house, such as its size, location,
+- PLSRegression:<br>
+>PLSRegression is a regression model that uses the partial least squares (PLS) method to find
+- make_pipeline:<br>
+>The make_pipeline() function is used to create a pipeline of steps. The steps are executed in the
+- y:<br>
+>The variable y is the dependent variable in the given Python script. It represents the target variable that we
+- StandardScaler:<br>
+>StandardScaler is a class that is used to scale the features of a dataset. It is a preprocessing
+- train_test_split:<br>
+>The train_test_split function is used to split the data into training and testing sets. It takes in
 ## Synthesis Blocks
-### notebooks/plot_digits_classification.ipynb
-CONTEXT:   Recognizing hand-written digits  This example shows how scikit-learn can be used to recognize images of hand-written digits, from 0-9.
-COMMENT: Authors: The scikit-learn developers SPDX-License-Identifier: BSD-3-Clause Standard scientific Python imports
-```python
-import matplotlib.pyplot as plt
-```
-
 ### notebooks/dataset2/cross_decomposition/plot_compare_cross_decomposition.ipynb
-CONTEXT:  Canonical (symmetric) PLS   Transform data   COMMENT:
+CONTEXT:   Compare cross decomposition methods  Simple usage of various cross decomposition algorithms:  - PLSCanonical - PLSRegression, with
+multivariate response, a.k.a. PLS2 - PLSRegression, with univariate response, a.k.a. PLS1 - CCA  Given 2 multivariate covarying two-dimensional
+datasets, X, and Y, PLS extracts the 'directions of covariance', i.e. the components of each datasets that explain the most shared variance between
+both datasets. This is apparent on the **scatterplot matrix** display: components 1 in dataset X and dataset Y are maximally correlated (points lie
+around the first diagonal). This is also true for components 2 in both dataset, however, the correlation across datasets for different components is
+weak: the point cloud is very spherical.  COMMENT: Authors: The scikit-learn developers SPDX-License-Identifier: BSD-3-Clause
 ```python
-import matplotlib.pyplot as plt
+import numpy as np
+n = 500
 ```
 
-### notebooks/plot_digits_classification.ipynb
-CONTEXT:  Digits dataset  The digits dataset consists of 8x8 pixel images of digits. The ``images`` attribute of the dataset stores 8x8 arrays of
-grayscale values for each image. We will use these arrays to visualize the first 4 images. The ``target`` attribute of the dataset stores the digit
-each image represents and this is included in the title of the 4 plots below.  Note: if we were working from image files (e.g., 'png' files), we would
-load them using :func:`matplotlib.pyplot.imread`.   COMMENT:
+### notebooks/dataset2/cross_decomposition/plot_pcr_vs_pls.ipynb
+CONTEXT:  Projection on one component and predictive power  We now create two regressors: PCR and PLS, and for our illustration purposes we set the
+number of components to 1. Before feeding the data to the PCA step of PCR, we first standardize it, as recommended by good practice. The PLS estimator
+has built-in scaling capabilities.  For both models, we plot the projected data onto the first component against the target. In both cases, this
+projected data is what the regressors will use as training data.   COMMENT: retrieve the PCA step of the pipeline
 ```python
-digits = datasets.load_digits()
-_, axes = plt.subplots(nrows=1, ncols=4, figsize=(10, 3))
-for ax, image, label in zip(axes, digits.images, digits.target):
-    ax.set_axis_off()
-    ax.imshow(image, cmap=plt.cm.gray_r, interpolation="nearest")
-    ax.set_title("Training: %i" % label)
-```
+from sklearn.cross_decomposition import PLSRegression
+from sklearn.decomposition import PCA
+from sklearn.linear_model import LinearRegression
+from sklearn.model_selection import train_test_split
+from sklearn.pipeline import make_pipeline
+from sklearn.preprocessing import StandardScaler
+X_train, X_test, y_train, y_test = train_test_split(X, y, random_state=rng)
+pcr = make_pipeline(StandardScaler(), PCA(n_components=1), LinearRegression())
+pcr.fit(X_train, y_train)
+pca = pcr.named_steps["pca"]
 
-### notebooks/plot_digits_classification.ipynb
-CONTEXT: We can also plot a `confusion matrix <confusion_matrix>` of the true digit values and the predicted digit values.   COMMENT:
-```python
-disp = metrics.ConfusionMatrixDisplay.from_predictions(y_test, predicted)
-disp.figure_.suptitle("Confusion Matrix")
-print(f"Confusion matrix:\n{disp.confusion_matrix}")
+pls = PLSRegression(n_components=1)
+pls.fit(X_train, y_train)
+fig, axes = plt.subplots(1, 2, figsize=(10, 3))
+axes[0].scatter(pca.transform(X_test), y_test, alpha=0.3, label="ground truth")
+axes[0].scatter(
+    pca.transform(X_test), pcr.predict(X_test), alpha=0.3, label="predictions"
+)
+axes[0].set(
+    xlabel="Projected data onto first PCA component", ylabel="y", title="PCR / PCA"
+)
+axes[0].legend()
+axes[1].scatter(pls.transform(X_test), y_test, alpha=0.3, label="ground truth")
+axes[1].scatter(
+    pls.transform(X_test), pls.predict(X_test), alpha=0.3, label="predictions"
+)
+axes[1].set(xlabel="Projected data onto first PLS component", ylabel="y", title="PLS")
+axes[1].legend()
+plt.tight_layout()
 plt.show()
 ```
 
 ### notebooks/dataset2/cross_decomposition/plot_compare_cross_decomposition.ipynb
-CONTEXT:  Scatter plot of scores   COMMENT: On diagonal plot X vs Y scores on each components
+CONTEXT:  PLS regression, with univariate response, a.k.a. PLS1   COMMENT:
 ```python
-plt.subplot(222)
-plt.scatter(X_train_r[:, 0], X_train_r[:, 1], label="train", marker="*", s=50)
-plt.scatter(X_test_r[:, 0], X_test_r[:, 1], label="test", marker="*", s=50)
-plt.xlabel("X comp. 1")
-plt.ylabel("X comp. 2")
-plt.title(
-    "X comp. 1 vs X comp. 2 (test corr = %.2f)"
-    % np.corrcoef(X_test_r[:, 0], X_test_r[:, 1])[0, 1]
-)
-plt.legend(loc="best")
-plt.xticks(())
-plt.yticks(())
-plt.subplot(223)
-plt.scatter(Y_train_r[:, 0], Y_train_r[:, 1], label="train", marker="*", s=50)
-plt.scatter(Y_test_r[:, 0], Y_test_r[:, 1], label="test", marker="*", s=50)
-plt.xlabel("Y comp. 1")
-plt.ylabel("Y comp. 2")
-plt.title(
-    "Y comp. 1 vs Y comp. 2 , (test corr = %.2f)"
-    % np.corrcoef(Y_test_r[:, 0], Y_test_r[:, 1])[0, 1]
-)
-plt.legend(loc="best")
-plt.xticks(())
-plt.yticks(())
-plt.show()
+print("Estimated betas")
+print(np.round(pls1.coef_, 1))
 ```
 
 ## Code Concatenation
 ```python
-import matplotlib.pyplot as plt
-import matplotlib.pyplot as plt
-digits = datasets.load_digits()
-_, axes = plt.subplots(nrows=1, ncols=4, figsize=(10, 3))
-for ax, image, label in zip(axes, digits.images, digits.target):
-    ax.set_axis_off()
-    ax.imshow(image, cmap=plt.cm.gray_r, interpolation="nearest")
-    ax.set_title("Training: %i" % label)
-disp = metrics.ConfusionMatrixDisplay.from_predictions(y_test, predicted)
-disp.figure_.suptitle("Confusion Matrix")
-print(f"Confusion matrix:\n{disp.confusion_matrix}")
-plt.show()
-plt.subplot(222)
-plt.scatter(X_train_r[:, 0], X_train_r[:, 1], label="train", marker="*", s=50)
-plt.scatter(X_test_r[:, 0], X_test_r[:, 1], label="test", marker="*", s=50)
-plt.xlabel("X comp. 1")
-plt.ylabel("X comp. 2")
-plt.title(
-    "X comp. 1 vs X comp. 2 (test corr = %.2f)"
-    % np.corrcoef(X_test_r[:, 0], X_test_r[:, 1])[0, 1]
+import numpy as np
+n = 500
+from sklearn.cross_decomposition import PLSRegression
+from sklearn.decomposition import PCA
+from sklearn.linear_model import LinearRegression
+from sklearn.model_selection import train_test_split
+from sklearn.pipeline import make_pipeline
+from sklearn.preprocessing import StandardScaler
+X_train, X_test, y_train, y_test = train_test_split(X, y, random_state=rng)
+pcr = make_pipeline(StandardScaler(), PCA(n_components=1), LinearRegression())
+pcr.fit(X_train, y_train)
+pca = pcr.named_steps["pca"]
+
+pls = PLSRegression(n_components=1)
+pls.fit(X_train, y_train)
+fig, axes = plt.subplots(1, 2, figsize=(10, 3))
+axes[0].scatter(pca.transform(X_test), y_test, alpha=0.3, label="ground truth")
+axes[0].scatter(
+    pca.transform(X_test), pcr.predict(X_test), alpha=0.3, label="predictions"
 )
-plt.legend(loc="best")
-plt.xticks(())
-plt.yticks(())
-plt.subplot(223)
-plt.scatter(Y_train_r[:, 0], Y_train_r[:, 1], label="train", marker="*", s=50)
-plt.scatter(Y_test_r[:, 0], Y_test_r[:, 1], label="test", marker="*", s=50)
-plt.xlabel("Y comp. 1")
-plt.ylabel("Y comp. 2")
-plt.title(
-    "Y comp. 1 vs Y comp. 2 , (test corr = %.2f)"
-    % np.corrcoef(Y_test_r[:, 0], Y_test_r[:, 1])[0, 1]
+axes[0].set(
+    xlabel="Projected data onto first PCA component", ylabel="y", title="PCR / PCA"
 )
-plt.legend(loc="best")
-plt.xticks(())
-plt.yticks(())
+axes[0].legend()
+axes[1].scatter(pls.transform(X_test), y_test, alpha=0.3, label="ground truth")
+axes[1].scatter(
+    pls.transform(X_test), pls.predict(X_test), alpha=0.3, label="predictions"
+)
+axes[1].set(xlabel="Projected data onto first PLS component", ylabel="y", title="PLS")
+axes[1].legend()
+plt.tight_layout()
 plt.show()
+print("Estimated betas")
+print(np.round(pls1.coef_, 1))
 ```

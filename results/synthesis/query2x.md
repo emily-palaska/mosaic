@@ -1,172 +1,154 @@
 # Exhaustive Code Synthesis
-Query `Create a regression model.`
+Query `Graph operations`
 ## Script Variables
-- axes:<br>
->It is a variable that is used to create a grid of subplots. It is used to create
-- name:<br>
->max_class_disp
-- classifier_idx:<br>
->It is a variable that represents the classifier used to generate the decision boundary display. In this case,
-- classifier:<br>
->The variable classifier is a machine learning algorithm that is used to classify data into different categories. It is
-- label:<br>
->max_class_disp
-- fig:<br>
->fig is a variable that is used to store the figure object that is created by the script. It
-- classifiers:<br>
->The variable classifiers are used to determine the number of classifiers to be used in the script. They are
-- y_unique:<br>
->y_unique is a list of unique values in the y_test variable. It is used to create a
-- plt:<br>
->plt is a module in python that is used to create plots. It is used in this script to
-- X_train:<br>
->X_train is a numpy array of shape (n_samples, n_features) containing the training data.
-- y_test:<br>
->y_test is the test set of Iris flower data. It contains the target values of the test set
-- levels:<br>
->levels
-- X_test:<br>
->X_test is a test dataset that is used to evaluate the performance of the model on unseen data.
-- y_train:<br>
->It is a target variable that contains the species of the iris flower. It is used to split the
-- iris:<br>
->It is a dataset that contains information about the iris flowers. It has 3 classes of iris flowers
-- len:<br>
->len is a variable that is used to count the number of elements in a list or tuple. It
-- y_pred:<br>
->The variable y_pred is a prediction of the output of the model. It is used to determine the
-- n_classifiers:<br>
->n_classifiers is the number of classifiers used in the script. It is used to determine the number
-- evaluation_results:<br>
->It is a pandas DataFrame object that contains the evaluation results of the model. The columns of the DataFrame
-- X:<br>
->X is a matrix of size n x 4, where n is the number of samples. Each
 - np:<br>
->It is a python library that provides a wide range of mathematical functions and tools for scientific computing. It
-- q:<br>
->It is the number of components in the PLS regression model. The higher the value of q,
-- PLSRegression:<br>
->PLSRegression is a class that implements Partial Least Squares (PLS) regression. It is
-- print:<br>
->The print function is used to display the output of a Python script to the console. It is a
-- n:<br>
->n is the number of samples in the dataset.
-- B:<br>
->Variable B is a matrix of size (q, p) where q is the number of components and
+>The np variable is a Python package that provides a large collection of mathematical functions and data structures. It
+- Y_test_r:<br>
+>Y_test_r is a matrix of the same size as X_test, where each row is the result
+- X_test_r:<br>
+>X_test_r is the transformed version of the test dataset using the PLSCanonical model. It
+- X_train_r:<br>
+>X_train_r is a matrix of 1000 rows and 2 columns. Each row represents a
+- Y_train_r:<br>
+>Y_train_r is a numpy array of shape (n_samples, 1) which contains the y
 - Y:<br>
->Y is a matrix of size n x q where n is the number of samples and q is the
-- pls2:<br>
->pls2 is a variable that is used to predict the value of B in the equation y = mx
-- pls1:<br>
->pls1 is an instance of the PLSRegression class. PLSRegression is a regression model that
-- image:<br>
->The variable image is a 2D numpy array that represents the input image. It is used to
-- predicted:<br>
->The variable predicted is a variable that is used to predict the output of the model. It is a
-- cm:<br>
->cm is a 2D array of integers, where each row represents the number of times a given
-- zip:<br>
->The zip() function is a built-in function in Python that takes an iterable (a sequence, list
+>Y is a matrix of size (n, 4) where n is the number of samples.
+- X:<br>
+>X is a matrix of size n x q where n is the number of samples and q is the
+- plt:<br>
+>plt is a module that provides a number of command-line interfaces for plotting in Python. It is a
+- digits:<br>
+>It is a variable that is used to store the digits of the image. It is a 2
 - _:<br>
->The variable _ is a tuple that contains the axes of the subplots. The axes are used to
+>The variable _ is a placeholder for the value of the variable digits, which is a dictionary containing the
+- zip:<br>
+>It is a function that takes two arguments, a list of lists and a list of strings. It
 - ax:<br>
->ax is a variable that is used to store the axes of the subplots. It is used to
-- prediction:<br>
->The variable prediction is a small description of the variable that is used to predict the output of the model
+>The variable ax is a subplot object that is used to display the images in the script. It is
+- datasets:<br>
+>The dataset is a collection of 1797 images of handwritten digits, each image is a 8
+- cm:<br>
+>cm is a confusion matrix that is used to compare the actual values of the target variable with the predicted
+- image:<br>
+>Image is a 2D array of size 8x8. It contains the pixels of the
+- axes:<br>
+>The variable axes is a tuple containing the axes of the subplots. It is used to create a
+- label:<br>
+>The variable label is a dataset that contains 1797 images of digits from 0 to 9
+- print:<br>
+>The print function is used to display the output of a Python expression on the screen. It is a
+- y_test:<br>
+>The variable y_test is a numpy array containing the true labels of the test data. It is used
+- predicted:<br>
+>The variable predicted is the predicted value of the image. It is used to determine the classification of the
+- disp:<br>
+>disp is a confusion matrix which is used to compare the predicted values with the actual values. It is
+- metrics:<br>
+>Confusion matrix
 ## Synthesis Blocks
-### notebooks/plot_classification_probability.ipynb
-CONTEXT:  Plotting the decision boundaries  For each classifier, we plot the per-class probabilities on the first three columns and the probabilities
-of the most likely class on the last column.   COMMENT: Ensure legend not cut off
-```python
-mpl.rcParams["savefig.bbox"] = "tight"
-fig, axes = plt.subplots(
-    nrows=n_classifiers,
-    ncols=len(iris.target_names) + 1,
-    figsize=(4 * 2.2, n_classifiers * 2.2),
-)
-evaluation_results = []
-levels = 100
-for classifier_idx, (name, classifier) in enumerate(classifiers.items()):
-    y_pred = classifier.fit(X_train, y_train).predict(X_test)
-    y_pred_proba = classifier.predict_proba(X_test)
-    accuracy_test = accuracy_score(y_test, y_pred)
-    roc_auc_test = roc_auc_score(y_test, y_pred_proba, multi_class="ovr")
-    log_loss_test = log_loss(y_test, y_pred_proba)
-    evaluation_results.append(
-        {
-            "name": name.replace("\n", " "),
-            "accuracy": accuracy_test,
-            "roc_auc": roc_auc_test,
-            "log_loss": log_loss_test,
-        }
-    )
-    for label in y_unique:
-```
-
 ### notebooks/dataset2/cross_decomposition/plot_compare_cross_decomposition.ipynb
-CONTEXT:  PLS regression, with univariate response, a.k.a. PLS1   COMMENT:
+CONTEXT:  Canonical (symmetric) PLS   Transform data   COMMENT:
 ```python
-print("Estimated betas")
-print(np.round(pls1.coef_, 1))
+import matplotlib.pyplot as plt
 ```
 
-### notebooks/plot_digits_classification.ipynb
-CONTEXT: Below we visualize the first 4 test samples and show their predicted digit value in the title.   COMMENT:
+### notebooks/dataset2/classification/plot_digits_classification.ipynb
+CONTEXT:   Recognizing hand-written digits  This example shows how scikit-learn can be used to recognize images of hand-written digits, from 0-9.
+COMMENT: Authors: The scikit-learn developers SPDX-License-Identifier: BSD-3-Clause Standard scientific Python imports
 ```python
+import matplotlib.pyplot as plt
+```
+
+### notebooks/dataset2/classification/plot_digits_classification.ipynb
+CONTEXT:  Digits dataset  The digits dataset consists of 8x8 pixel images of digits. The ``images`` attribute of the dataset stores 8x8 arrays of
+grayscale values for each image. We will use these arrays to visualize the first 4 images. The ``target`` attribute of the dataset stores the digit
+each image represents and this is included in the title of the 4 plots below.  Note: if we were working from image files (e.g., 'png' files), we would
+load them using :func:`matplotlib.pyplot.imread`.   COMMENT:
+```python
+digits = datasets.load_digits()
 _, axes = plt.subplots(nrows=1, ncols=4, figsize=(10, 3))
-for ax, image, prediction in zip(axes, X_test, predicted):
+for ax, image, label in zip(axes, digits.images, digits.target):
     ax.set_axis_off()
-    image = image.reshape(8, 8)
     ax.imshow(image, cmap=plt.cm.gray_r, interpolation="nearest")
-    ax.set_title(f"Prediction: {prediction}")
+    ax.set_title("Training: %i" % label)
+```
+
+### notebooks/dataset2/classification/plot_digits_classification.ipynb
+CONTEXT: We can also plot a `confusion matrix <confusion_matrix>` of the true digit values and the predicted digit values.   COMMENT:
+```python
+disp = metrics.ConfusionMatrixDisplay.from_predictions(y_test, predicted)
+disp.figure_.suptitle("Confusion Matrix")
+print(f"Confusion matrix:\n{disp.confusion_matrix}")
+plt.show()
 ```
 
 ### notebooks/dataset2/cross_decomposition/plot_compare_cross_decomposition.ipynb
-CONTEXT:  PLS regression, with multivariate response, a.k.a. PLS2   COMMENT:
+CONTEXT:  Scatter plot of scores   COMMENT: On diagonal plot X vs Y scores on each components
 ```python
-Y = np.dot(X, B) + np.random.normal(size=n * q).reshape((n, q)) + 5
-pls2 = PLSRegression(n_components=3)
-pls2.fit(X, Y)
-print("True B (such that: Y = XB + Err)")
-print(B)
+plt.subplot(222)
+plt.scatter(X_train_r[:, 0], X_train_r[:, 1], label="train", marker="*", s=50)
+plt.scatter(X_test_r[:, 0], X_test_r[:, 1], label="test", marker="*", s=50)
+plt.xlabel("X comp. 1")
+plt.ylabel("X comp. 2")
+plt.title(
+    "X comp. 1 vs X comp. 2 (test corr = %.2f)"
+    % np.corrcoef(X_test_r[:, 0], X_test_r[:, 1])[0, 1]
+)
+plt.legend(loc="best")
+plt.xticks(())
+plt.yticks(())
+plt.subplot(223)
+plt.scatter(Y_train_r[:, 0], Y_train_r[:, 1], label="train", marker="*", s=50)
+plt.scatter(Y_test_r[:, 0], Y_test_r[:, 1], label="test", marker="*", s=50)
+plt.xlabel("Y comp. 1")
+plt.ylabel("Y comp. 2")
+plt.title(
+    "Y comp. 1 vs Y comp. 2 , (test corr = %.2f)"
+    % np.corrcoef(Y_test_r[:, 0], Y_test_r[:, 1])[0, 1]
+)
+plt.legend(loc="best")
+plt.xticks(())
+plt.yticks(())
+plt.show()
 ```
 
 ## Code Concatenation
 ```python
-mpl.rcParams["savefig.bbox"] = "tight"
-fig, axes = plt.subplots(
-    nrows=n_classifiers,
-    ncols=len(iris.target_names) + 1,
-    figsize=(4 * 2.2, n_classifiers * 2.2),
-)
-evaluation_results = []
-levels = 100
-for classifier_idx, (name, classifier) in enumerate(classifiers.items()):
-    y_pred = classifier.fit(X_train, y_train).predict(X_test)
-    y_pred_proba = classifier.predict_proba(X_test)
-    accuracy_test = accuracy_score(y_test, y_pred)
-    roc_auc_test = roc_auc_score(y_test, y_pred_proba, multi_class="ovr")
-    log_loss_test = log_loss(y_test, y_pred_proba)
-    evaluation_results.append(
-        {
-            "name": name.replace("\n", " "),
-            "accuracy": accuracy_test,
-            "roc_auc": roc_auc_test,
-            "log_loss": log_loss_test,
-        }
-    )
-    for label in y_unique:
-print("Estimated betas")
-print(np.round(pls1.coef_, 1))
+import matplotlib.pyplot as plt
+import matplotlib.pyplot as plt
+digits = datasets.load_digits()
 _, axes = plt.subplots(nrows=1, ncols=4, figsize=(10, 3))
-for ax, image, prediction in zip(axes, X_test, predicted):
+for ax, image, label in zip(axes, digits.images, digits.target):
     ax.set_axis_off()
-    image = image.reshape(8, 8)
     ax.imshow(image, cmap=plt.cm.gray_r, interpolation="nearest")
-    ax.set_title(f"Prediction: {prediction}")
-Y = np.dot(X, B) + np.random.normal(size=n * q).reshape((n, q)) + 5
-pls2 = PLSRegression(n_components=3)
-pls2.fit(X, Y)
-print("True B (such that: Y = XB + Err)")
-print(B)
+    ax.set_title("Training: %i" % label)
+disp = metrics.ConfusionMatrixDisplay.from_predictions(y_test, predicted)
+disp.figure_.suptitle("Confusion Matrix")
+print(f"Confusion matrix:\n{disp.confusion_matrix}")
+plt.show()
+plt.subplot(222)
+plt.scatter(X_train_r[:, 0], X_train_r[:, 1], label="train", marker="*", s=50)
+plt.scatter(X_test_r[:, 0], X_test_r[:, 1], label="test", marker="*", s=50)
+plt.xlabel("X comp. 1")
+plt.ylabel("X comp. 2")
+plt.title(
+    "X comp. 1 vs X comp. 2 (test corr = %.2f)"
+    % np.corrcoef(X_test_r[:, 0], X_test_r[:, 1])[0, 1]
+)
+plt.legend(loc="best")
+plt.xticks(())
+plt.yticks(())
+plt.subplot(223)
+plt.scatter(Y_train_r[:, 0], Y_train_r[:, 1], label="train", marker="*", s=50)
+plt.scatter(Y_test_r[:, 0], Y_test_r[:, 1], label="test", marker="*", s=50)
+plt.xlabel("Y comp. 1")
+plt.ylabel("Y comp. 2")
+plt.title(
+    "Y comp. 1 vs Y comp. 2 , (test corr = %.2f)"
+    % np.corrcoef(Y_test_r[:, 0], Y_test_r[:, 1])[0, 1]
+)
+plt.legend(loc="best")
+plt.xticks(())
+plt.yticks(())
+plt.show()
 ```

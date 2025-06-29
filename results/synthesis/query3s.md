@@ -1,32 +1,25 @@
 # String Code Synthesis
-Query `Graph operations`
+Query `How to perform cross_decomposition`
 ## Script Variables
-- metrics:<br>
->The variable metrics is a function that calculates the classification report for a given classifier. It takes two arguments
-- predicted:<br>
->The variable predicted is a variable that is used to predict the output of the model. It is a
-- y_test:<br>
->y_test is a numpy array that contains the actual values of the test data. It is used to
-- disp:<br>
->disp is a confusion matrix that is used to compare the predicted values with the actual values.
-- plt:<br>
->plt is a module in python that is used to create plots. It is used in this script to
-- print:<br>
->print() is a function that prints a string to the console. In this case, it is used
+- np:<br>
+>The np variable is a Python package that provides a large collection of mathematical functions and data structures. It
+- n:<br>
+>The value of n is 1000 which is the number of samples in the dataset.
 ## Synthesis Blocks
-### notebooks/plot_digits_classification.ipynb
-CONTEXT: We can also plot a `confusion matrix <confusion_matrix>` of the true digit values and the predicted digit values.   COMMENT:
+### notebooks/dataset2/cross_decomposition/plot_compare_cross_decomposition.ipynb
+CONTEXT:   Compare cross decomposition methods  Simple usage of various cross decomposition algorithms:  - PLSCanonical - PLSRegression, with
+multivariate response, a.k.a. PLS2 - PLSRegression, with univariate response, a.k.a. PLS1 - CCA  Given 2 multivariate covarying two-dimensional
+datasets, X, and Y, PLS extracts the 'directions of covariance', i.e. the components of each datasets that explain the most shared variance between
+both datasets. This is apparent on the **scatterplot matrix** display: components 1 in dataset X and dataset Y are maximally correlated (points lie
+around the first diagonal). This is also true for components 2 in both dataset, however, the correlation across datasets for different components is
+weak: the point cloud is very spherical.  COMMENT: Authors: The scikit-learn developers SPDX-License-Identifier: BSD-3-Clause
 ```python
-disp = metrics.ConfusionMatrixDisplay.from_predictions(y_test, predicted)
-disp.figure_.suptitle("Confusion Matrix")
-print(f"Confusion matrix:\n{disp.confusion_matrix}")
-plt.show()
+import numpy as np
+n = 500
 ```
 
 ## Code Concatenation
 ```python
-disp = metrics.ConfusionMatrixDisplay.from_predictions(y_test, predicted)
-disp.figure_.suptitle("Confusion Matrix")
-print(f"Confusion matrix:\n{disp.confusion_matrix}")
-plt.show()
+import numpy as np
+n = 500
 ```

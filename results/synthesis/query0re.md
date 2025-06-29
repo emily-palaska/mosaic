@@ -1,108 +1,146 @@
 # Reverse Embedding Code Synthesis
-Query `Create classifiers with different types and names. Compare the classifiers and plot them.`
+Query `Create Regression, SVM, Tree, AdaBoost and Bayes classifiers. Compare the classifiers and plot them.`
 ## Script Variables
-- axes:<br>
->The axes variable is used to create a grid of axes in a figure. It is a list of
-- name:<br>
->max_class_disp
-- classifier_idx:<br>
->It is a variable that represents the classifier used to generate the decision boundary display. In this case,
-- classifier:<br>
->The variable classifier is a machine learning algorithm that is used to classify data into different categories. It is
-- fig:<br>
->fig is a variable that is used to store the figure object that is created by the script. It
+- make_pipeline:<br>
+>make_pipeline() is a function in scikit-learn that allows us to create a pipeline of machine
 - classifiers:<br>
->The variable classifiers are used to determine the number of classifiers to be used in the script. They are
-- y_unique:<br>
->y_unique is a list of unique values in the y_test variable. It is used to create a
+>The variable classifiers are used to determine the number of classifiers used in the model. This is done by
+- SplineTransformer:<br>
+>SplineTransformer is a class that transforms the input data into a new feature space using splines.
+- LogisticRegression:<br>
+>Logistic regression is a type of classification algorithm that is used to predict the probability of a given outcome
+- RBF:<br>
+>RBF is an acronym for Radial Basis Function. It is a type of kernel function used in
+- Nystroem:<br>
+>Nystroem is a kernel-based method for dimensionality reduction. It is a wrapper around a
+- HistGradientBoostingClassifier:<br>
+>HistGradientBoostingClassifier is a machine learning algorithm that uses a gradient boosting technique to fit a histogram
+- KBinsDiscretizer:<br>
+>KBinsDiscretizer is a class used to discretize continuous features into a fixed number of bins
+- GaussianProcessClassifier:<br>
+>The GaussianProcessClassifier is a classifier that uses a Gaussian process to make predictions. It is a non
+- PolynomialFeatures:<br>
+>PolynomialFeatures is a class that is used to create polynomial features from the input data. It is
+- np:<br>
+>The np variable is a Python package that provides a large collection of mathematical functions and data structures. It
+- Y_test_r:<br>
+>Y_test_r is a matrix of the same size as X_test, where each row is the result
+- y:<br>
+>The variable y is a 1000x1 matrix containing the actual values of the dependent variable.
+- X_test_r:<br>
+>X_test_r is the transformed version of the test dataset using the PLSCanonical model. It
+- X_train_r:<br>
+>X_train_r is a matrix of 1000 rows and 2 columns. Each row represents a
+- Y_train_r:<br>
+>Y_train_r is a numpy array of shape (n_samples, 1) which contains the y
+- Y:<br>
+>Y is a matrix of size (n, 4) where n is the number of samples.
+- X:<br>
+>X is a matrix of size n x q where n is the number of samples and q is the
 - plt:<br>
->plt is a Python library that provides a wide range of plotting functions and tools for creating and customizing
-- X_train:<br>
->X_train is a numpy array of shape (n_samples, n_features) containing the training data.
-- y_test:<br>
->y_test is the test set of Iris flower data. It contains the target values of the test set
-- levels:<br>
->levels
-- X_test:<br>
->The variable X_test is a test dataset that is used to evaluate the performance of the model. It
-- y_train:<br>
->It is a target variable that contains the species of the iris flower. It is used to split the
-- iris:<br>
->It is a dataset that contains information about the iris flowers. It has 3 classes of iris flowers
-- len:<br>
->len is a variable that is used to count the number of elements in a list or tuple. It
-- y_pred:<br>
->The variable y_pred is a prediction of the output of the model. It is used to determine the
-- n_classifiers:<br>
->n_classifiers is the number of classifiers used in the script. It is used to determine the number
-- evaluation_results:<br>
->It is a pandas DataFrame object that contains the evaluation results of the model. The columns of the DataFrame
+>plt is a Python library that is used to create plots. It is a part of the Matplotlib
 ## Synthesis Blocks
-### notebooks/plot_classification_probability.ipynb
-CONTEXT:  Plotting the decision boundaries  For each classifier, we plot the per-class probabilities on the first three columns and the probabilities
-of the most likely class on the last column.   COMMENT: Ensure legend not cut off
+### notebooks/dataset2/cross_decomposition/plot_compare_cross_decomposition.ipynb
+CONTEXT:  Scatter plot of scores   COMMENT:
 ```python
-mpl.rcParams["savefig.bbox"] = "tight"
-fig, axes = plt.subplots(
-    nrows=n_classifiers,
-    ncols=len(iris.target_names) + 1,
-    figsize=(4 * 2.2, n_classifiers * 2.2),
+plt.figure(figsize=(12, 8))
+plt.subplot(221)
+plt.scatter(X_train_r[:, 0], Y_train_r[:, 0], label="train", marker="o", s=25)
+plt.scatter(X_test_r[:, 0], Y_test_r[:, 0], label="test", marker="o", s=25)
+plt.xlabel("x scores")
+plt.ylabel("y scores")
+plt.title(
+    "Comp. 1: X vs Y (test corr = %.2f)"
+    % np.corrcoef(X_test_r[:, 0], Y_test_r[:, 0])[0, 1]
 )
-evaluation_results = []
-levels = 100
-for classifier_idx, (name, classifier) in enumerate(classifiers.items()):
-    y_pred = classifier.fit(X_train, y_train).predict(X_test)
-    y_pred_proba = classifier.predict_proba(X_test)
-    accuracy_test = accuracy_score(y_test, y_pred)
-    roc_auc_test = roc_auc_score(y_test, y_pred_proba, multi_class="ovr")
-    log_loss_test = log_loss(y_test, y_pred_proba)
-    evaluation_results.append(
-        {
-            "name": name.replace("\n", " "),
-            "accuracy": accuracy_test,
-            "roc_auc": roc_auc_test,
-            "log_loss": log_loss_test,
-        }
-    )
-    for name in y_unique:
+plt.xticks(())
+plt.yticks(())
+plt.legend(loc="best")
+plt.subplot(224)
+plt.scatter(X_train_r[:, 1], Y_train_r[:, 1], label="train", marker="o", s=25)
+plt.scatter(X_test_r[:, 1], Y_test_r[:, 1], label="test", marker="o", s=25)
+plt.xlabel("x scores")
+plt.ylabel("y scores")
+plt.title(
+    "Comp. 2: X vs Y (test corr = %.2f)"
+    % np.corrcoef(X_test_r[:, 1], Y_test_r[:, 1])[0, 1]
+)
+plt.xticks(())
+plt.yticks(())
+plt.legend(loc="best")
 ```
 
-### notebooks/plot_lda_qda.ipynb
-CONTEXT: We generate three datasets. In the first dataset, the two classes share the same covariance matrix, and this covariance matrix has the
-specificity of being spherical (isotropic). The second dataset is similar to the first one but does not enforce the covariance to be spherical.
-Finally, the third dataset has a non-spherical covariance matrix for each class.   COMMENT:
+### notebooks/dataset2/classification/plot_classification_probability.ipynb
+CONTEXT:  Probabilistic classifiers  We will plot the decision boundaries of several classifiers that have a `predict_proba` method. This will allow
+us to visualize the uncertainty of the classifier in regions where it is not certain of its prediction.   COMMENT:
 ```python
-import matplotlib as mpl
-from matplotlib import colors
-from sklearn.inspection import DecisionBoundaryDisplay
+classifiers = {
+    "Logistic regression\n(C=0.01)": LogisticRegression(C=0.1),
+    "Logistic regression\n(C=1)": LogisticRegression(C=100),
+    "Gaussian Process": GaussianProcessClassifier(kernel=1.0 * RBF([1.0, 1.0])),
+    "Logistic regression\n(RBF features)": make_pipeline(
+        Nystroem(kernel="rbf", gamma=5e-1, n_components=50, random_state=1),
+        LogisticRegression(C=10),
+    ),
+    "Gradient Boosting": HistGradientBoostingClassifier(),
+    "Logistic regression\n(binned features)": make_pipeline(
+        KBinsDiscretizer(n_bins=5, quantile_method="averaged_inverted_cdf"),
+        PolynomialFeatures(interaction_only=True),
+        LogisticRegression(C=10),
+    ),
+    "Logistic regression\n(spline features)": make_pipeline(
+        SplineTransformer(n_knots=5),
+        PolynomialFeatures(interaction_only=True),
+        LogisticRegression(C=10),
+    ),
+}
 ```
 
 ## Code Concatenation
 ```python
-mpl.rcParams["savefig.bbox"] = "tight"
-fig, axes = plt.subplots(
-    nrows=n_classifiers,
-    ncols=len(iris.target_names) + 1,
-    figsize=(4 * 2.2, n_classifiers * 2.2),
+plt.figure(figsize=(12, 8))
+plt.subplot(221)
+plt.scatter(X_train_r[:, 0], Y_train_r[:, 0], label="train", marker="o", s=25)
+plt.scatter(X_test_r[:, 0], Y_test_r[:, 0], label="test", marker="o", s=25)
+plt.xlabel("x scores")
+plt.ylabel("y scores")
+plt.title(
+    "Comp. 1: X vs Y (test corr = %.2f)"
+    % np.corrcoef(X_test_r[:, 0], Y_test_r[:, 0])[0, 1]
 )
-evaluation_results = []
-levels = 100
-for classifier_idx, (name, classifier) in enumerate(classifiers.items()):
-    y_pred = classifier.fit(X_train, y_train).predict(X_test)
-    y_pred_proba = classifier.predict_proba(X_test)
-    accuracy_test = accuracy_score(y_test, y_pred)
-    roc_auc_test = roc_auc_score(y_test, y_pred_proba, multi_class="ovr")
-    log_loss_test = log_loss(y_test, y_pred_proba)
-    evaluation_results.append(
-        {
-            "name": name.replace("\n", " "),
-            "accuracy": accuracy_test,
-            "roc_auc": roc_auc_test,
-            "log_loss": log_loss_test,
-        }
-    )
-    for name in y_unique:
-import matplotlib as mpl
-from matplotlib import colors
-from sklearn.inspection import DecisionBoundaryDisplay
+plt.xticks(())
+plt.yticks(())
+plt.legend(loc="best")
+plt.subplot(224)
+plt.scatter(X_train_r[:, 1], Y_train_r[:, 1], label="train", marker="o", s=25)
+plt.scatter(X_test_r[:, 1], Y_test_r[:, 1], label="test", marker="o", s=25)
+plt.xlabel("x scores")
+plt.ylabel("y scores")
+plt.title(
+    "Comp. 2: X vs Y (test corr = %.2f)"
+    % np.corrcoef(X_test_r[:, 1], Y_test_r[:, 1])[0, 1]
+)
+plt.xticks(())
+plt.yticks(())
+plt.legend(loc="best")
+classifiers = {
+    "Logistic regression\n(C=0.01)": LogisticRegression(C=0.1),
+    "Logistic regression\n(C=1)": LogisticRegression(C=100),
+    "Gaussian Process": GaussianProcessClassifier(kernel=1.0 * RBF([1.0, 1.0])),
+    "Logistic regression\n(RBF features)": make_pipeline(
+        Nystroem(kernel="rbf", gamma=5e-1, n_components=50, random_state=1),
+        LogisticRegression(C=10),
+    ),
+    "Gradient Boosting": HistGradientBoostingClassifier(),
+    "Logistic regression\n(binned features)": make_pipeline(
+        KBinsDiscretizer(n_bins=5, quantile_method="averaged_inverted_cdf"),
+        PolynomialFeatures(interaction_only=True),
+        LogisticRegression(C=10),
+    ),
+    "Logistic regression\n(spline features)": make_pipeline(
+        SplineTransformer(n_knots=5),
+        PolynomialFeatures(interaction_only=True),
+        LogisticRegression(C=10),
+    ),
+}
 ```

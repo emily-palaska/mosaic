@@ -1,105 +1,84 @@
 # Exhaustive Code Synthesis
-Query `Initialize a logistic regression model. Use standardization on training inputs. Train the model.`
+Query `Create a regression model.`
 ## Script Variables
-- len:<br>
->len is a built-in function in Python that returns the length of an object. In this case,
-- metrics:<br>
->The variable metrics is a function that calculates the classification report for a given classifier. It takes two arguments
-- y_pred:<br>
->y_pred is a list of predicted labels for each sample in the dataset.
-- gt:<br>
->The variable gt is used to represent the ground truth labels. It is a list of integers that represent
-- cm:<br>
->cm is a colormap which is used to color the decision boundary of the classifier. It is a
-- y_true:<br>
->It is a list that contains the true values of the labels of the test set.
 - print:<br>
->print() is a function that prints a string to the console. In this case, it is used
-- pred:<br>
->pred is a variable that is used to store the predicted values from the confusion matrix. It is used
-- range:<br>
->The range of the variable gt is from 0 to 4, which represents the four classes of
-- y_train:<br>
->It is a variable that contains the labels of the training data. It is used to train the model
-- X_test:<br>
->X_test is a test dataset that is used to evaluate the performance of the model on unseen data.
-- ax:<br>
->ax is a scatter plot object. It is used to visualize the relationship between two variables. The first
-- X_train:<br>
->X_train is a matrix of 400 rows and 2 columns. Each row represents a data point
-- i:<br>
->It is a variable that is used to iterate over the different datasets and classifiers. It is used to
-- StandardScaler:<br>
->StandardScaler is a class that is used to scale the features of a dataset. It is a pipeline
-- plt:<br>
->plt is a python library used for plotting and graphing data. It is a part of the matplotlib
-- score:<br>
->The score variable is used to measure the accuracy of the classifier. It is a floating-point number between
-- classifiers:<br>
->The variable classifiers are used to determine the number of classifiers to be used in the script. They are
-- y_test:<br>
->The variable y_test is a test set that is used to evaluate the performance of the model. It
-- clf:<br>
->clf is a classifier object which is used to predict the class of the test data.
-- names:<br>
->names
+>The variable print is used to print the correlation matrix of the input data. It is used to check
+- np:<br>
+>The np variable is a Python package that provides a large collection of mathematical functions and data structures. It
+- pls1:<br>
+>pls1 is a PLSRegression object which is used to perform PLS regression. PLS regression
+- q:<br>
+>The variable q is the number of components used in the PLS regression model. It is used to
+- n:<br>
+>The value of n is 1000 which is the number of samples in the dataset.
+- Y:<br>
+>Y is a matrix of size (n, 4) where n is the number of samples.
+- PLSRegression:<br>
+>PLSRegression is a class that implements Partial Least Squares (PLS) regression. PLS
 - X:<br>
->X is a matrix of 2 columns and 100 rows. The first column is the x-axis
-- zip:<br>
->The zip() function in Python is used to create an iterator that aggregates elements from each of the iter
-- datasets:<br>
->The variable datasets are the input data that is used to train the machine learning models. They are used
-- DecisionBoundaryDisplay:<br>
->DecisionBoundaryDisplay is a class that displays the decision boundary of a classifier. It is used to visualize
-- name:<br>
->The variable name is "name". It is a string that represents the name of the dataset.
+>X is a matrix of size n x q where n is the number of samples and q is the
+- pls2:<br>
+>pls2 is a PLSRegression object that is used to fit the data and predict the output.
+- B:<br>
+>B is a matrix of size (q, p) where q is the number of components and p
+- data:<br>
+>Variable data is a dataset that contains information about the digits in the MNIST dataset.
+- digits:<br>
+>It is a variable that is used to store the digits of the image. It is a 2
+- n_samples:<br>
+>It is the number of samples in the dataset. In this case, it is 1797.
+- len:<br>
+>len is a built-in function that returns the length of an object. In this case, it is
 - make_pipeline:<br>
->It is a function that takes in a list of classifiers and returns a pipeline object. The pipeline object
-- RBF:<br>
->RBF is an acronym for Radial Basis Function. It is a kernel function that is used in
-- PolynomialFeatures:<br>
->PolynomialFeatures is a class that takes in a dataset and transforms it into a new dataset with polynomial
-- Nystroem:<br>
->Nystroem is a kernel-based method that is used to transform the input data into a high
-- GaussianProcessClassifier:<br>
->The GaussianProcessClassifier is a machine learning classifier that uses Gaussian processes to make predictions. It is a
-- LogisticRegression:<br>
->Logistic regression is a supervised machine learning algorithm that is used for classification problems. It is a type
-- HistGradientBoostingClassifier:<br>
->HistGradientBoostingClassifier is a machine learning algorithm that uses a gradient boosting technique to fit a history
-- KBinsDiscretizer:<br>
->KBinsDiscretizer is a class that is used to discretize continuous features into a fixed number
+>make_pipeline() is a function in scikit-learn that allows us to create a pipeline of machine
+- classifiers:<br>
+>The variable classifiers are used to determine the number of classifiers used in the model. This is done by
 - SplineTransformer:<br>
->SplineTransformer is a class that transforms the input data into a new representation using splines. It
-- predicted:<br>
->The variable predicted is a variable that is used to predict the output of the model. It is a
+>SplineTransformer is a class that transforms the input data into a new feature space using splines.
+- LogisticRegression:<br>
+>Logistic regression is a type of classification algorithm that is used to predict the probability of a given outcome
+- RBF:<br>
+>RBF is an acronym for Radial Basis Function. It is a type of kernel function used in
+- Nystroem:<br>
+>Nystroem is a kernel-based method for dimensionality reduction. It is a wrapper around a
+- HistGradientBoostingClassifier:<br>
+>HistGradientBoostingClassifier is a machine learning algorithm that uses a gradient boosting technique to fit a histogram
+- KBinsDiscretizer:<br>
+>KBinsDiscretizer is a class used to discretize continuous features into a fixed number of bins
+- GaussianProcessClassifier:<br>
+>The GaussianProcessClassifier is a classifier that uses a Gaussian process to make predictions. It is a non
+- PolynomialFeatures:<br>
+>PolynomialFeatures is a class that is used to create polynomial features from the input data. It is
 ## Synthesis Blocks
-### notebooks/plot_digits_classification.ipynb
+### notebooks/dataset2/classification/plot_digits_classification.ipynb
 CONTEXT:  Classification  To apply a classifier on this data, we need to flatten the images, turning each 2-D array of grayscale values from shape
 ``(8, 8)`` into shape ``(64,)``. Subsequently, the entire dataset will be of shape ``(n_samples, n_features)``, where ``n_samples`` is the number of
 images and ``n_features`` is the total number of pixels in each image.  We can then split the data into train and test subsets and fit a support
 vector classifier on the train samples. The fitted classifier can subsequently be used to predict the value of the digit for the samples in the test
-subset.   COMMENT: Predict the value of the digit on the test subset
+subset.   COMMENT: flatten the images
 ```python
-predicted = clf.predict(X_test)
+n_samples = len(digits.images)
+data = digits.images.reshape((n_samples, -1))
 ```
 
-### notebooks/plot_digits_classification.ipynb
-CONTEXT: If the results from evaluating a classifier are stored in the form of a `confusion matrix <confusion_matrix>` and not in terms of `y_true`
-and `y_pred`, one can still build a :func:`~sklearn.metrics.classification_report` as follows:   COMMENT: For each cell in the confusion matrix, add
-the corresponding ground truths and predictions to the lists
+### notebooks/dataset2/cross_decomposition/plot_compare_cross_decomposition.ipynb
+CONTEXT:  PLS regression, with univariate response, a.k.a. PLS1   COMMENT:
 ```python
-for gt in range(len(cm)):
-    for pred in range(len(cm)):
-        y_true += [gt] * cm[gt][pred]
-        y_pred += [pred] * cm[gt][pred]
-print(
-    "Classification report rebuilt from confusion matrix:\n"
-    f"{metrics.classification_report(y_true, y_pred)}\n"
-)
+print("Estimated betas")
+print(np.round(pls1.coef_, 1))
 ```
 
-### notebooks/plot_classification_probability.ipynb
+### notebooks/dataset2/cross_decomposition/plot_compare_cross_decomposition.ipynb
+CONTEXT:  PLS regression, with multivariate response, a.k.a. PLS2   COMMENT:
+```python
+Y = np.dot(X, B) + np.random.normal(size=n * q).reshape((n, q)) + 5
+pls2 = PLSRegression(n_components=3)
+pls2.fit(X, Y)
+print("True B (such that: Y = XB + Err)")
+print(B)
+```
+
+### notebooks/dataset2/classification/plot_classification_probability.ipynb
 CONTEXT:  Probabilistic classifiers  We will plot the decision boundaries of several classifiers that have a `predict_proba` method. This will allow
 us to visualize the uncertainty of the classifier in regions where it is not certain of its prediction.   COMMENT:
 ```python
@@ -125,35 +104,17 @@ classifiers = {
 }
 ```
 
-### notebooks/plot_classifier_comparison.ipynb
-CONTEXT:   Classifier comparison  A comparison of several classifiers in scikit-learn on synthetic datasets. The point of this example is to
-illustrate the nature of decision boundaries of different classifiers. This should be taken with a grain of salt, as the intuition conveyed by these
-examples does not necessarily carry over to real datasets.  Particularly in high-dimensional spaces, data can more easily be separated linearly and
-the simplicity of classifiers such as naive Bayes and linear SVMs might lead to better generalization than is achieved by other classifiers.  The
-plots show training points in solid colors and testing points semi-transparent. The lower right shows the classification accuracy on the test set.
-COMMENT: iterate over classifiers
-```python
-for name, clf in zip(names, classifiers):
-    ax = plt.subplot(len(datasets), len(classifiers) + 1, i)
-    clf = make_pipeline(StandardScaler(), clf)
-    clf.fit(X_train, y_train)
-    score = clf.score(X_test, y_test)
-    DecisionBoundaryDisplay.from_estimator(
-        clf, X, cmap=cm, alpha=0.8, ax=ax, eps=0.5
-    )
-```
-
 ## Code Concatenation
 ```python
-predicted = clf.predict(X_test)
-for gt in range(len(cm)):
-    for pred in range(len(cm)):
-        y_true += [gt] * cm[gt][pred]
-        y_pred += [pred] * cm[gt][pred]
-print(
-    "Classification report rebuilt from confusion matrix:\n"
-    f"{metrics.classification_report(y_true, y_pred)}\n"
-)
+n_samples = len(digits.images)
+data = digits.images.reshape((n_samples, -1))
+print("Estimated betas")
+print(np.round(pls1.coef_, 1))
+Y = np.dot(X, B) + np.random.normal(size=n * q).reshape((n, q)) + 5
+pls2 = PLSRegression(n_components=3)
+pls2.fit(X, Y)
+print("True B (such that: Y = XB + Err)")
+print(B)
 classifiers = {
     "Logistic regression\n(C=0.01)": LogisticRegression(C=0.1),
     "Logistic regression\n(C=1)": LogisticRegression(C=100),
@@ -174,12 +135,4 @@ classifiers = {
         LogisticRegression(C=10),
     ),
 }
-for name, clf in zip(names, classifiers):
-    ax = plt.subplot(len(datasets), len(classifiers) + 1, i)
-    clf = make_pipeline(StandardScaler(), clf)
-    clf.fit(X_train, y_train)
-    score = clf.score(X_test, y_test)
-    DecisionBoundaryDisplay.from_estimator(
-        clf, X, cmap=cm, alpha=0.8, ax=ax, eps=0.5
-    )
 ```

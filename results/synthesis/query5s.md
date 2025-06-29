@@ -1,10 +1,10 @@
 # String Code Synthesis
-Query `PCA algorithm`
+Query `Run a PCA algorithm and visualize it.`
 ## Script Variables
 - pca:<br>
->pca is a PCA object which is used to perform Principal Component Analysis. PCA is a dimensionality
+>pca is a PCA object that is used to reduce the dimensionality of the data. It does
 - pcr:<br>
->The variable pcr is a function that calculates the r-squared value of a given dataset. It
+>The variable pcr is a pipeline that contains a standard scaler, a PCA component, and a linear
 ## Synthesis Blocks
 ### notebooks/dataset2/cross_decomposition/plot_pcr_vs_pls.ipynb
 CONTEXT: For the purpose of this example, we now define the target `y` such that it is strongly correlated with a direction that has a small variance.
