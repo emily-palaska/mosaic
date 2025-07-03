@@ -39,8 +39,9 @@ def variance(batch):
 
 def plot_sim(sim_mat, path='../plots/similarity_matrix.png'):
     plt.figure()
-    plt.imshow(sim_mat, cmap='coolwarm', interpolation='nearest')
-    plt.colorbar(label='Similarity')
+    plt.imshow(sim_mat, cmap='cividis', interpolation='nearest')
+    plt.colorbar(label='Ομοιότητα')
+    plt.axis('off')
 
     # Annotate the matrix with similarity values - ONLY for small dimensions due to visibility
     if sim_mat.shape[0] <= 20:
@@ -49,7 +50,7 @@ def plot_sim(sim_mat, path='../plots/similarity_matrix.png'):
                 plt.text(j, i, f"{sim_mat[i, j]:.2f}",
                          ha="center", va="center", color="black")
 
-    plt.title("Similarity Matrix")
+    #plt.title("Similarity Matrix")
     plt.tight_layout()
     plt.savefig(path)
     plt.close()
@@ -63,8 +64,8 @@ def pivot_rotation(q: Tensor, n: Tensor, s: Tensor, i: Tensor, k: float, l: floa
     n_proj = projection(n, s)
     i_proj = projection(q, n)
 
-    if method == 'rnd': rand(s.shape)
-    elif method == 'rev': s = s - l * n_proj
+    if method == 'rnd': s = rand(s.shape)
+    elif method == 'rev': s = - n
     else: s = l * n_proj - s
     s /= s.norm()
     i -= k * i_proj.norm().item()

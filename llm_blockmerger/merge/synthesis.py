@@ -10,19 +10,17 @@ from torch import tensor, Tensor, rand
 
 
 def check_repetitions(max_rep:int, ids:list, top_nn:list):
-    for neighbor in top_nn:
-        if ids.count(neighbor.id) < max_rep:
-            return neighbor
+    for nn in top_nn:
+        if ids.count(nn.id) < max_rep: return nn
     return None
 
-def string_synthesis(model:LLM, db:BlockDB, query:str, max_rep=2, repl:str='[UNK]',
+
+def string_synthesis(model:LLM, db:BlockDB, query:str, max_rep=1, repl:str='[UNK]',
                      var:bool=True, max_it:int|None=None, mlp:MLP|None=None):
     synthesis, ids, last_nn = BlockManager(), [], None
-    s = mlp(tensor(model.encode(query))) if mlp else tensor(model.encode(query))
+    s = mlp(tensor(model.encode(query))[0]) if mlp else tensor(model.encode(query))[0]
 
     for _ in range(max_it if max_it else s.shape[0]):
-        if query in ['', ' ']: return synthesis # Break condition: Empty specification
-
         nn = check_repetitions(max_rep, ids, db.read(s, limit=3))
         if nn is None or nn == last_nn: break  # Break condition: No valid neighbors
 
@@ -30,7 +28,7 @@ def string_synthesis(model:LLM, db:BlockDB, query:str, max_rep=2, repl:str='[UNK
         ids.append(nn.id)
 
         nn_label = encoded_json(nn.blockdata)['label']
-        new_query = remove_common_words(og=query, rem=''.join(nn_label), repl=repl)
+        new_query = remove_common_words(og=query, rem=nn_label, repl=repl)
         if new_query == query: break # Break condition: Unchanged specification
 
         synthesis.append_doc(nn)
@@ -64,10 +62,11 @@ def embedding_synthesis(model:LLM, db:BlockDB, query:str, k:float=0.9, l:float=1
     return merge_variables(model, synthesis) if var else synthesis
 
 
-def reconstruct(information: float, projections:Tensor, features: int, p:float=0.95):
+def reconstruct(information: float, projections:Tensor, features: int, p:float=0.95, max_l=3):
     docs = projections.size(0)
     best_r, best_mask = 0.0, None
-    for l in range(1, min(features, docs) + 1):
+    iterations = min(min(features, docs), max_l) + 1
+    for l in range(1, iterations):
         r, mask = best_combination(docs, l, information, projections)
         if r is None: continue
         if r > best_r:
@@ -76,7 +75,8 @@ def reconstruct(information: float, projections:Tensor, features: int, p:float=0
     return best_mask.tolist() if best_mask is not None else None
 
 
-def exhaustive_synthesis(model: LLM, db: BlockDB, query: str, mlp:MLP|None=None):
+def exhaustive_synthesis(model: LLM, db: BlockDB, query: str, mlp:MLP|None=None, noise:bool=False):
+    if noise: return BlockManager()
     q = mlp(tensor(model.encode(query))[0]) if mlp else tensor(model.encode(query))[0]
     i = q.norm().item()
 

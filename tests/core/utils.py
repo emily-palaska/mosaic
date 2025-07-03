@@ -51,3 +51,15 @@ def linear_regression(x, y):
     r_squared = 1 - (ss_res / ss_tot)
 
     return y_pred, m, b, r_squared
+
+
+def separate_methods(synthesis_list):
+    info = dict()
+    for synthesis_dict in synthesis_list:
+        for m, s in synthesis_dict.items():
+            if m not in info: info[m] = {"codes":[], "blocks":[], "lines":[]}
+            info[m]["codes"].append('\n'.join(s.labels) + '\n' + '\n'.join(s.blocks))
+            #info[m]["codes"].append('\n'.join(s.blocks))
+            info[m]["blocks"].append(len(s))
+            info[m]["lines"].append(sum(len(block.splitlines()) for block in s.blocks))
+    return info

@@ -2,21 +2,16 @@ import os
 os.chdir("../")
 
 from time import time
-from json import dumps
 from numpy import mean, std
-from tests.core import merge, restore
-from llm_blockmerger.core import LLM, norm_cos_sim
+from random import randint, sample
+from json import dumps
+from tests.core import merge, restore, separate_methods
+from llm_blockmerger.core import LLM, norm_cos_sim, encoded_json
+from llm_blockmerger.store import BlockDB
 from llm_blockmerger.merge import embedding_synthesis
+from tests.queries import queries
 
-queries = [
-    'Create classifiers with names Regression, SVM, Tree, AdaBoost and Bayes classifiers. Compare them and plot them.',
-    'Initialize a logistic regression model. Use standardization on training inputs. Train the model.',
-    'Create a regression model.',
-    'Graph operations',
-    'How to perform cross_decomposition',
-    'Simple PCA algorithm.',
-    'Run a PCA algorithm. Visualize it by plotting some plt plots.'
-]
+
 
 
 def runtime(A=1000):
@@ -43,45 +38,74 @@ def runtime(A=1000):
         print('\rExperiment completed')
 
 
-def separate_methods(synthesis_list):
+def quantitative(db=None, sample_q=None, filename=None):
+    demo_queries = sample(queries, sample_q) if sample_q else queries
+    model = LLM(task='embedding')
     results = dict()
-    for synthesis_dict in synthesis_list:
-        for m, s in synthesis_dict.items():
-            try: results[m].append('\n'.join(s.labels) + '\n' + '\n'.join(s.blocks))
-            except KeyError: results[m] = ['\n'.join(s.labels) + '\n' + '\n'.join(s.blocks)]
+    info = separate_methods(merge(demo_queries, save=False, verbose=True, db=db))
+
+    qs = [model.encode(query) for query in demo_queries]
+    cs = {method: model.encode(m_dict["codes"]) for method, m_dict in info.items()}
+    for method, m_dict in info.items():
+        results[method] = {
+            "sims": [norm_cos_sim(q, c).item() for q, c in zip(qs, cs[method])],
+            "blocks": info[method]["blocks"],
+            "lines": info[method]["lines"]
+        }
+
+    print('\tAverage similarities')
+    for m, m_dict in results.items(): print(f'\t\t{m}: {mean(m_dict["sims"])} ± {std(m_dict["sims"])}')
+    print('\tAverage Blocks:')
+    for m, m_dict in results.items(): print(f'\t\t{m}: {mean(m_dict["blocks"])} ± {std(m_dict["blocks"])}')
+    print('\tAverage Lines:')
+    for m, m_dict in results.items(): print(f'\t\t{m}: {mean(m_dict["lines"])} ± {std(m_dict["lines"])}')
+
+    if filename:
+        with open(filename, 'w') as file:
+            file.write(f'merging_quan = {dumps(results, indent=2)}')
     return results
 
 
-def quantitative():
-    model = LLM(task='embedding')
-    synthesis_list = merge(queries)
-    results = separate_methods(synthesis_list)
+def scalability(step_size=100):
+    filename, results = 'tests/core/graphs/merging_sc.py', dict()
 
-    qs = [model.encode(query) for query in queries]
-    rs = {k: model.encode(r) for k, r in results.items()}
-    sims = {k: norm_cos_sim(qs[i], rs[k]).tolist() for i, k in enumerate(rs.keys())}
+    db = BlockDB(empty=False)
+    embeddings, blockdata = db.embeddings(), db.blockdata()
+    print(f'Loaded BlockDB with {db.num_docs()} docs')
 
-    results ='results/merging_quan.txt'
-    with open(results, 'w') as file:
-        file.write(f'sims = {dumps(sims, indent=2)}')
+    for step in range(step_size, db.num_docs(), step_size):
+        print(f'Samples: {step}')
+        sample_ids = sorted([randint(0, len(embeddings)-1) for _ in range(step)])
+        sample_embeddings = embeddings[sample_ids]
+        sample_blockdata = [blockdata[s] for s in sample_ids]
+        db = BlockDB(empty=True)
+        db.create(sample_embeddings, sample_blockdata)
+        for method, m_dict in quantitative(db).items():
+            if not method in results: results[method] = {"sims": dict(), "blocks": dict()}
+            results[method]["sims"][step] = m_dict["sims"]
+            results[method]["blocks"][step] = m_dict["blocks"]
+    with open(filename, 'w') as file: file.write(f'merging_sc = {dumps(results, indent=2)}')
 
-    print('Average similarities')
-    for k, v in sims.items(): print(f'{k}: {mean(v)} ± {std(v)}')
-    print('Blocks:')
-    for i, synthesis_dict in enumerate(synthesis_list):
-        print(f'\tQ{i}: ', end='')
-        for m, s in synthesis_dict.items():
-            print(f'{m}={len(s)}', end=' ')
-        print('')
+    db = BlockDB(empty=True)
+    db.create(embeddings, blockdata)
+    print(f'Restored BlockDB with {db.num_docs()} docs')
 
 
 def integration():
-    merge([queries[0]], save=False)
+    merge([queries[286]], save=False, verbose=True)
 
 
 def qualitive():
-    merge(queries)
+    small_dataset_queries = [
+        'Initialize a logistic regression model. Use standardization on training inputs. Train the model.',
+        'Create a regression model.',
+        'Simple Graph operations',
+        'Simple PCA algorithm.',
+        'How do you normalize data?'
+    ]
+    merge(small_dataset_queries)
 
 
 if __name__ == '__main__':
-    quantitative()
+    filename = 'tests/graphs/merging_quan.py'
+    qualitive()

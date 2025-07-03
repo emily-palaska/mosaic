@@ -1,4 +1,4 @@
-from torch import stack
+from torch import stack, Tensor
 from os.path import join
 
 from llm_blockmerger.core import LLM, plot_sim, norm_cos_sim, print_synthesis, encoded_json
@@ -12,7 +12,6 @@ from tests.core.utils import md_dumb_synthesis, slice_2d
 def preprocess(paths: list, plot:bool=False, db:bool=False, limit:int|None=None, empty:bool=True):
     managers = init_managers(paths)
     if limit: managers = slice_2d(managers, limit)
-    for manager in managers: print(manager)
 
     llama = LLM(task='question')
     for manager in managers:
@@ -47,6 +46,7 @@ def merge(queries:list, path:str='./results/synthesis/', model:LLM|None=None, db
 
     results = []
     for i, query in enumerate(queries):
+        if verbose: print(f'\rProgress: {i}/{len(queries)}', end='')
         qpath = join(path, f'query{i}')
         methods = {
             's': string_synthesis(model, db, query, mlp=mlp),
@@ -59,13 +59,15 @@ def merge(queries:list, path:str='./results/synthesis/', model:LLM|None=None, db
 
         for key, synthesis in methods.items():
             if save: md_dumb_synthesis(synthesis, query, names[key], qpath + f'{key}.md')
-            elif verbose: print_synthesis(synthesis, query, title=names[key].upper())
+            #elif verbose: print_synthesis(synthesis, query, title=names[key].upper())
 
-    if save and verbose: print(f'Results saved in {path}')
+    if save and verbose: print(f'\rResults saved in {path}')
+    elif verbose: print(f'\rMerging completed.')
     return results
 
-def deploy_mlp(model, embeddings, blockdata):
+def deploy_mlp(model:MLP, embeddings:Tensor, blockdata:str):
     new_embeddings = stack([model(embedding.to(model.device)) for embedding in embeddings]).tolist()
+    blockdata = encoded_json(blockdata)
     new_blockdata = []
     for datadict, new_emb in zip(blockdata, new_embeddings):
         new_datadict = encoded_json(datadict)

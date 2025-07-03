@@ -4,6 +4,7 @@ os.chdir("../")
 from time import time
 from datetime import datetime
 from tests.core import restore
+from llm_blockmerger.core import plot_sim, norm_cos_sim
 
 def runtime(A=1000, verbose=True):
     demo_paths = ['notebooks/example_more.ipynb', 'notebooks/pygrank_snippets.ipynb']
@@ -27,6 +28,7 @@ def runtime(A=1000, verbose=True):
 def integration():
     model, db = restore()
     print(f'Loaded {model.name} model and BlockDB with {db.num_docs()} docs and {db.features} features')
+    plot_sim(norm_cos_sim(db.embeddings()), path='./plots/similarity_matrix.png')
 
 
 if __name__ == '__main__':

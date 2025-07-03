@@ -46,6 +46,8 @@ def parse_script(script:str):
         except (IndentationError, SyntaxError):
             new_script = script.split('\n', 1)
             script = dedent_blocks(new_script[1]) if len(new_script) > 1 else ''
+        except TypeError:
+            break
     return None
 
 def ast_extraction(script: str):

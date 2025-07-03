@@ -61,7 +61,8 @@ class BlockManager:
 
     def append_doc(self, doc):
         blockdata = encoded_json(doc.blockdata)
-        self.blocks.append(blockdata["block"])
+        try: self.blocks.append(blockdata["block"])
+        except KeyError: self.blocks.append(blockdata["blocks"])
         self.labels.append(blockdata["label"])
         self.var_dicts.append(blockdata["var_dict"])
         if not isinstance(self.sources, list): self.sources = [self.sources]

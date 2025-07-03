@@ -5,7 +5,6 @@ from tests.core.pipelines import preprocess
 from time import time
 from datetime import datetime
 
-
 def runtime(A:int=20):
     demo_paths = ['notebooks/example_more.ipynb', 'notebooks/pygrank_snippets.ipynb']
     # paths = ['notebooks/02.02-The-Basics-Of-NumPy-Arrays.ipynb']
@@ -48,20 +47,11 @@ def scalability(A:int=20, limits:list|None=None):
 
 def integration():
     #demo_paths = ['notebooks/example_more.ipynb', 'notebooks/pygrank_snippets.ipynb']
-    # paths = ['notebooks/02.02-The-Basics-Of-NumPy-Arrays.ipynb']
-    classification = [
-        'notebooks/dataset2/classification/plot_classifier_comparison.ipynb',
-        'notebooks/dataset2/classification/plot_classification_probability.ipynb',
-        'notebooks/dataset2/classification/plot_digits_classification.ipynb',
-        'notebooks/dataset2/classification/plot_lda.ipynb',
-        'notebooks/dataset2/classification/plot_lda_qda.ipynb'
-    ]
-    cross_decomposition = [
-        'notebooks/dataset2/cross_decomposition/plot_compare_cross_decomposition.ipynb',
-        'notebooks/dataset2/cross_decomposition/plot_pcr_vs_pls.ipynb'
-    ]
-    db = preprocess(cross_decomposition, plot=True, db=True, empty=False)
-    print(f'Created database with {db.num_docs()} documents')
+    #paths = ['notebooks/02.02-The-Basics-Of-NumPy-Arrays.ipynb']
+    from tests.filenames import more_datafiles
+    for data in more_datafiles:
+        db = preprocess(data, plot=True, db=True, empty=False)
+        print(f'Created database with {db.num_docs()} documents')
 
 if __name__ == '__main__':
     integration()

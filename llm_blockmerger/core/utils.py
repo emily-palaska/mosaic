@@ -46,7 +46,9 @@ def dedent_blocks(blocks):
 
         dedented_lines = [line[common_ind:] if line.strip() else '' for line in lines]
         dedented_blocks.append('\n'.join(dedented_lines))
-    return dedented_blocks if len(dedented_blocks) > 1 else dedented_blocks[0]
+    if dedented_blocks and len(dedented_blocks) > 1: return dedented_blocks
+    elif dedented_blocks and len(dedented_blocks) == 1: return dedented_blocks[0]
+    else: return ''
 
 
 def encoded_json(field: str):
@@ -91,12 +93,11 @@ def remove_symbols(script):
     return script
 
 
-def best_combination(n: int, r: int, target: float, components: Tensor, batch_size: int = 10_000):
+def best_combination(n: int, r: int, target: float, components: Tensor, batch_size: int = 1.0e8):
     best_sum, best_comb = None, None
     device, batch = components.device, []
-    comb_gen = combinations(range(n), r)
 
-    for comb in comb_gen:
+    for comb in combinations(range(n), r):
         batch.append(comb)
         if len(batch) == batch_size:
             best_sum, best_comb = _process_batch(batch, components, target, best_sum, best_comb)

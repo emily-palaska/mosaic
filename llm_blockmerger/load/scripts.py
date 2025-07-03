@@ -1,5 +1,4 @@
 from re import match, escape
-
 from llm_blockmerger.core import dedent_blocks, separate_lines
 
 
@@ -31,11 +30,12 @@ def generate_blocks(cells, acc_md):
 
         for func, lines in sections:
             sec_blocks, sec_labels = func(lines, md_prefix)
-            sec_blocks = dedent_blocks(sec_blocks)
+            if len(sec_blocks) == 0: continue
             blocks.extend(sec_blocks if isinstance(sec_blocks, list) else [sec_blocks])
             labels.extend(sec_labels)
+    assert len(blocks) == len(labels), f"Invalid lengths {len(blocks)} != {len(labels)}"
+    for block in blocks: assert isinstance(block, str), f"Invalid block type: {type(block)}"
     return blocks, labels
-
 
 def _split_sections(cell):
     sections, curr_sec, types_stack = [], [], []
@@ -93,15 +93,15 @@ def main_section(lines, prefix):
 
         if stripped.startswith('#'):
             if curr_block:
-                blocks.append(curr_block)
+                blocks.append('\n'.join(curr_block))
                 labels.append(prefix + '\n'.join(curr_comments))
                 curr_block, curr_comments = [], []
             curr_comments.append(stripped[1:].strip())
         else:
             curr_block.append(line)
 
-    if curr_block or curr_comments:
-        blocks.append(curr_block)
+    if curr_block:
+        blocks.append('\n'.join(curr_block))
         labels.append(prefix + '\n'.join(curr_comments))
     return blocks, labels
 
