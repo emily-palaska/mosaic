@@ -8,10 +8,10 @@ from datetime import datetime
 def runtime(A:int=20):
     demo_paths = ['notebooks/example_more.ipynb', 'notebooks/pygrank_snippets.ipynb']
     # paths = ['notebooks/02.02-The-Basics-Of-NumPy-Arrays.ipynb']
-    results ='results/preprocessing_run.txt'
-    timestamp = datetime.now().strftime("%d/%m %H:%M")
+    results ='tests/data/preprocessing_run.py'
+
     with open(results, 'w') as file:
-        file.write(f'Paths: {demo_paths}\nExperiment: {timestamp}\n[')
+        file.write(f'preprocessing_run = [')
 
     for i in range(A):
         print(f'\rProgress: {100 * i / A :.2f}%', end='')
@@ -27,10 +27,9 @@ def scalability(A:int=20, limits:list|None=None):
     if limits is None: limits = list(range(1, 35, 2))
     demo_paths = ['notebooks/example_more.ipynb', 'notebooks/pygrank_snippets.ipynb']
     # paths = ['notebooks/02.02-The-Basics-Of-NumPy-Arrays.ipynb']
-    results ='results/preprocessing_sc.txt'
-    timestamp = datetime.now().strftime("%d/%m %H:%M")
+    results ='tests/data/preprocessing_sc.py'
     with open(results, 'w') as file:
-        file.write(f'Paths: {demo_paths}\nExperiment: {timestamp}\n')
+        file.write('preprocessing_sc = [')
 
     for limit in limits:
         with open(results, 'a') as file:
@@ -48,7 +47,7 @@ def scalability(A:int=20, limits:list|None=None):
 def integration():
     #demo_paths = ['notebooks/example_more.ipynb', 'notebooks/pygrank_snippets.ipynb']
     #paths = ['notebooks/02.02-The-Basics-Of-NumPy-Arrays.ipynb']
-    from tests.filenames import more_datafiles
+    from tests.data.filenames import more_datafiles
     for data in more_datafiles:
         db = preprocess(data, plot=True, db=True, empty=False)
         print(f'Created database with {db.num_docs()} documents')

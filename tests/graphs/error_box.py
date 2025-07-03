@@ -2,9 +2,10 @@ import seaborn as sns
 import matplotlib.pyplot as plt
 from numpy import mean, std
 from tests.core.utils import linear_regression
+from tests.data import exactnn, approxnn, merging_quan, preprocessing_sc
 
 colors = ['#309db1', '#1f497d']
-#  showmeans=True, meanline=True, meanprops={'linestyle': '-', 'color': 'black'}
+
 def plot_boxplot(labels, values, title='Boxplot', x='Label', y='Value', path=None):
     flat_l = [l for l, v_list in zip(labels, values) for _ in v_list]
     flat_v = [v for v_list in values for v in v_list]
@@ -47,7 +48,6 @@ def plot_errorbar(times, title, xlabel, ylabel, llabel, path=None):
 
 
 def retrieving_boxplot(lang='gr'):
-    from tests.graphs.data import exactnn, approxnn
     for i in range(len(exactnn)): exactnn[i], approxnn[i] = 1000 * exactnn[i], 1000 * approxnn[i]
     labels = ['Ακριβής', 'Προσεγγιστικός'] if lang == 'gr' else ['Exact', 'Approx']
     title = f'Χρόνος Ανάκτησης Μπλοκ ({len(exactnn)} Επαναλήψεις)' if lang == 'gr'\
@@ -59,21 +59,18 @@ def retrieving_boxplot(lang='gr'):
 
 
 def preprocessing_errorbar(lang='gr'):
-    from tests.graphs.data import preprocessing_sc as times
-    per_block = [v / int(k) for k, values in times.items() for v in values]
+    per_block = [v / int(k) for k, values in preprocessing_sc.items() for v in values]
     print(f'Processing of one block: {mean(per_block):.2f} ± {std(per_block):.2f} s')
     xlabel = 'Αριθμός Μπλοκ' if lang == 'gr' else 'Block Number'
     ylabel = 'Χρόνος (s)' if lang == 'gr' else 'Processing Time (s)'
     llabel = 'Ευθεία Ελαχίστων Τετραγώνων' if lang == 'gr' else 'Least Squares Line'
     title = 'Χρόνος Επεξεργασίας Μπλοκ' if lang == 'gr' else 'Block Processing Time'
     path = f'../../plots/preprocessing_error.png'
-    plot_errorbar(times, title, xlabel, ylabel, llabel, path)
+    plot_errorbar(preprocessing_sc, title, xlabel, ylabel, llabel, path)
 
 
 def merging_boxplot(lang='gr'):
-    from tests.graphs.merging_quan import merging_quan
     sims = [m_dict["sims"] for m_dict in merging_quan.values()]
-    # TODO CHANGE THIS ORDER
     labels = ['Συμβολοσειρά', 'Περιστροφή', 'Απομάκρυνση', 'Τυχαία', 'Εξαντλητική'] if lang == 'gr' \
         else ['String', 'Rotation', 'Reverse Embedding', 'Random', 'Exhaustive']
     title = f'Θηκόγραμμα Ομοιότητας Αποτελέσματος-Προδιαγραφής' if lang == 'gr'\
@@ -84,21 +81,7 @@ def merging_boxplot(lang='gr'):
     plot_boxplot(labels, sims, title, xlabel, ylabel, path)
 
 
-def merging_calculations():
-    from tests.graphs.data import synthesis, llama
-    print(f'Synthesis: {mean(synthesis):.2f} ± {std(synthesis)} s')
-    print(f'Llama: {mean(llama):.2f} ± {std(llama):.2f} s')
-
-def preprocessing_calculations():
-    from tests.graphs.data import preprocessing_sc
-    print("Average per block num:")
-    for b, times in preprocessing_sc.items():
-        print(rf'\t{b}: {mean(times):.2f} $\pm$ {std(times):.2f} ' + r'\eng{s}')
-
-
 if __name__ == '__main__':
-    #merging_boxplot()
-    merging_calculations()
-    #preprocessing_errorbar()
-    #preprocessing_calculations()
-    #retrieving_boxplot()
+    merging_boxplot()
+    preprocessing_errorbar()
+    retrieving_boxplot()

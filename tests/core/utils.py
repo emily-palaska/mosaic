@@ -1,6 +1,7 @@
 import numpy as np
 from llm_blockmerger.load import BlockManager
 from textwrap import fill
+from re import sub, escape
 
 def md_dumb_synthesis(synthesis: BlockManager, query:str, method: str, path: str):
     assert method in ['String', 'Embedding', 'Exhaustive', 'Reverse Embedding', 'Random'], f'Invalid method {method}'
@@ -63,3 +64,8 @@ def separate_methods(synthesis_list):
             info[m]["blocks"].append(len(s))
             info[m]["lines"].append(sum(len(block.splitlines()) for block in s.blocks))
     return info
+
+
+def remove_words(queries: list, stopwords: list):
+    pattern = r'\b(?:' + '|'.join(map(escape, stopwords)) + r')\b'
+    return [sub(pattern, '', q) for q in queries]

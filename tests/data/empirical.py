@@ -1,4 +1,3 @@
-from numpy import mean, std
 queries = [
     "SpectralBiclustering with consensus score in scikit-learn",
     "Calibration curves for Naive Bayes and Logistic Regression",
@@ -8,6 +7,7 @@ queries = [
     "Decision tree regression with depth comparison",
     "PCA vs KernelPCA image reconstruction"
 ]
+program_blocks = [2, 3, 4, 2, 4, 4, 3]
 programs = [
     """from sklearn.cluster import SpectralBiclustering
 from sklearn.metrics import consensus_score
@@ -255,35 +255,4 @@ plot_digits(
    ),
 )"""
 ]
-stopwords = [
-    "a", "an", "the",
-    "and", "or", "but", "if", "because", "while",
-    "of", "to", "in", "for", "on", "with", "at", "by", "from",
-    "up", "down", "over", "under", "above", "below",
-    "as", "that", "this", "these", "those",
-    "is", "are", "was", "were", "be", "been", "being",
-    "have", "has", "had", "do", "does", "did",
-    "it", "its", "they", "them", "their",
-    "will", "would", "can", "could", "shall", "should",
-    "when", "where", "how", "why", "what", "which",
-    "not", "no", "yes", "so", "such",
-    "there", "here", "other", "another",
-    "more", "most", "less", "least",
-    "only", "just", "also", "very", "too", "much", "many", "some", "any",
-    "each", "every", "all", "both", "either", "neither"
-]
 
-program_blocks = [2, 3, 4, 2, 4, 4, 3]
-program_lines = [len(program.splitlines()) for program in programs]
-filtered_queries = []
-for q in queries:
-    for word in stopwords:
-        q = q.replace(word, '')
-    filtered_queries.append(q)
-q_words = [len(q.split()) for q in filtered_queries]
-assert len(program_blocks) == len(q_words)
-
-program_blocks_norm = [pb / qw for qw, pb in zip(q_words, program_blocks)]
-print(f"Ideal Blocks per Query word: {mean(program_blocks_norm)} +- {std(program_blocks_norm)}")
-program_lines_norm = [pl / qw for qw, pl in zip(q_words, program_lines)]
-print(f"Ideal Lines per Query word: {mean(program_lines_norm)} +- {std(program_lines_norm)}")

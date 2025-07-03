@@ -5,14 +5,12 @@ from time import time
 from numpy import mean, std
 from random import randint, sample
 from json import dumps
+
 from tests.core import merge, restore, separate_methods
-from llm_blockmerger.core import LLM, norm_cos_sim, encoded_json
+from llm_blockmerger.core import LLM, norm_cos_sim
 from llm_blockmerger.store import BlockDB
 from llm_blockmerger.merge import embedding_synthesis
-from tests.queries import queries
-
-
-
+from tests.data import queries
 
 def runtime(A=1000):
     results ='results/merging_run.txt'
