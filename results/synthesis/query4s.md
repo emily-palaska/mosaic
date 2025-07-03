@@ -1,25 +1,29 @@
 # String Code Synthesis
-Query `How to perform cross_decomposition`
+Query `How do you normalize data?`
 ## Script Variables
-- np:<br>
->The np variable is a Python package that provides a large collection of mathematical functions and data structures. It
-- n:<br>
->The value of n is 1000 which is the number of samples in the dataset.
+- x_train:<br>
+>x_train is a numpy array of size (n_samples, n_features) containing the training data. The values of x_train are the features of the training data. The values of y_train are the labels of the training data.
+- preprocessing:<br>
+>The preprocessing variable is used to normalize the data. It is used to remove the outliers and to make the data more robust. The data is normalized by subtracting the mean and dividing by the standard deviation. This helps to reduce the impact of outliers and to make the data more robust. The normalization process is done before the data is used for training the model.
 ## Synthesis Blocks
-### notebooks/dataset2/cross_decomposition/plot_compare_cross_decomposition.ipynb
-CONTEXT:   Compare cross decomposition methods  Simple usage of various cross decomposition algorithms:  - PLSCanonical - PLSRegression, with
-multivariate response, a.k.a. PLS2 - PLSRegression, with univariate response, a.k.a. PLS1 - CCA  Given 2 multivariate covarying two-dimensional
-datasets, X, and Y, PLS extracts the 'directions of covariance', i.e. the components of each datasets that explain the most shared variance between
-both datasets. This is apparent on the **scatterplot matrix** display: components 1 in dataset X and dataset Y are maximally correlated (points lie
-around the first diagonal). This is also true for components 2 in both dataset, however, the correlation across datasets for different components is
-weak: the point cloud is very spherical.  COMMENT: Authors: The scikit-learn developers SPDX-License-Identifier: BSD-3-Clause
+### notebooks/example_more.ipynb
+CONTEXT: def train_lr(x_train, y_train, preprocessing="normalize"): COMMENT: Standardize training data
 ```python
-import numpy as np
-n = 500
+if preprocessing == "standardize":
+    x_train = (x_train - x_train.mean(axis=0)) / (x_train.std(axis=0))
+```
+
+### notebooks/example_more.ipynb
+CONTEXT: def train_lr(x_train, y_train, preprocessing="normalize"): COMMENT: Normalize training data
+```python
+if preprocessing == "normalize":
+    x_train = (x_train - x_train.min(axis=0)) / (x_train.max(axis=0) - x_train.min(axis=0))
 ```
 
 ## Code Concatenation
 ```python
-import numpy as np
-n = 500
+if preprocessing == "standardize":
+    x_train = (x_train - x_train.mean(axis=0)) / (x_train.std(axis=0))
+if preprocessing == "normalize":
+    x_train = (x_train - x_train.min(axis=0)) / (x_train.max(axis=0) - x_train.min(axis=0))
 ```

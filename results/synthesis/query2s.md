@@ -1,73 +1,22 @@
 # String Code Synthesis
-Query `Create a regression model.`
+Query `Simple Graph operations`
 ## Script Variables
-- make_pipeline:<br>
->make_pipeline() is a function in scikit-learn that allows us to create a pipeline of machine
-- classifiers:<br>
->The variable classifiers are used to determine the number of classifiers used in the model. This is done by
-- SplineTransformer:<br>
->SplineTransformer is a class that transforms the input data into a new feature space using splines.
-- LogisticRegression:<br>
->Logistic regression is a type of classification algorithm that is used to predict the probability of a given outcome
-- RBF:<br>
->RBF is an acronym for Radial Basis Function. It is a type of kernel function used in
-- Nystroem:<br>
->Nystroem is a kernel-based method for dimensionality reduction. It is a wrapper around a
-- HistGradientBoostingClassifier:<br>
->HistGradientBoostingClassifier is a machine learning algorithm that uses a gradient boosting technique to fit a histogram
-- KBinsDiscretizer:<br>
->KBinsDiscretizer is a class used to discretize continuous features into a fixed number of bins
-- GaussianProcessClassifier:<br>
->The GaussianProcessClassifier is a classifier that uses a Gaussian process to make predictions. It is a non
-- PolynomialFeatures:<br>
->PolynomialFeatures is a class that is used to create polynomial features from the input data. It is
+- pg:<br>
+>pg is a variable that is used to split the dataset into training and testing sets. The dataset is split into two sets, one for training and one for testing. The training set is used to train the model, and the testing set is used to evaluate the model's performance. The split() function is used to split the dataset into two sets, and the pg variable is used to store the result of the split() function.
+- graph:<br>
+>The variable graph is a list of dictionaries. Each dictionary represents a node in the graph and contains the node's ID and its neighbors. The neighbors are represented as a list of tuples, where each tuple contains the ID of the neighbor and the weight of the edge connecting the two nodes.
+- signal:<br>
+>It is a function that takes a graph and a group as input and returns a signal object. The signal object contains the signal values for each node in the group, as well as the signal values for each edge in the graph. The signal values are calculated using the pg.to_signal function, which takes the graph and group as input and returns a signal object. The signal object contains the signal values for each node in the group, as well as the signal values for each edge in the graph. The signal values are calculated using the pg.to_signal function, which takes the graph and group as input
+- group:<br>
+>The variable group is a list of two variables, the first one is a list of nodes and the second one is a list of edges. The nodes are represented as strings and the edges are represented as tuples of two strings. The variable group is used to represent the graph structure of the dataset.
 ## Synthesis Blocks
-### notebooks/dataset2/classification/plot_classification_probability.ipynb
-CONTEXT:  Probabilistic classifiers  We will plot the decision boundaries of several classifiers that have a `predict_proba` method. This will allow
-us to visualize the uncertainty of the classifier in regions where it is not certain of its prediction.   COMMENT:
+### notebooks/pygrank_snippets.ipynb
+CONTEXT: def algorithm_comparison(): COMMENT: convert group to graph signal
 ```python
-classifiers = {
-    "Logistic regression\n(C=0.01)": LogisticRegression(C=0.1),
-    "Logistic regression\n(C=1)": LogisticRegression(C=100),
-    "Gaussian Process": GaussianProcessClassifier(kernel=1.0 * RBF([1.0, 1.0])),
-    "Logistic regression\n(RBF features)": make_pipeline(
-        Nystroem(kernel="rbf", gamma=5e-1, n_components=50, random_state=1),
-        LogisticRegression(C=10),
-    ),
-    "Gradient Boosting": HistGradientBoostingClassifier(),
-    "Logistic regression\n(binned features)": make_pipeline(
-        KBinsDiscretizer(n_bins=5, quantile_method="averaged_inverted_cdf"),
-        PolynomialFeatures(interaction_only=True),
-        LogisticRegression(C=10),
-    ),
-    "Logistic regression\n(spline features)": make_pipeline(
-        SplineTransformer(n_knots=5),
-        PolynomialFeatures(interaction_only=True),
-        LogisticRegression(C=10),
-    ),
-}
+signal = pg.to_signal(graph, group)
 ```
 
 ## Code Concatenation
 ```python
-classifiers = {
-    "Logistic regression\n(C=0.01)": LogisticRegression(C=0.1),
-    "Logistic regression\n(C=1)": LogisticRegression(C=100),
-    "Gaussian Process": GaussianProcessClassifier(kernel=1.0 * RBF([1.0, 1.0])),
-    "Logistic regression\n(RBF features)": make_pipeline(
-        Nystroem(kernel="rbf", gamma=5e-1, n_components=50, random_state=1),
-        LogisticRegression(C=10),
-    ),
-    "Gradient Boosting": HistGradientBoostingClassifier(),
-    "Logistic regression\n(binned features)": make_pipeline(
-        KBinsDiscretizer(n_bins=5, quantile_method="averaged_inverted_cdf"),
-        PolynomialFeatures(interaction_only=True),
-        LogisticRegression(C=10),
-    ),
-    "Logistic regression\n(spline features)": make_pipeline(
-        SplineTransformer(n_knots=5),
-        PolynomialFeatures(interaction_only=True),
-        LogisticRegression(C=10),
-    ),
-}
+signal = pg.to_signal(graph, group)
 ```

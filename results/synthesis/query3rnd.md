@@ -1,92 +1,70 @@
 # Random Code Synthesis
-Query `Graph operations`
+Query `Simple PCA algorithm.`
 ## Script Variables
-- var:<br>
->var is a variable that is used to multiply the value of comp by a variable value. It is
-- comp:<br>
->The variable comp is a 2D array that represents the principal components of the dataset. It is
-- plt:<br>
->plt is a module in python that is used for plotting graphs. It is a part of the matplotlib
-- pca:<br>
->pca is a PCA object that is used to reduce the dimensionality of the data. It does
-- n_samples:<br>
->The variable n_samples is the number of samples in the dataset. It is used to create a random
-- rng:<br>
->The variable rng is used to generate random numbers for the train-test split and the PLSRegression model
-- X:<br>
->X is a dataset containing information about the properties of a house, such as its size, location,
-- i:<br>
->The variable i is used to represent the index of the component in the PCA model. It is used
-- enumerate:<br>
->Enumerate is a built-in function in Python that returns a list of tuples containing the index and value
-- np:<br>
->Numpy is a library for scientific computing which provides a high-performance multidimensional array object, and tools
-- zip:<br>
->The zip() function is used to create an iterator that aggregates elements from
-- cov:<br>
->The variable cov is a 2x2 matrix that represents the covariance between the two features in the
+- pg:<br>
+>pg is a variable that is used to split the dataset into training and testing sets. The dataset is split into two sets, one for training and one for testing. The training set is used to train the model, and the testing set is used to evaluate the model's performance. The split() function is used to split the dataset into two sets, and the pg variable is used to store the result of the split() function.
+- ppr:<br>
+>ppr is a variable that is used to rank the data points in the training set. It is a measure of the proximity of a point to the nearest point in the training set. The rank of a point is the number of points in the training set that are closer to it than the point itself. The rank of a point is used to determine the distance between the point and the nearest point in the training set. The rank of a point is also used to determine the distance between the point and the nearest point in the training set. The rank of a
+- signal:<br>
+>It is a function that takes a graph and a group as input and returns a signal object. The signal object contains the signal values for each node in the group, as well as the signal values for each edge in the graph. The signal values are calculated using the pg.to_signal function, which takes the graph and group as input and returns a signal object. The signal object contains the signal values for each node in the group, as well as the signal values for each edge in the graph. The signal values are calculated using the pg.to_signal function, which takes the graph and group as input
+- algorithm:<br>
+>The variable algorithm is a Python script that calculates the heat kernel for a given kernel. The heat kernel is a mathematical function that describes the rate of change of a function with respect to time. In this case, the heat kernel is used to calculate the rate of change of the function with respect to the kernel. The variable algorithm is used to calculate the heat kernel for a given kernel, and is used in many applications such as image processing, signal processing, and machine learning.
+- degu:<br>
+>degu is a dictionary that contains the degree of each node in the graph G. The degree of a node is the number of edges that are incident to that node. The value of each key in the dictionary is the square root of the degree of the corresponding node. This is done to ensure that the values in the dictionary are non-negative.
+- G:<br>
+>The variable G is a graph object that represents the network of interactions between the nodes in the system. It contains information about the edges between the nodes, such as the weight of each edge, the direction of the edge, and any additional properties associated with the edge. The variable G is used to calculate the rank of each node in the network, which is a measure of the importance of each
+- len:<br>
+>len is a function that returns the length of a sequence. In this case, it is the number of nodes in the graph G. It is used to calculate the mean square error (msq) which is used to determine when the algorithm has converged.
+- float:<br>
+>float is a data type that represents a floating-point number. It is a decimal number that can be represented with a fixed number of digits after the decimal point. The variable float is used to store a floating-point number in the script. It is used to calculate the degree of each node in the graph and to calculate the degree of each node in the graph with the symmetric degree. The variable float is used to store the result of the calculation and is used to calculate the degree of each node in the graph with the symmetric degree. The variable
+- u:<br>
+>u is a variable that stores the degree of each node in the graph G. It is calculated by taking the square root of the number of neighbors for each node in the graph. This is done to make the values more manageable and easier to work with in the script. The script uses the built-in function len() to count the number of neighbors for each node and then takes the square root of the result to get the degree of each node. This is done for both the original graph G and the graph G with the degree of each node
+- v:<br>
+>v is a variable that is used to store the degree of a node in the graph.
+- list:<br>
+>degv
+- symm:<br>
+>symm is a variable that is used to represent the exponent of the degree of the graph. This variable is used to calculate the degree of the graph and is used to calculate the degree of the graph. This variable is used to calculate the degree of the graph and is used to calculate the degree of the graph. This variable is used to calculate the degree of the graph and is used to calculate the degree of the graph. This variable is used to calculate the degree of the graph and is used to calculate the degree of the graph
+- preprocessing:<br>
+>The preprocessing variable is used to normalize the data. It is used to remove the outliers and to make the data more robust. The data is normalized by subtracting the mean and dividing by the standard deviation. This helps to reduce the impact of outliers and to make the data more robust. The normalization process is done before the data is used for training the model.
 ## Synthesis Blocks
-### notebooks/dataset2/cross_decomposition/plot_pcr_vs_pls.ipynb
-CONTEXT:  The data  We start by creating a simple dataset with two features. Before we even dive into PCR and PLS, we fit a PCA estimator to display
-the two principal components of this dataset, i.e. the two directions that explain the most variance in the data.   COMMENT: scale component by its
-variance explanation power
+### notebooks/example_more.ipynb
+CONTEXT: def train_lr(x_train, y_train, preprocessing="normalize"): COMMENT:
 ```python
-import matplotlib.pyplot as plt
-import numpy as np
-from sklearn.decomposition import pca
-rng = np.random.RandomState(0)
-n_samples = 500
-cov = [[3, 3], [3, 4]]
-X = rng.multivariate_normal(mean=[0, 0], cov=cov, size=n_samples)
-pca = pca(n_components=2).fit(X)
-plt.scatter(X[:, 0], X[:, 1], alpha=0.3, label="samples")
-for i, (comp, var) in enumerate(zip(pca.components_, pca.explained_variance_)):
-    comp = comp * var
+preprocessing = "normalize"
+```
 
-    plt.plot(
-        [0, comp[0]],
-        [0, comp[1]],
-        label=f"Component {i}",
-        linewidth=5,
-        color=f"C{i + 2}",
-    )
-plt.gca().set(
-    aspect="equal",
-    title="2-dimensional dataset with principal components",
-    xlabel="first feature",
-    ylabel="second feature",
-)
-plt.legend()
-plt.show()
+### notebooks/pygrank_snippets.ipynb
+CONTEXT: def algorithm_comparison(): COMMENT: create default pagerank
+```python
+ppr = pg.PageRank()
+```
+
+### notebooks/pygrank_snippets.ipynb
+CONTEXT: def test_personalized_heatkernel(k=3): COMMENT: run the personalized version of the algorithm
+```python
+algorithm.rank(signal)
+```
+
+### notebooks/pygrank_snippets.ipynb
+CONTEXT: def test_personalized_heatkernel(k=3): COMMENT: run the personalized version of the algorithm
+```python
+algorithm.rank(signal)
+```
+
+### notebooks/example_more.ipynb
+COMMENT: calculate asymmetric Laplacian normalization
+```python
+degu = {v : float(len(list(G.neighbors(v))))**symm for v in G.nodes()}
+degu = {u : float(len(list(G.neighbors(u))))**(1-symm) for u in G.nodes()}
 ```
 
 ## Code Concatenation
 ```python
-import matplotlib.pyplot as plt
-import numpy as np
-from sklearn.decomposition import pca
-rng = np.random.RandomState(0)
-n_samples = 500
-cov = [[3, 3], [3, 4]]
-X = rng.multivariate_normal(mean=[0, 0], cov=cov, size=n_samples)
-pca = pca(n_components=2).fit(X)
-plt.scatter(X[:, 0], X[:, 1], alpha=0.3, label="samples")
-for i, (comp, var) in enumerate(zip(pca.components_, pca.explained_variance_)):
-    comp = comp * var
-
-    plt.plot(
-        [0, comp[0]],
-        [0, comp[1]],
-        label=f"Component {i}",
-        linewidth=5,
-        color=f"C{i + 2}",
-    )
-plt.gca().set(
-    aspect="equal",
-    title="2-dimensional dataset with principal components",
-    xlabel="first feature",
-    ylabel="second feature",
-)
-plt.legend()
-plt.show()
+preprocessing = "normalize"
+ppr = pg.PageRank()
+algorithm.rank(signal)
+algorithm.rank(signal)
+degu = {v : float(len(list(G.neighbors(v))))**symm for v in G.nodes()}
+degu = {u : float(len(list(G.neighbors(u))))**(1-symm) for u in G.nodes()}
 ```

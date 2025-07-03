@@ -1,145 +1,46 @@
 # Exhaustive Code Synthesis
-Query `Create classifiers with names Regression, SVM, Tree, AdaBoost and Bayes classifiers. Compare them and plot them.`
+Query `Initialize a logistic regression model. Use standardization on training inputs. Train the model.`
 ## Script Variables
-- X_train:<br>
->X_train is a matrix containing the first two features of the Iris dataset. It is used to train
-- evaluation_results:<br>
->The evaluation_results variable is a pandas DataFrame that contains the results of the evaluation of the model. It
-- n_classifiers:<br>
->n_classifiers is a variable that stores the number of classifiers used in the script. It is used
-- classifier_idx:<br>
->The classifier_idx variable is used to iterate over the classifiers dictionary. It is used to access the name
-- X_test:<br>
->X_test is a matrix of size (n_samples, n_features) where n_samples is the number
-- classifiers:<br>
->The variable classifiers are used to classify the input data into different classes. They are used to identify the
-- iris:<br>
->iris is a dataset that contains information about 150 flowers of the Iris species. The dataset contains
+- print:<br>
+>The variable print is a function that prints the output of the measure function, which is the rank of the train data set. The measure function is used to calculate the rank of the data set based on the given criteria. The rank is then used to determine the best model for the data set.
+- ppr:<br>
+>ppr is a variable that is used to rank the data points in the training set. It is a measure of the proximity of a point to the nearest point in the training set. The rank of a point is the number of points in the training set that are closer to it than the point itself. The rank of a point is used to determine the distance between the point and the nearest point in the training set. The rank of a point is also used to determine the distance between the point and the nearest point in the training set. The rank of a
+- measure:<br>
+>Measure is a variable that is used to rank the importance of each feature in a dataset. It is a measure of the predictive power of each feature in a dataset. It is used to rank the features based on their importance in predicting the target variable. It is calculated by taking the ratio of the variance of the feature to the variance of the target variable. The higher the value of the measure, the more important the feature is in predicting the target variable. It is used in machine learning algorithms such as decision trees, random forests, and gradient boosting to select the best features
+- train:<br>
+>It is a list of tuples, each tuple contains a pair of (word, score) where score is the probability of the word being a positive review.
+- x_train:<br>
+>x_train is a numpy array of size (n_samples, n_features) containing the training data. The values of x_train are the features of the training data. The values of y_train are the labels of the training data.
+- preprocessing:<br>
+>The preprocessing variable is used to normalize the data. It is used to remove the outliers and to make the data more robust. The data is normalized by subtracting the mean and dividing by the standard deviation. This helps to reduce the impact of outliers and to make the data more robust. The normalization process is done before the data is used for training the model.
+- model:<br>
+>The variable model is a logistic regression model that is trained on the training data. The model is used to predict the probability of a given observation being a member of a particular class. The model is trained using the training data and the training labels. The model is then used to predict the probability of a given observation being a member of a particular class. The model is used to make predictions on the test data and the test labels. The model is evaluated using the test labels and the test accuracy is calculated. The model is then used to make predictions on the test data and the test labels
 - y_train:<br>
->y_train is a variable that contains the target values for the training data. It is used to evaluate
-- mpl:<br>
->mpl is a python package that provides a comprehensive set of tools for creating and manipulating plots in a variety
-- fig:<br>
->fig is a variable that is used to create a figure object. It is used to create a plot
-- levels:<br>
->levels
-- roc_auc_test:<br>
->The roc_auc_test is the area under the curve of the receiver operating characteristic (ROC) curve.
-- name:<br>
->The variable name is "evaluation_results". It is a list of dictionaries that contain the accuracy, roc
-- classifier:<br>
->The variable classifier is a machine learning algorithm that is used to identify the most important features in a dataset
-- y_test:<br>
->y_test is a variable that is used to test the model. It is a list of integers that
-- plt:<br>
->plt is a module in Python that is used for plotting and graphing. It is a part of
-- accuracy_score:<br>
->Accuracy score is a measure of the quality of a binary classification model. It is calculated as the ratio
-- axes:<br>
->The variable axes are used to display the decision boundary of the classifier on the training data. The classifier
-- len:<br>
->len is a function that returns the length of an object. In this case, it is used to
-- accuracy_test:<br>
->Accuracy test is a metric used to evaluate the performance of a machine learning model in classifying data.
-- y_pred:<br>
->y_pred is a variable that stores the predicted values of the test data set. It is used to
-- enumerate:<br>
->enumerate() is a built-in function that returns an iterator over the indices and values of a sequence.
-- log_loss_test:<br>
->The log_loss_test variable is a measure of the accuracy of the model in predicting the class labels of
-- log_loss:<br>
->The log_loss function is used to calculate the loss function for a binary classification problem. It is a
-- roc_auc_score:<br>
->The roc_auc_score is a function that calculates the area under the receiver operating characteristic curve (ROC)
-- y_pred_proba:<br>
->It is a probability vector of length 3, which represents the probability of each class (0,
-- ax:<br>
->ax is a scatter plot object that is used to plot the training data points on the scatter plot.
-- ds_cnt:<br>
->It is a counter that keeps track of the number of datasets in the list of datasets. It is
-- datasets:<br>
->The variable datasets are the datasets used to train the machine learning models. They are used to predict the
-- cm_bright:<br>
->cm_bright is a colormap that is used to color the scatter plot. It is a color map
-- i:<br>
->The variable i is a counter that is used to keep track of the number of plots that have been
-- ListedColormap:<br>
->It is a colormap that is used to represent the color of the points in the scatter plot. The
-- cm:<br>
->cm is a colormap object which is used to color the data points in the scatter plot.
+>It is a list of integers that represents the labels of the training data.
 ## Synthesis Blocks
-### notebooks/dataset2/classification/plot_classifier_comparison.ipynb
-CONTEXT:   Classifier comparison  A comparison of several classifiers in scikit-learn on synthetic datasets. The point of this example is to
-illustrate the nature of decision boundaries of different classifiers. This should be taken with a grain of salt, as the intuition conveyed by these
-examples does not necessarily carry over to real datasets.  Particularly in high-dimensional spaces, data can more easily be separated linearly and
-the simplicity of classifiers such as naive Bayes and linear SVMs might lead to better generalization than is achieved by other classifiers.  The
-plots show training points in solid colors and testing points semi-transparent. The lower right shows the classification accuracy on the test set.
-COMMENT: just plot the dataset first
+### notebooks/example_more.ipynb
+CONTEXT: def train_lr(x_train, y_train, preprocessing="normalize"): COMMENT: Normalize training data
 ```python
-cm = plt.cm.RdBu
-cm_bright = ListedColormap(["#FF0000", "#0000FF"])
-
-ax = plt.subplot(len(datasets), len(classifiers) + 1, i)
-if ds_cnt == 0:
-    ax.set_title("Input data")
+if preprocessing == "normalize":
+    x_train = (x_train - x_train.min(axis=0)) / (x_train.max(axis=0) - x_train.min(axis=0))
 ```
 
-### notebooks/dataset2/classification/plot_classification_probability.ipynb
-CONTEXT:  Plotting the decision boundaries  For each classifier, we plot the per-class probabilities on the first three columns and the probabilities
-of the most likely class on the last column.   COMMENT: Ensure legend not cut off
+### notebooks/example_more.ipynb
+CONTEXT: def train_lr(x_train, y_train, preprocessing="normalize"): COMMENT: train
 ```python
-mpl.rcParams["savefig.bbox"] = "tight"
-fig, axes = plt.subplots(
-    nrows=n_classifiers,
-    ncols=len(iris.target_names) + 1,
-    figsize=(4 * 2.2, n_classifiers * 2.2),
-)
-evaluation_results = []
-levels = 100
-for classifier_idx, (name, classifier) in enumerate(classifiers.items()):
-    y_pred = classifier.fit(X_train, y_train).predict(X_test)
-    y_pred_proba = classifier.predict_proba(X_test)
-    accuracy_test = accuracy_score(y_test, y_pred)
-    roc_auc_test = roc_auc_score(y_test, y_pred_proba, multi_class="ovr")
-    log_loss_test = log_loss(y_test, y_pred_proba)
-    evaluation_results.append(
-        {
-            "name": name.replace("\n", " "),
-            "accuracy": accuracy_test,
-            "roc_auc": roc_auc_test,
-            "log_loss": log_loss_test,
-        }
-    )
+model.train(x_train, y_train)
+```
+
+### notebooks/pygrank_snippets.ipynb
+CONTEXT: def algorithm_comparison(): COMMENT: assess ppr
+```python
+print(measure(ppr.rank(train)))
 ```
 
 ## Code Concatenation
 ```python
-cm = plt.cm.RdBu
-cm_bright = ListedColormap(["#FF0000", "#0000FF"])
-
-ax = plt.subplot(len(datasets), len(classifiers) + 1, i)
-if ds_cnt == 0:
-    ax.set_title("Input data")
-mpl.rcParams["savefig.bbox"] = "tight"
-fig, axes = plt.subplots(
-    nrows=n_classifiers,
-    ncols=len(iris.target_names) + 1,
-    figsize=(4 * 2.2, n_classifiers * 2.2),
-)
-evaluation_results = []
-levels = 100
-for classifier_idx, (name, classifier) in enumerate(classifiers.items()):
-    y_pred = classifier.fit(X_train, y_train).predict(X_test)
-    y_pred_proba = classifier.predict_proba(X_test)
-    accuracy_test = accuracy_score(y_test, y_pred)
-    roc_auc_test = roc_auc_score(y_test, y_pred_proba, multi_class="ovr")
-    log_loss_test = log_loss(y_test, y_pred_proba)
-    evaluation_results.append(
-        {
-            "name": name.replace("\n", " "),
-            "accuracy": accuracy_test,
-            "roc_auc": roc_auc_test,
-            "log_loss": log_loss_test,
-        }
-    )
+if preprocessing == "normalize":
+    x_train = (x_train - x_train.min(axis=0)) / (x_train.max(axis=0) - x_train.min(axis=0))
+model.train(x_train, y_train)
+print(measure(ppr.rank(train)))
 ```

@@ -1,222 +1,111 @@
 # Embedding Code Synthesis
-Query `Graph operations`
+Query `Simple PCA algorithm.`
 ## Script Variables
-- plt:<br>
->plt is a module that provides a number of command-line interfaces for plotting in Python. It is a
-- print:<br>
->The print function is used to display the output of a Python expression on the screen. It is a
-- y_test:<br>
->The variable y_test is a numpy array containing the true labels of the test data. It is used
-- predicted:<br>
->The variable predicted is the predicted value of the image. It is used to determine the classification of the
-- disp:<br>
->disp is a confusion matrix which is used to compare the predicted values with the actual values. It is
-- metrics:<br>
->Confusion matrix
-- clf:<br>
->It is a classifier that is used to predict the class of a given data point.
-- X_test:<br>
->X_test is a matrix of size (n_samples, n_features) where n_samples is the number
-- Y_test:<br>
->Y_test is a variable that is used to test the performance of the PLSCanonical algorithm on
-- np:<br>
->The np variable is a Python package that provides a large collection of mathematical functions and data structures. It
-- X_train:<br>
->X_train is a dataset of 1000 observations and 20 variables. It is used to train
-- l1:<br>
->l1 is a numpy array of size n which is used to generate the latent variables l1 and
-- n:<br>
->The value of n is 1000 which is the number of samples in the dataset.
-- Y_train:<br>
->Y_train is a matrix of size 1000x1, which contains the target values for the
-- l2:<br>
->l2 is a random variable that is generated using the normal distribution with a size of n. It
-- Y:<br>
->Y is a matrix of size (n, 4) where n is the number of samples.
-- X:<br>
->X is a matrix of size n x q where n is the number of samples and q is the
-- latents:<br>
->latents is a matrix of 4 rows and n columns. Each row represents a latent variable.
+- degu:<br>
+>degu is a dictionary that contains the degree of each node in the graph G. The degree of a node is the number of edges that are incident to that node. The value of each key in the dictionary is the square root of the degree of the corresponding node. This is done to ensure that the values in the dictionary are non-negative.
+- G:<br>
+>The variable G is a graph object that represents the network of interactions between the nodes in the system. It contains information about the edges between the nodes, such as the weight of each edge, the direction of the edge, and any additional properties associated with the edge. The variable G is used to calculate the rank of each node in the network, which is a measure of the importance of each
+- len:<br>
+>len is a function that returns the length of a sequence. In this case, it is the number of nodes in the graph G. It is used to calculate the mean square error (msq) which is used to determine when the algorithm has converged.
+- float:<br>
+>float is a data type that represents a floating-point number. It is a decimal number that can be represented with a fixed number of digits after the decimal point. The variable float is used to store a floating-point number in the script. It is used to calculate the degree of each node in the graph and to calculate the degree of each node in the graph with the symmetric degree. The variable float is used to store the result of the calculation and is used to calculate the degree of each node in the graph with the symmetric degree. The variable
+- u:<br>
+>u is a variable that stores the degree of each node in the graph G. It is calculated by taking the square root of the number of neighbors for each node in the graph. This is done to make the values more manageable and easier to work with in the script. The script uses the built-in function len() to count the number of neighbors for each node and then takes the square root of the result to get the degree of each node. This is done for both the original graph G and the graph G with the degree of each node
+- v:<br>
+>v is a variable that is used to store the degree of a node in the graph.
+- list:<br>
+>degv
+- alpha:<br>
+>Alpha is a variable that is used to represent the learning rate of the neural network. It is a value between 0 and 1 that determines how quickly the neural network learns from the data. A higher value of alpha means that the neural network will learn faster, but it may also be more prone to overfitting. A lower value of alpha means that the neural network will learn slower, but it may also be less prone to overfitting. The optimal value of alpha depends on the specific problem being solved and the type of neural network being used.
+- pg:<br>
+>pg is a variable that is used to split the dataset into training and testing sets. The dataset is split into two sets, one for training and one for testing. The training set is used to train the model, and the testing set is used to evaluate the model's performance. The split() function is used to split the dataset into two sets, and the pg variable is used to store the result of the split() function.
+- signal:<br>
+>It is a function that takes a graph and a group as input and returns a signal object. The signal object contains the signal values for each node in the group, as well as the signal values for each edge in the graph. The signal values are calculated using the pg.to_signal function, which takes the graph and group as input and returns a signal object. The signal object contains the signal values for each node in the group, as well as the signal values for each edge in the graph. The signal values are calculated using the pg.to_signal function, which takes the graph and group as input
+- train:<br>
+>It is a list of tuples, each tuple contains a pair of (word, score) where score is the probability of the word being a positive review.
+- test:<br>
+>It is a variable that contains the test data. It is used to calculate the AUC score. The AUC score is a measure of the accuracy of a model in predicting whether a given data point belongs to the positive class or not. The test data is used to evaluate the performance of the model on unseen data.
+- split:<br>
+>Split is a variable that is used to separate the dataset into two parts, train and test. The train part is used to train the model and the test part is used to evaluate the model's performance. The split variable is used to split the dataset into two parts, where the first part is used for training and the second part is used for testing. The split variable is used to split the dataset into two parts, where the first part is used for training and the second part is used for testing. The split variable is used to split the dataset into two parts, where the first part
 - y:<br>
->The variable y is a 1000x1 matrix containing the actual values of the dependent variable.
-- p:<br>
->p is the number of components in the PLS model. In this case, it is 3
-- pls1:<br>
->pls1 is a PLSRegression object which is used to perform PLS regression. PLS regression
-- PLSRegression:<br>
->PLSRegression is a class that implements Partial Least Squares (PLS) regression. PLS
-- make_pipeline:<br>
->make_pipeline() is a function in scikit-learn that allows us to create a pipeline of machine
-- classifiers:<br>
->The variable classifiers are used to determine the number of classifiers used in the model. This is done by
-- SplineTransformer:<br>
->SplineTransformer is a class that transforms the input data into a new feature space using splines.
-- LogisticRegression:<br>
->Logistic regression is a type of classification algorithm that is used to predict the probability of a given outcome
-- RBF:<br>
->RBF is an acronym for Radial Basis Function. It is a type of kernel function used in
-- Nystroem:<br>
->Nystroem is a kernel-based method for dimensionality reduction. It is a wrapper around a
-- HistGradientBoostingClassifier:<br>
->HistGradientBoostingClassifier is a machine learning algorithm that uses a gradient boosting technique to fit a histogram
-- KBinsDiscretizer:<br>
->KBinsDiscretizer is a class used to discretize continuous features into a fixed number of bins
-- GaussianProcessClassifier:<br>
->The GaussianProcessClassifier is a classifier that uses a Gaussian process to make predictions. It is a non
-- PolynomialFeatures:<br>
->PolynomialFeatures is a class that is used to create polynomial features from the input data. It is
+>It is a set of values that are used to train the model. The model is then used to predict values for new data.
+- pickle:<br>
+>It is a module that is used to serialize and deserialize Python objects. It is used to store the data in a binary format. It is used to store the data in a binary format. It is used to store the data in a binary format. It is used to store the data in a binary format. It is used to store the data in a binary format. It is used to store the data in a binary format. It is used to store the data in a binary format. It is used to store the data in a binary format. It is used to store the data
+- CustomClassifier:<br>
+>CustomClassifier is a class that inherits from sklearn.base.BaseEstimator and sklearn.base.ClassifierMixin. It is used to train a custom classifier on a given dataset and save it to a pickle file. The class has two methods
+- custom:<br>
+>The variable custom is used to store the trained machine learning model. It is created as an instance of the CustomClassifier class, which is a custom machine learning model that is trained on the given data. If the file path provided exists, the model is loaded from the file. Otherwise, the model is trained and saved to the file. This allows the model to be loaded and used later in the script.
+- x:<br>
+>The variable x is a 2D numpy array containing the training data for the support vector regression model. The rows of the array correspond to the training examples, and the columns correspond to the features or attributes of each example. The values in the array are the actual values of the features for each training example. The variable y is a 1D numpy array containing the target values for the training data. The values in the array are the actual values of the target variable for each training example. The variable svr is an instance of the support vector regression model, which is used to
+- os:<br>
+>The os module is a built-in module in Python that provides a portable way of using operating system dependent functionality. It provides a portable way of using operating system dependent functionality. It provides a portable way of using operating system dependent functionality. It provides a portable way of using operating system dependent functionality. It provides a portable way of using operating system dependent functionality. It provides
+- path:<br>
+>path is a string variable that is used to store the path of the file where the pickle file is to be saved.
+- SVR:<br>
+>SVR is a support vector regression algorithm that is used to predict continuous values. It is a supervised machine learning algorithm that is used to predict continuous values. It is a supervised machine learning algorithm that is used to predict continuous values. It is a supervised machine learning algorithm that is used to predict continuous values. It is a supervised machine learning algorithm that is used to predict continuous values. It is a supervised machine learning algorithm that is used to predict continuous values. It is a supervised machine learning algorithm that is used to predict continuous values. It is a supervised machine learning algorithm that is
 ## Synthesis Blocks
-### notebooks/dataset2/cross_decomposition/plot_compare_cross_decomposition.ipynb
-CONTEXT:  Canonical (symmetric) PLS   Transform data   COMMENT:
+### notebooks/pygrank_snippets.ipynb
+CONTEXT: def test_pagerank(alpha=0.9): COMMENT:
 ```python
-import matplotlib.pyplot as plt
+alpha = 0.9
 ```
 
-### notebooks/dataset2/classification/plot_lda_qda.ipynb
-CONTEXT: We generate three datasets. In the first dataset, the two classes share the same covariance matrix, and this covariance matrix has the
-specificity of being spherical (isotropic). The second dataset is similar to the first one but does not enforce the covariance to be spherical.
-Finally, the third dataset has a non-spherical covariance matrix for each class.   COMMENT:
+### notebooks/pygrank_snippets.ipynb
+CONTEXT: def algorithm_comparison(): COMMENT: split signal to training and test subsets
 ```python
-import matplotlib as mpl
-from matplotlib import colors
-from sklearn.inspection import DecisionBoundaryDisplay
+split = pg.split(signal)
+train = split[0]
+test = split[1]
 ```
 
-### notebooks/dataset2/classification/plot_digits_classification.ipynb
-CONTEXT:  Classification  To apply a classifier on this data, we need to flatten the images, turning each 2-D array of grayscale values from shape
-``(8, 8)`` into shape ``(64,)``. Subsequently, the entire dataset will be of shape ``(n_samples, n_features)``, where ``n_samples`` is the number of
-images and ``n_features`` is the total number of pixels in each image.  We can then split the data into train and test subsets and fit a support
-vector classifier on the train samples. The fitted classifier can subsequently be used to predict the value of the digit for the samples in the test
-subset.   COMMENT: Predict the value of the digit on the test subset
+### notebooks/example_more.ipynb
+CONTEXT: def createSVR(x, y): COMMENT:
 ```python
-predicted = clf.predict(X_test)
+SVR = SVR()
+SVR.train(x, y)
 ```
 
-### notebooks/dataset2/cross_decomposition/plot_compare_cross_decomposition.ipynb
-CONTEXT:  PLS regression, with multivariate response, a.k.a. PLS2   COMMENT: compare pls2.coef_ with B
+### notebooks/example_more.ipynb
+CONTEXT: def pagerank_fast(G, prior_ranks, a, msq_error, order): COMMENT: calculate normalization parameters of symmetric Laplacian
 ```python
-n = 1000
-p = 10
-X = np.random.normal(size=n * p).reshape((n, p))
-y = X[:, 0] + 2 * X[:, 1] + np.random.normal(size=n * 1) + 5
-pls1 = PLSRegression(n_components=3)
-pls1.fit(X, y)
+degu = {v : float(len(list(G.neighbors(v))))**0.5 for v in G.nodes()}
+degu = {u : float(len(list(G.neighbors(u))))**0.5 for u in G.nodes()}
 ```
 
-### notebooks/dataset2/cross_decomposition/plot_compare_cross_decomposition.ipynb
-CONTEXT:  Dataset based latent variables model   COMMENT:
+### notebooks/example_more.ipynb
+CONTEXT: def pagerank_fast(G, prior_ranks, a, msq_error, order): COMMENT: calculate normalization parameters of symmetric Laplacian
 ```python
-l1 = np.random.normal(size=n)
-l2 = np.random.normal(size=n)
-latents = np.array([l1, l1, l2, l2]).T
-X = latents + np.random.normal(size=4 * n).reshape((n, 4))
-Y = latents + np.random.normal(size=4 * n).reshape((n, 4))
-X_train = X[: n // 2]
-Y_train = Y[: n // 2]
-X_test = X[n // 2 :]
-Y_test = Y[n // 2 :]
-print("Corr(X)")
-print(np.round(np.corrcoef(X.T), 2))
-print("Corr(Y)")
-print(np.round(np.corrcoef(Y.T), 2))
+degu = {v : float(len(list(G.neighbors(v))))**0.5 for v in G.nodes()}
+degu = {u : float(len(list(G.neighbors(u))))**0.5 for u in G.nodes()}
 ```
 
-### notebooks/dataset2/classification/plot_digits_classification.ipynb
-CONTEXT: We can also plot a `confusion matrix <confusion_matrix>` of the true digit values and the predicted digit values.   COMMENT:
+### notebooks/example_more.ipynb
+CONTEXT: def load_custom_model(path, CustomClassifier, x, y): COMMENT:
 ```python
-disp = metrics.ConfusionMatrixDisplay.from_predictions(y_test, predicted)
-disp.figure_.suptitle("Confusion Matrix")
-print(f"Confusion matrix:\n{disp.confusion_matrix}")
-plt.show()
-```
-
-### notebooks/dataset2/classification/plot_digits_classification.ipynb
-CONTEXT: We can also plot a `confusion matrix <confusion_matrix>` of the true digit values and the predicted digit values.   COMMENT:
-```python
-disp = metrics.ConfusionMatrixDisplay.from_predictions(y_test, predicted)
-disp.figure_.suptitle("Confusion Matrix")
-print(f"Confusion matrix:\n{disp.confusion_matrix}")
-plt.show()
-```
-
-### notebooks/dataset2/classification/plot_classification_probability.ipynb
-CONTEXT:  Probabilistic classifiers  We will plot the decision boundaries of several classifiers that have a `predict_proba` method. This will allow
-us to visualize the uncertainty of the classifier in regions where it is not certain of its prediction.   COMMENT:
-```python
-classifiers = {
-    "Logistic regression\n(C=0.01)": LogisticRegression(C=0.1),
-    "Logistic regression\n(C=1)": LogisticRegression(C=100),
-    "Gaussian Process": GaussianProcessClassifier(kernel=1.0 * RBF([1.0, 1.0])),
-    "Logistic regression\n(RBF features)": make_pipeline(
-        Nystroem(kernel="rbf", gamma=5e-1, n_components=50, random_state=1),
-        LogisticRegression(C=10),
-    ),
-    "Gradient Boosting": HistGradientBoostingClassifier(),
-    "Logistic regression\n(binned features)": make_pipeline(
-        KBinsDiscretizer(n_bins=5, quantile_method="averaged_inverted_cdf"),
-        PolynomialFeatures(interaction_only=True),
-        LogisticRegression(C=10),
-    ),
-    "Logistic regression\n(spline features)": make_pipeline(
-        SplineTransformer(n_knots=5),
-        PolynomialFeatures(interaction_only=True),
-        LogisticRegression(C=10),
-    ),
-}
+if os.path.isfile(path):
+    custom = pickle.load(path)
+else:
+    custom = CustomClassifier()
+    custom.train(x, y)
+    pickle.dump(custom, path)
 ```
 
 ## Code Concatenation
 ```python
-import matplotlib.pyplot as plt
-import matplotlib as mpl
-from matplotlib import colors
-from sklearn.inspection import DecisionBoundaryDisplay
-predicted = clf.predict(X_test)
-n = 1000
-p = 10
-X = np.random.normal(size=n * p).reshape((n, p))
-y = X[:, 0] + 2 * X[:, 1] + np.random.normal(size=n * 1) + 5
-pls1 = PLSRegression(n_components=3)
-pls1.fit(X, y)
-l1 = np.random.normal(size=n)
-l2 = np.random.normal(size=n)
-latents = np.array([l1, l1, l2, l2]).T
-X = latents + np.random.normal(size=4 * n).reshape((n, 4))
-Y = latents + np.random.normal(size=4 * n).reshape((n, 4))
-X_train = X[: n // 2]
-Y_train = Y[: n // 2]
-X_test = X[n // 2 :]
-Y_test = Y[n // 2 :]
-print("Corr(X)")
-print(np.round(np.corrcoef(X.T), 2))
-print("Corr(Y)")
-print(np.round(np.corrcoef(Y.T), 2))
-disp = metrics.ConfusionMatrixDisplay.from_predictions(y_test, predicted)
-disp.figure_.suptitle("Confusion Matrix")
-print(f"Confusion matrix:\n{disp.confusion_matrix}")
-plt.show()
-disp = metrics.ConfusionMatrixDisplay.from_predictions(y_test, predicted)
-disp.figure_.suptitle("Confusion Matrix")
-print(f"Confusion matrix:\n{disp.confusion_matrix}")
-plt.show()
-classifiers = {
-    "Logistic regression\n(C=0.01)": LogisticRegression(C=0.1),
-    "Logistic regression\n(C=1)": LogisticRegression(C=100),
-    "Gaussian Process": GaussianProcessClassifier(kernel=1.0 * RBF([1.0, 1.0])),
-    "Logistic regression\n(RBF features)": make_pipeline(
-        Nystroem(kernel="rbf", gamma=5e-1, n_components=50, random_state=1),
-        LogisticRegression(C=10),
-    ),
-    "Gradient Boosting": HistGradientBoostingClassifier(),
-    "Logistic regression\n(binned features)": make_pipeline(
-        KBinsDiscretizer(n_bins=5, quantile_method="averaged_inverted_cdf"),
-        PolynomialFeatures(interaction_only=True),
-        LogisticRegression(C=10),
-    ),
-    "Logistic regression\n(spline features)": make_pipeline(
-        SplineTransformer(n_knots=5),
-        PolynomialFeatures(interaction_only=True),
-        LogisticRegression(C=10),
-    ),
-}
+alpha = 0.9
+split = pg.split(signal)
+train = split[0]
+test = split[1]
+SVR = SVR()
+SVR.train(x, y)
+degu = {v : float(len(list(G.neighbors(v))))**0.5 for v in G.nodes()}
+degu = {u : float(len(list(G.neighbors(u))))**0.5 for u in G.nodes()}
+degu = {v : float(len(list(G.neighbors(v))))**0.5 for v in G.nodes()}
+degu = {u : float(len(list(G.neighbors(u))))**0.5 for u in G.nodes()}
+if os.path.isfile(path):
+    custom = pickle.load(path)
+else:
+    custom = CustomClassifier()
+    custom.train(x, y)
+    pickle.dump(custom, path)
 ```
