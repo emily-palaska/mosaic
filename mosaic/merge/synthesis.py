@@ -1,10 +1,10 @@
-from llm_blockmerger.core import remove_common_words, encoded_json, projection, LLM, best_combination, pivot_rotation
-from llm_blockmerger.load import BlockManager
-from llm_blockmerger.store import BlockDB
-from llm_blockmerger.learn import MLP
+from mosaic.core import remove_common_words, encoded_json, projection, LLM, best_combination, pivot_rotation
+from mosaic.load import BlockManager
+from mosaic.store import BlockDB
+from mosaic.learn import MLP
 
-from llm_blockmerger.merge.merger import merge_variables
-from llm_blockmerger.merge.order import synthesis_order
+from mosaic.merge.merger import merge_variables
+from mosaic.merge.order import synthesis_order
 
 from torch import tensor, Tensor, rand
 

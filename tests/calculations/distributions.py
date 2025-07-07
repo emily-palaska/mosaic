@@ -27,7 +27,7 @@ def merging_distributions():
     for m, dist in block_dist.items():
         if m == "emp": continue
         b = wasserstein_distance(dist, block_dist["emp"])
-        l = wasserstein_distance(dist, block_dist["emp"])
+        l = wasserstein_distance(dist, lines_dist["emp"])
         print(f'\t{m}\t\t{b:.3f}\t\t{l:.3f}')
 
 

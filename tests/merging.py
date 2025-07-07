@@ -7,9 +7,9 @@ from random import randint, sample
 from json import dumps
 
 from tests.core import merge, restore, separate_methods
-from llm_blockmerger.core import LLM, norm_cos_sim
-from llm_blockmerger.store import BlockDB
-from llm_blockmerger.merge import embedding_synthesis
+from mosaic.core import LLM, norm_cos_sim
+from mosaic.store import BlockDB
+from mosaic.merge import embedding_synthesis
 from tests.data import queries
 
 def runtime(A=1000):
@@ -36,7 +36,7 @@ def runtime(A=1000):
         print('\rExperiment completed')
 
 
-def quantitative(db=None, sample_q=None, filename=None):
+def quantitative(db=None, sample_q=None, path=None):
     demo_queries = sample(queries, sample_q) if sample_q else queries
     model = LLM(task='embedding')
     results = dict()
@@ -58,14 +58,14 @@ def quantitative(db=None, sample_q=None, filename=None):
     print('\tAverage Lines:')
     for m, m_dict in results.items(): print(f'\t\t{m}: {mean(m_dict["lines"])} ± {std(m_dict["lines"])}')
 
-    if filename:
-        with open(filename, 'w') as file:
+    if path:
+        with open(path, 'w') as file:
             file.write(f'merging_quan = {dumps(results, indent=2)}')
     return results
 
 
 def scalability(step_size=100):
-    filename, results = 'tests/core/graphs/merging_sc.py', dict()
+    path, results = 'tests/core/graphs/merging_sc.py', dict()
 
     db = BlockDB(empty=False)
     embeddings, blockdata = db.embeddings(), db.blockdata()
@@ -82,7 +82,7 @@ def scalability(step_size=100):
             if not method in results: results[method] = {"sims": dict(), "blocks": dict()}
             results[method]["sims"][step] = m_dict["sims"]
             results[method]["blocks"][step] = m_dict["blocks"]
-    with open(filename, 'w') as file: file.write(f'merging_sc = {dumps(results, indent=2)}')
+    with open(path, 'w') as file: file.write(f'merging_sc = {dumps(results, indent=2)}')
 
     db = BlockDB(empty=True)
     db.create(embeddings, blockdata)

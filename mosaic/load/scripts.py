@@ -1,5 +1,5 @@
 from re import match, escape
-from llm_blockmerger.core import dedent_blocks, separate_lines
+from mosaic.core import dedent_blocks, separate_lines
 
 
 def cell_content(nb):

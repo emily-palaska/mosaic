@@ -1,6 +1,6 @@
 from re import search
 from textwrap import indent
-from llm_blockmerger.core import ast_extraction
+from mosaic.core import ast_extraction
 
 def nb_variables(manager, model, empty=False):
     if empty:

@@ -3,7 +3,7 @@ from sqlite3 import connect
 from docarray import BaseDoc
 from docarray.typing import TorchTensor
 
-from llm_blockmerger.core import encoded_json
+from mosaic.core import encoded_json
 
 def doc_class(features=384):
     class BlockDoc(BaseDoc):

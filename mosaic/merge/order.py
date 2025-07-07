@@ -1,5 +1,5 @@
-from llm_blockmerger.load import BlockManager
-from llm_blockmerger.core import ast_io_split
+from mosaic.load import BlockManager
+from mosaic.core import ast_io_split
 
 def io_order(io_splits: list):
     outputs = set()

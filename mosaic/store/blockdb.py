@@ -6,8 +6,8 @@ from torch.utils.data import Dataset
 from torch import tensor, stack, float32
 from json import dumps
 
-from llm_blockmerger.core import triplets
-from llm_blockmerger.store.docs import doc_class, get_docs, empty_docs, separate_docs, find_docs
+from mosaic.core import triplets
+from mosaic.store.docs import doc_class, get_docs, empty_docs, separate_docs, find_docs
 
 class BlockDB(Dataset):
     def __init__(self, dbtype=ApproxNN, workspace='./databases/', features=384, precision=float32, empty=False):

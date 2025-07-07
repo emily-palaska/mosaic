@@ -1,8 +1,8 @@
 from json import dumps
 from textwrap import fill, indent
 
-from llm_blockmerger.core import load_nb, load_py, encoded_json, remove_symbols
-from llm_blockmerger.load.scripts import generate_blocks, cell_content
+from mosaic.core import load_nb, load_py, encoded_json, remove_symbols
+from mosaic.load.scripts import generate_blocks, cell_content
 
 class BlockManager:
     def __init__(self, blocks=None, labels=None, source=None, var_dicts=None):

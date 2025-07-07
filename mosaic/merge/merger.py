@@ -1,6 +1,6 @@
 from collections import defaultdict
-from llm_blockmerger.core import norm_cos_sim
-from llm_blockmerger.core.utils import regular_replace
+from mosaic.core import norm_cos_sim
+from mosaic.core.utils import regular_replace
 
 def _connected_components(graph):
     visited, components = set(), []

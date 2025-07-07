@@ -1,5 +1,5 @@
 import ast
-from llm_blockmerger.core import dedent_blocks
+from mosaic.core import dedent_blocks
 
 class VariableAnalyzer(ast.NodeVisitor):
     def __init__(self, io_split=False):

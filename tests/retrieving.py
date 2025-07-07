@@ -4,7 +4,7 @@ os.chdir('../')
 from datetime import datetime
 from time import time
 
-from llm_blockmerger.store import BlockDB, ApproxNN, ExactNN
+from mosaic.store import BlockDB, ApproxNN, ExactNN
 from tests.core.pipelines import restore
 
 def runtime(A=1_000):

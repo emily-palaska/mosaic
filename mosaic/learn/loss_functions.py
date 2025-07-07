@@ -1,5 +1,5 @@
 import torch
-from llm_blockmerger.core import norm_cos_sim, variance, norm_batch
+from mosaic.core import norm_cos_sim, variance, norm_batch
 from torch.nn.functional import leaky_relu
 
 class TransitiveCrossEntropy:

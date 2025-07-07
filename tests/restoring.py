@@ -4,7 +4,7 @@ os.chdir("../")
 from time import time
 from datetime import datetime
 from tests.core import restore
-from llm_blockmerger.core import plot_sim, norm_cos_sim
+from mosaic.core import plot_sim, norm_cos_sim
 
 def runtime(A=1000, verbose=True):
     demo_paths = ['notebooks/example_more.ipynb', 'notebooks/pygrank_snippets.ipynb']
