@@ -1,5 +1,5 @@
-# MOSAIC
-MOSAIC (Model-based Orchestration of Semantic Assembly through Informed Composition) was developed as part of my Master Thesis, titled "Traceable linear code synthesis at scale"
+# MOSAIC: Model-based Orchestration of Semantic Assembly through Informed Composition
+Developed as part of Master Thesis titled "Traceable linear code synthesis at scale"
 
 **Dependencies:** Python 3.12<br>
 **Contact:** Aimilia Palaska (aimilia.p2@gmail.com)<br>
