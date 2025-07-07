@@ -1,6 +1,5 @@
-# LlmBlockMerger-Diploma
-A Master Thesis exploring Automated Code Block Synthesis enhanced by LLMs.
-
+# MOSAIC
+MOSAIC (Model-based Orchestration of Semantic Assembly through Informed Composition) was developed as part of my Master Thesis, titled "Traceable linear code synthesis at scale"
 
 **Dependencies:** Python 3.12<br>
 **Contact:** Aimilia Palaska (aimilia.p2@gmail.com)<br>
