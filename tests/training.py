@@ -3,8 +3,8 @@ os.chdir("../")
 
 
 from torch.optim import Adam
-from llm_blockmerger.store import BlockDB
-from llm_blockmerger.learn import MLP, train, TransitiveCrossEntropy, TransitiveContrastive, train_plot, loaders
+from mosaic.store import BlockDB
+from mosaic.learn import MLP, train, TransitiveCrossEntropy, TransitiveContrastive, train_plot, loaders
 from tests.core import merge, deploy_mlp
 
 def integration(plot=True, verbose=True, save=True):

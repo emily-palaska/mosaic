@@ -1,11 +1,11 @@
 from torch import stack, Tensor
 from os.path import join
 
-from llm_blockmerger.core import LLM, plot_sim, norm_cos_sim, print_synthesis, encoded_json
-from llm_blockmerger.load import init_managers, nb_variables, flatten_labels, create_blockdata
-from llm_blockmerger.merge import string_synthesis, embedding_synthesis, exhaustive_synthesis
-from llm_blockmerger.store import BlockDB, ApproxNN, ExactNN
-from llm_blockmerger.learn import MLP
+from mosaic.core import LLM, plot_sim, norm_cos_sim, print_synthesis, encoded_json
+from mosaic.load import init_managers, nb_variables, flatten_labels, create_blockdata
+from mosaic.merge import string_synthesis, embedding_synthesis, exhaustive_synthesis
+from mosaic.store import BlockDB, ApproxNN, ExactNN
+from mosaic.learn import MLP
 from tests.core.utils import md_dumb_synthesis, slice_2d
 
 

@@ -12,9 +12,9 @@ Install requirements with `pip install -r requirements.txt`<br>
 ### Example of pre-processing pipeline
 
 ```python
-from llm_blockmerger.load import init_managers, flatten_labels, create_blockdata, nb_variables
-from llm_blockmerger.store import BlockDB
-from llm_blockmerger.core import plot_sim, norm_cos_sim, LLM
+from mosaic.load import init_managers, flatten_labels, create_blockdata, nb_variables
+from mosaic.store import BlockDB
+from mosaic.core import plot_sim, norm_cos_sim, LLM
 
 paths = ['notebooks/example_more.ipynb', 'notebooks/pygrank_snippets.ipynb']
 managers = init_managers(paths)
@@ -34,9 +34,9 @@ db.create(embeddings=embeddings, blockdata=create_blockdata(managers, embeddings
 ### Example of merging scenario
 
 ```python
-from llm_blockmerger.store import BlockDB
-from llm_blockmerger.core import LLM, print_synthesis
-from llm_blockmerger.merge import string_synthesis, embedding_synthesis
+from mosaic.store import BlockDB
+from mosaic.core import LLM, print_synthesis
+from mosaic.merge import string_synthesis, embedding_synthesis
 
 spec = 'Initialize a logistic regression model. Use standardization on training inputs. Train the model.'
 model = LLM(task='embedding')
@@ -62,12 +62,13 @@ An abstracted high-level flow chart of the mechanism:
 This method is a unique element of the mechanism, which leverages vector operations to subtract infromation and iteratively query the VectorDB in order to retrieve blocks that implement a natural language specification. Its interests lies in the adaptation to the LLM's embedding space properties of semantic proximity between vectors.
 
 ```python
-from llm_blockmerger.load import BlockManager
-from llm_blockmerger.core import projection, LLM, ast_io_split
-from llm_blockmerger.merge.merger import merge_variables
-from llm_blockmerger.merge.order import  io_order
-from llm_blockmerger.store import BlockDB
+from mosaic.load import BlockManager
+from mosaic.core import projection, LLM, ast_io_split
+from mosaic.merge.merger import merge_variables
+from mosaic.merge.order import io_order
+from mosaic.store import BlockDB
 from torch import norm, tensor
+
 
 def embedding_synthesis(model: LLM, db: BlockDB, spec: str, k=0.9, l=1.4, max_it=10, t=0.05, var=True):
     synthesis = BlockManager()
@@ -77,7 +78,7 @@ def embedding_synthesis(model: LLM, db: BlockDB, spec: str, k=0.9, l=1.4, max_it
 
     for _ in range(max_it):
         print(f'Search embedding: {s.norm().item(): .2f}, Information: {i: .2f}')
-        if i < t: break # Break condition: Embedding norm below the norm threshold
+        if i < t: break  # Break condition: Embedding norm below the norm threshold
 
         nn = db.read(s, limit=1)[0]
         if nn is None: break  # Break condition: No neighbors

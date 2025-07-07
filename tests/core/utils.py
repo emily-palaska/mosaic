@@ -1,5 +1,5 @@
 import numpy as np
-from llm_blockmerger.load import BlockManager
+from mosaic.load import BlockManager
 from textwrap import fill
 from re import sub, escape
 

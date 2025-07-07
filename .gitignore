@@ -3,4 +3,4 @@
 /databases/*
 *.db
 /models/**
-/llm_blockmerger/dummy.py
+/mosaic/dummy.py
