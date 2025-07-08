@@ -101,7 +101,8 @@ def qualitive():
         'Simple PCA algorithm.',
         'How do you normalize data?'
     ]
-    merge(small_dataset_queries)
+    demo_queries = sample(queries, 10)
+    merge(demo_queries, save=True, path='./results/temp/')
 
 
 if __name__ == '__main__':

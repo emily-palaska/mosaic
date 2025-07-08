@@ -1,8 +1,11 @@
+import os
+os.chdir('../../')
+
 import numpy as np
 import matplotlib.pyplot as plt
 
 colors = {'b': '#1f497d', 't': '#309db1'}
-lang = 'gr'
+lang = 'eng'
 
 def sphere(ax):
     u, v = np.mgrid[0:2 * np.pi:100j, 0:np.pi:100j]
@@ -106,7 +109,7 @@ def plot_sphere():
     ax.set_box_aspect([1, 1, 1])
     ax.legend()
     plt.tight_layout()
-    plt.savefig('../../plots/sphere.png')
+    plt.savefig('./plots/sphere.png')
 
 if __name__ == '__main__':
     plot_sphere()

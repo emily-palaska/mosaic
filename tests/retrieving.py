@@ -7,12 +7,10 @@ from time import time
 from mosaic.store import BlockDB, ApproxNN, ExactNN
 from tests.core.pipelines import restore
 
-def runtime(A=1_000):
-    results = 'results/retrieving_run.txt'
+def runtime(A=10_000):
+    results = 'tests/data/retrieving_run.py'
     example = 'example query'
-    timestamp = datetime.now().strftime("%d/%m %H:%M")
-    with open(results, 'w') as file:
-        file.write(f'Experiment: {timestamp} A={A}\n')
+    with open(results, 'w') as file: file.write('')
 
     for TypeNN in [ApproxNN, ExactNN]:
         model, db = restore(TypeNN)

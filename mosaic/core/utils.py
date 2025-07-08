@@ -9,9 +9,11 @@ from itertools import combinations
 def concat_block(block):
     return '\n'.join(block) + '\n'
 
+
 def load_nb(paths):
     if isinstance(paths, str): return load(open(paths, 'r'))
     return [load(open(path, 'r')) for path in paths]
+
 
 def load_py(paths):
     if isinstance(paths, str): return open(paths, 'r', encoding='utf-8')
