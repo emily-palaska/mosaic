@@ -16,7 +16,7 @@ from mosaic.load import init_managers, flatten_labels, create_blockdata, nb_vari
 from mosaic.store import BlockDB
 from mosaic.core import plot_sim, norm_cos_sim, LLM
 
-paths = ['notebooks/example_more.ipynb', 'notebooks/pygrank_snippets.ipynb']
+paths = ['notebooks/dataset1/example_more.ipynb', 'notebooks/dataset1/pygrank_snippets.ipynb']
 managers = init_managers(paths)
 
 llama = LLM(task='question')
@@ -38,66 +38,89 @@ from mosaic.store import BlockDB
 from mosaic.core import LLM, print_synthesis
 from mosaic.merge import string_synthesis, embedding_synthesis
 
-spec = 'Initialize a logistic regression model. Use standardization on training inputs. Train the model.'
+query = 'Initialize a logistic regression model. Use standardization on training inputs. Train the model.'
 model = LLM(task='embedding')
 db = BlockDB(empty=False)
-synthesis = string_synthesis(model, db, spec)
-print_synthesis(spec, synthesis, title='STRING')
-synthesis = embedding_synthesis(model, db, spec)
-print_synthesis(spec, synthesis, title='EMBEDDING')
+synthesis = string_synthesis(model, db, query)
+print_synthesis(query, synthesis, title='STRING')
+synthesis = embedding_synthesis(model, db, query)
+print_synthesis(query, synthesis, title='EMBEDDING')
 ```
 
 ## 🧠About
-LLM-BlockMerger utilizes LLMs along with a VectrorDB for Retrieval Augemntation to merge Code Blocks from natural language speficiations. It can be divided into 5 functional modules:
+MOSAIC utilizes pre-trained LLMs along with a vector database for retrieval augemntation to merge code blocks from natural language speficiations (queries). It can be divided into 5 functional modules:
 - **core**: llm loading/quering, embedding operations and abstract syntax tree analyzers
 - **load**: file pre-processing and block extraction based on comments and markdown text
-- **store**: VectorDB initialization and functionality for accelerate retrieval of Code Blocks
-- **learn**: MLP that applies Transfer Learning to the Embedding Space in order to enforce transitivity relation
+- **store**: vector database initialization and functionality for accelerate retrieval of code blocks
+- **learn**: MLP that applies transfer learning to the embedding space in order to enforce transitivity relation
 - **merge**: two block synthesis mechanisms, based on string alteration or embedding projections
 
 An abstracted high-level flow chart of the mechanism:
-<p align=center> <img title="Absttract Flowchart" alt="LLM-BlockMerger" src="plots/system_general_eng.png"> 
+<p align=center> <img title="Absttract flowchart" alt="MOSAIC" src="plots/system_general_eng.png"> 
 
 ## 🧮Embedding Synthesis
-This method is a unique element of the mechanism, which leverages vector operations to subtract infromation and iteratively query the VectorDB in order to retrieve blocks that implement a natural language specification. Its interests lies in the adaptation to the LLM's embedding space properties of semantic proximity between vectors.
+This method is a unique element of the mechanism, which leverages vector operations to subtract infromation and iteratively query the vector database in order to retrieve blocks that implement a query. Its interest lies in the adaptation to the LLM's embedding space properties of semantic proximity between vectors. Below is a flowchart of the iterative algorithm
+
+<p align=center> <img title="Synthesis algorithm" alt="LLM-BlockMerger" src="plots/synthesis_eng.png"> 
 
 ```python
 from mosaic.load import BlockManager
-from mosaic.core import projection, LLM, ast_io_split
+from mosaic.core import projection, LLM, pivot_rotation
 from mosaic.merge.merger import merge_variables
-from mosaic.merge.order import io_order
+from mosaic.merge.order import synthesis_order
 from mosaic.store import BlockDB
 from torch import norm, tensor
 
 
-def embedding_synthesis(model: LLM, db: BlockDB, spec: str, k=0.9, l=1.4, max_it=10, t=0.05, var=True):
-    synthesis = BlockManager()
-    s = tensor(model.encode(spec)[0])
-    spec_emb = tensor(model.encode(spec)[0])
-    i = spec_emb.norm().item()
+def embedding_synthesis(model:LLM, db:BlockDB, query:str, k:float=0.9, l:float=1.4, t:float=0.05,
+                        max_it:int|None=None, mlp:MLP|None=None, var:bool=True, rot:str|None=None):
+    synthesis, last_nn = BlockManager(), None
+    q = mlp(tensor(model.encode(query))[0]) if mlp else tensor(model.encode(query))[0]
+    s = rand(q.shape) if rot == 'rnd' else q
+    i = q.norm().item()
 
-    for _ in range(max_it):
-        print(f'Search embedding: {s.norm().item(): .2f}, Information: {i: .2f}')
-        if i < t: break  # Break condition: Embedding norm below the norm threshold
+    for _ in range(max_it if max_it else q.shape[0]):
+        if i < t: break # Break condition: Information norm below the norm threshold
 
         nn = db.read(s, limit=1)[0]
-        if nn is None: break  # Break condition: No neighbors
+        if nn is None or nn == last_nn: break  # Break condition: No neighbors
 
         n = nn.embedding
-        n_proj = projection(n, s)
-        i_proj = projection(spec_emb, n)
-        if norm(n_proj) < t: break  # Break condition: Perpendicular embeddings
-
+        s, i, norm_proj = pivot_rotation(q, n, s, i, k, l, method=rot)
+        if norm_proj < t and not rot=='rnd': break  # Break condition: Perpendicular embeddings (not for rnd)
         synthesis.append_doc(nn)
+        last_nn = nn
 
-        s = l * n_proj - s
-        s /= s.norm()
-        i -= k * i_proj.norm().item()
-
-    synthesis.rearrange(io_order(ast_io_split(synthesis)))
+    synthesis.rearrange(synthesis_order(synthesis))
     return merge_variables(model, synthesis) if var else synthesis
 ```
 
+Intuitionally, we rotate the search vector on the intersection circle to continue the synthesis process (avoid repetition of the same nearest block) while maintaining cohesion between the chosen blocks.
+<p align=center> <img title="Absttract Flowchart" alt="LLM-BlockMerger" src="plots/sphere.png">
 
-A visual representation of the core idea behind the search embedding rotation:
-<p align=center> <img title="Absttract Flowchart" alt="LLM-BlockMerger" src="plots/sphere.png" height=350px> <img title="Absttract Flowchart" alt="LLM-BlockMerger" src="plots/vectors.png" height=350px> 
+Snippet of the [core](mosaic/core) module mathematical implementation: 
+```python
+from torch import Tensor
+
+def projection(a, b):
+    if not isinstance(a, torch.Tensor): a = torch.tensor(a)
+    if not isinstance(b, torch.Tensor): b = torch.tensor(b)
+
+    if torch.all(a == 0): return None
+    dot = torch.dot(b, a) / torch.dot(a, a)
+    return dot * a
+
+
+def pivot_rotation(q: Tensor, n: Tensor, s: Tensor, i: Tensor, k: float, l: float, method:str|None=None):
+    n_proj = projection(n, s)
+    i_proj = projection(q, n)
+
+    if method == 'rnd': s = rand(s.shape)
+    elif method == 'rev': s = - n
+    else: s = l * n_proj - s
+    s /= s.norm()
+    i -= k * i_proj.norm().item()
+    return s, i, norm(n_proj).item()
+```
+
+<p align=center> <img title="Absttract Flowchart" alt="LLM-BlockMerger" src="plots/vectors.png"> 
