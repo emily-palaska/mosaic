@@ -37,10 +37,11 @@ def variance(batch):
     return torch.mean(var_per_dim)
 
 
-def plot_sim(sim_mat, path='../plots/similarity_matrix.png'):
+def plot_sim(sim_mat, path='../plots/similarity_matrix.png', lang='gr'):
     plt.figure()
     plt.imshow(sim_mat, cmap='cividis', interpolation='nearest')
-    plt.colorbar(label='Ομοιότητα')
+    label = 'Ομοιότητα' if lang == 'gr' else 'Similarity'
+    plt.colorbar(label=label)
     plt.axis('off')
 
     # Annotate the matrix with similarity values - ONLY for small dimensions due to visibility
@@ -50,7 +51,6 @@ def plot_sim(sim_mat, path='../plots/similarity_matrix.png'):
                 plt.text(j, i, f"{sim_mat[i, j]:.2f}",
                          ha="center", va="center", color="black")
 
-    #plt.title("Similarity Matrix")
     plt.tight_layout()
     plt.savefig(path)
     plt.close()

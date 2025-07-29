@@ -74,7 +74,7 @@ def merging_boxplot(lang='gr'):
     labels = ['Συμβολοσειρά', 'Περιστροφή', 'Απομάκρυνση', 'Τυχαία', 'Εξαντλητική'] if lang == 'gr' \
         else ['String', 'Rotation', 'Reverse Embedding', 'Random', 'Exhaustive']
     title = f'Θηκόγραμμα Ομοιότητας Αποτελέσματος-Προδιαγραφής' if lang == 'gr'\
-        else f'Query-Result Similarity Boxplot'
+        else f'Query-Result Similarity per Synthesis Method'
     xlabel ='Μέθοδοι Σύνθεσης' if lang == 'gr' else f'Synthesis Methods'
     ylabel = 'Συνημιτονική Ομοιότητα' if lang == 'gr' else 'Cosine Similarity'
     path = f'../../plots/merging_box.png'
@@ -82,6 +82,6 @@ def merging_boxplot(lang='gr'):
 
 
 if __name__ == '__main__':
-    merging_boxplot()
-    preprocessing_errorbar()
-    retrieving_boxplot()
+    merging_boxplot(lang='eng')
+    preprocessing_errorbar(lang='eng')
+    retrieving_boxplot(lang='eng')
