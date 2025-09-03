@@ -5,6 +5,7 @@ ApproxNN.__name__, ExactNN.__name__ = 'ApproxNN', 'ExactNN'
 from torch.utils.data import Dataset
 from torch import tensor, stack, float32
 from json import dumps
+from os import path
 
 from mosaic.core import triplets
 from mosaic.store.docs import doc_class, get_docs, empty_docs, separate_docs, find_docs
@@ -54,7 +55,8 @@ class BlockDB(Dataset):
             self.db = self.dbtype[self.BlockDoc](workspace=self.workspace, index=True)
             return self.embeddings(), self.blockdata()
         else:
-            files = find_docs(self.workspace, 'db')
+            db_path = path.join(self.workspace, 'HNSWLibIndexer_BlockDoc__BlockDocWithMatchesAndScores_')
+            files = find_docs(db_path, 'db')
             assert len(files) == 1, f"Multiple db files found in workspace {self.workspace}: {files}"
             return separate_docs(get_docs(files[0]))
 

@@ -4,13 +4,14 @@ from textwrap import fill
 from re import sub, escape
 
 def md_dumb_synthesis(synthesis: BlockManager, query:str, method: str, path: str):
-    assert method in ['String', 'Embedding', 'Exhaustive', 'Reverse Embedding', 'Random'], f'Invalid method {method}'
+    assert method in ['String', 'Embedding', 'Exhaustive', 'Reverse Embedding', 'Random', 'Baseline'], f'Invalid method {method}'
     blocks, labels, var_dicts, sources = synthesis.unzip()
 
     content = f"# {method} Code Synthesis\nQuery `{query}`\n"
-    content += f"## Script Variables\n"
-    for key, value in var_dicts.items():
-        content += f"- {key}:<br>\n>{value}\n"
+    if isinstance(var_dicts, dict):
+        content += f"## Script Variables\n"
+        for key, value in var_dicts.items():
+            content += f"- {key}:<br>\n>{value}\n"
     content += f"## Synthesis Blocks\n"
 
     for block, label, source in zip(blocks, labels, sources):

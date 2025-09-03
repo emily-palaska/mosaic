@@ -38,17 +38,34 @@ class LLM:
         if isinstance(labels, str): labels = [labels]
         return self.model.encode(labels)
 
-    def answer(self, prompt):
+    def answer(self, prompt, max_new_tokens=20):
         if self.task != 'question': return None
         inputs = self.tokenizer(prompt, return_tensors="pt").to(self.device)
         outputs = self.model.generate(
             inputs["input_ids"],
-            max_new_tokens=20,
+            max_new_tokens=max_new_tokens,
             temperature=0.3,
             top_p=0.9,
             attention_mask=inputs["attention_mask"],
             pad_token_id=self.tokenizer.pad_token_id
         )
         output_text = self.tokenizer.decode(outputs[0], skip_special_tokens=True)
-        if self.verbose: print('\nLLAMA OUTPUT:\n', output_text)
+        if self.verbose: print('\nMODEL OUTPUT:\n', output_text)
         return output_text
+
+
+def code_prompt(script: str):
+    return f"""
+Write a Python program that implements the following query. Make it functional and include all the necessary functions.
+
+'''{script}'''
+
+Code:
+
+"""
+
+
+def separate_code(output: str):
+    if (position := output.find('Code:')) != -1:
+        return output[position + len('Code:\n'):]
+    return output

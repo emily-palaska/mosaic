@@ -94,15 +94,8 @@ def integration():
 
 
 def qualitive():
-    small_dataset_queries = [
-        'Initialize a logistic regression model. Use standardization on training inputs. Train the model.',
-        'Create a regression model.',
-        'Simple Graph operations',
-        'Simple PCA algorithm.',
-        'How do you normalize data?'
-    ]
-    demo_queries = sample(queries, 10)
-    merge(demo_queries, save=True, path='./results/temp/')
+    demo_queries = sample(queries, 30)
+    merge(demo_queries, save=True, path='./results/synthesis/')
 
 
 if __name__ == '__main__':

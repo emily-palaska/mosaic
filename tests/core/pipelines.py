@@ -3,7 +3,7 @@ from os.path import join
 
 from mosaic.core import LLM, plot_sim, norm_cos_sim, print_synthesis, encoded_json
 from mosaic.load import init_managers, nb_variables, flatten_labels, create_blockdata
-from mosaic.merge import string_synthesis, embedding_synthesis, exhaustive_synthesis
+from mosaic.merge import string_synthesis, embedding_synthesis, exhaustive_synthesis, baseline_synthesis
 from mosaic.store import BlockDB, ApproxNN, ExactNN
 from mosaic.learn import MLP
 from tests.core.utils import md_dumb_synthesis, slice_2d
@@ -39,31 +39,34 @@ def restore(dbtype:type[ApproxNN|ExactNN]=ApproxNN):
 
 def merge(queries:list, path:str='./results/synthesis/', model:LLM|None=None, db:BlockDB|None=None,
           mlp:MLP|None=None, save:bool=True, verbose:bool=True):
-    names = {'s': 'String', 'e': 'Embedding', 're': 'Reverse Embedding', 'rnd': 'Random', 'x': 'Exhaustive'}
+    names = {'s': 'String', 'e': 'Embedding', 're': 'Reverse Embedding', 'rnd': 'Random', 'x': 'Exhaustive', 'b': 'Baseline'}
     if model is None: model = LLM(task='embedding')
     if db is None: db = BlockDB(empty=False)
     if verbose: print(f'Initialized BlockDB with {db.num_docs()} docs')
+    llama = LLM(task='question')
 
     results = []
     for i, query in enumerate(queries):
         if verbose: print(f'\rProgress: {i}/{len(queries)}', end='')
-        qpath = join(path, f'query{i}')
         methods = {
             's': string_synthesis(model, db, query, mlp=mlp),
             'e': embedding_synthesis(model, db, query, mlp=mlp),
             're': embedding_synthesis(model, db, query, mlp=mlp, rot='rev'),
             'rnd': embedding_synthesis(model, db, query, mlp=mlp, rot='rnd'),
-            'x': exhaustive_synthesis(model, db, query, mlp=mlp)
+            'x': exhaustive_synthesis(model, db, query, mlp=mlp),
+            'b': baseline_synthesis(llama, query)
         }
         results.append(methods)
 
         for key, synthesis in methods.items():
+            qpath = join(path, f'{names[key].lower()}/query{i}')
             if save: md_dumb_synthesis(synthesis, query, names[key], qpath + f'{key}.md')
             #elif verbose: print_synthesis(synthesis, query, title=names[key].upper())
 
     if save and verbose: print(f'\rResults saved in {path}')
     elif verbose: print(f'\rMerging completed.')
     return results
+
 
 def deploy_mlp(model:MLP, embeddings:Tensor, blockdata:str):
     new_embeddings = stack([model(embedding.to(model.device)) for embedding in embeddings]).tolist()
